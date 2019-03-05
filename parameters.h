@@ -26,9 +26,12 @@ private:
 
 	//polymer parameters
 	float m_pmass;		// mass
+	float m_pradius; 	// radius
 	int m_psphere;		// number of interacting sphere
 	float m_pdist;		// length of bond [angstrom]
 	float m_bond;		// spring constant of harmonic oscillator (bond)
+	float m_hradius;	//hard core radius of sphere
+
 public:
 	Parameters();
 	Parameters( std::string );
@@ -52,7 +55,7 @@ public:
 	int get_psphere() { return m_psphere; }
 	float get_pdist() { return m_pdist; }
 	float get_bond() { return m_bond; }
-
+	float get_hradius() { return m_hradius; }
 };
 
 #endif /* PARAMETERS_H_ */

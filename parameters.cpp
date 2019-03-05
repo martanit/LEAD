@@ -20,6 +20,7 @@ Parameters::Parameters() {
 	m_pmass = 1.;
 	m_pdist = 1.;
 	m_bond = 1.;
+	m_hradius = 1.;
 }
 
 //constructor
@@ -57,7 +58,8 @@ bool Parameters::read_parm( std::string file_name ) {
 				else if( name == "m_pradius") set_parm( m_pradius, std::stof(par));
 				else if( name == "pmass" ) set_parm(m_pmass, std::stof(par));
 				else if( name == "pdist" ) set_parm(m_pdist, std::stof(par));		
-				else if( name == "bond") set_parm(m_bond, std::stof(par));
+				else if( name == "bond" ) set_parm(m_bond, std::stof(par));
+				else if( name == "hradius" ) set_parm(m_hradius, stof(par));
 			}
 		}
 	}
