@@ -1,0 +1,9 @@
+nstep=1000
+print=1000
+timestep=10.
+init="init.dat"
+pmass=11.
+pdist=11.
+psphere=110
+bond = 11.
+temp=9000.
