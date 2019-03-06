@@ -1,0 +1,6 @@
+# file to ignore in commit
+
+# default executable extension 'a.out'
+*.out
+# conformation file
+*.xyz
