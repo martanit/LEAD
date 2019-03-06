@@ -23,7 +23,7 @@ public:
 private:
 	std::vector<double> m_polX, m_polY, m_polZ; //vector of x,y,z coordinates of polymer
 	int m_psphere;
-	Parameters m_parm;
+	Parameters m_parm=Parameters("data.dat");
 };
 
 #endif /* POLYMER_H_ */

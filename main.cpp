@@ -6,14 +6,15 @@
  */
 
 #include "parameters.h"
+#include "polymer.h"
 
 int main() {
 
 //	Parameters parm("data.dat");
 	Parameters parm2;
 	parm2.read_parm("data.dat");
-
-	std::cout << parm2.get_temp() << std::endl;
+	Polymer poly;	
+	poly.poly_configuration();
 
 	return 0;
 }
