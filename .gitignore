@@ -1,6 +1,10 @@
 # file to ignore in commit
 
+# vim config file
+.ycm_extra_conf.py
 # default executable extension 'a.out'
 *.out
 # conformation file
 *.xyz
+# data file
+.dat
