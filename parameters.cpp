@@ -1,5 +1,5 @@
 /*
- * Parameters.cpp
+ * parameters.cpp
  *
  *  Created on: Feb 19, 2019
  *      Author: martanit
@@ -7,36 +7,22 @@
 
 #include "parameters.h"
 
-//default constructor
-Parameters::Parameters() {
-	m_nstep = 100;
-	m_print = 100;
-	m_timestep = 1.;
-	m_temp = 273.5;
-	m_init = "init.dat";
-
-	m_psphere = 100;
-	m_pradius = 1.;
-	m_pmass = 1.;
-	m_pdist = 1.;
-	m_bond = 1.;
-	m_hradius = 1.;
-}
-
-//constructor
-Parameters::Parameters( std::string file_name ){
+Parameters::Parameters( std::string file_name )
+{
 	this -> read_parm( file_name );
 }
 
-Parameters::~Parameters() { }
+Parameters::~Parameters()
+{
+}
 
-bool Parameters::read_parm( std::string file_name ) {
-
-	//read file
+bool Parameters::read_parm( std::string file_name )
+{
+	// read file
 	std::ifstream parm_file;
 	parm_file.open( file_name, std::fstream::in );
 
-	//return error if read file fail
+	// return error if read file fail
 	if( parm_file.fail() ) {
 		throw "ERROR: Impossible to open parameters file "+file_name;
 		return 1;

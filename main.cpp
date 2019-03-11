@@ -9,12 +9,9 @@
 #include "polymer.h"
 
 int main() {
-
-//	Parameters parm("data.dat");
-	Parameters parm2;
-	parm2.read_parm("data.dat");
-	Polymer poly;	
-	poly.poly_configuration();
-
+	
+	Polymer poly2("data.dat");
+	poly2.poly_configuration();
+	poly2.print_xyz( "prova.xyz");
 	return 0;
 }
