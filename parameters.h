@@ -14,24 +14,6 @@
 
 class Parameters {
 
-private:
-	// dynamic parameters
-	int m_nstep = 100;		// number of step
-	int m_print = 100;		// verbosity
-	float m_timestep = 1.;		// timestep
-
-	// system parameters
-	float m_temp = 273.5;		// system temperature [K]
-	std::string m_init = "init.dat";// first configuration
-
-	// polymer parameters
-	float m_pmass = 1.;		// mass
-	float m_pradius = 0.1;	 	// radius
-	int m_psphere = 100;		// number of interacting sphere
-	float m_pdist = 10.;		// length of bond [angstrom]
-	float m_bond = 15.;		// spring constant of harmonic oscillator (bond)
-	float m_hradius = 5.;		// hard core radius of sphere
-
 public:
 	// default constructor
 	Parameters() { };
@@ -58,6 +40,25 @@ public:
 	float get_pdist() { return m_pdist; }
 	float get_bond() { return m_bond; }
 	float get_hradius() { return m_hradius; }
+
+private:
+	// dynamic parameters
+	int m_nstep = 100;		// number of step
+	int m_print = 100;		// verbosity
+	float m_timestep = 1.;		// timestep
+
+	// system parameters
+	float m_temp = 273.5;		// system temperature [K]
+	std::string m_init = "init.dat";// first configuration
+
+	// polymer parameters
+	float m_pmass = 1.;		// mass
+	float m_pradius = 0.1;	 	// radius
+	int m_psphere = 100;		// number of interacting sphere
+	float m_pdist = 10.;		// length of bond [angstrom]
+	float m_bond = 15.;		// spring constant of harmonic oscillator (bond)
+	float m_hradius = 5.;		// hard core radius of sphere
+
 };
 
 #endif /* PARAMETERS_H_ */

@@ -26,14 +26,19 @@ public:
 	bool is_overlap(int );
 	// print coordinates of polymer in vmd like .xyz coordinates file
 	bool print_xyz(std::string );
+  // calculate distance between atoms
+  double dist(int , int );
 
-	// auxiliary function
-	int get_nsphere();
+	Parameters m_parm;
+  
+  // fuction to access sphere coordinates
+  double get_X(int i){ return m_polX[i]; };
+  double get_Y(int i){ return m_polY[i]; };
+  double get_Z(int i){ return m_polZ[i]; };
 
 private:
 	std::vector<double> m_polX, m_polY, m_polZ; //vector of x,y,z coordinates of polymer
 	int m_psphere;
-	Parameters m_parm;
 };
 
 #endif /* POLYMER_H_ */

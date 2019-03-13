@@ -57,10 +57,8 @@ bool Polymer::is_overlap(int lenght)
 {
 	bool is_overlap = false;
 	for( int j = 0; j<lenght; j++){
-		if( m_parm.get_hradius() > sqrt
-                                (pow(m_polX[j]-m_polX[lenght], 2)+
-                                 pow(m_polY[j]-m_polY[lenght], 2)+
-                                 pow(m_polZ[j]-m_polZ[lenght], 2))) 
+		if( m_parm.get_hradius() > 
+        this->dist(j, lenght)) 
       is_overlap = true;
 		else is_overlap = false;		
 	}
@@ -88,3 +86,7 @@ bool Polymer::print_xyz( std::string out_xyz )
   return 0;
 }
 
+double Polymer::dist(int i, int j)
+{
+  return  sqrt(pow(m_polX[i]-m_polX[j], 2)+pow(m_polY[i]-m_polY[j], 2)+pow(m_polZ[i]-m_polZ[j], 2)); 
+}

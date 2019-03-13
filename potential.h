@@ -15,24 +15,16 @@ class Potential
   public:
 	  Potential(Polymer & poly) : m_poly(poly) { };
 	  ~Potential() { };
+    
+    // function that return lennard jones potential 
+    // between i-atom and others
+    std::vector<double> lennard_jones(int );
+	
+    double HarmonicSpring(double );
 
-  private:
+  protected:
 	  Polymer m_poly;
-};
-
-class LennardJones : public Potential
-{
-  public:
-		LennardJones();
-		~LennardJones();
-};
-
-class HarmonicSpring : public Potential
-{
-	public:
-		HarmonicSpring();
-		~HarmonicSpring();
-
+    double m_epsilon;
 };
 
 #endif /* POTENTIAL_H_ */
