@@ -1,11 +1,5 @@
 #include "potential.h"
 
-
-
-
-
-
-
 std::vector<double> Potential::lennard_jones(int i)
 {
   std::vector<double> potential_vect;

@@ -13,10 +13,8 @@
 class Potential
 {
   public:
-	  Potential(Polymer & poly) : m_poly(poly) { };
+	  Potential(Parameters parm, Polymer & poly) : m_poly(poly) { };
 	  ~Potential() { };
-    
-    
     
     // function that return lennard jones potential 
     std::vector<double> lennard_jones(int );
@@ -28,9 +26,9 @@ class Potential
 	  Polymer m_poly;
 
     // function constant
-    double A = 4*m_poly.m_parm.get_epsilon()*std::pow(m_poly.m_parm.get_sigma(),12);
-    double B = 4*m_poly.m_parm.get_epsilon()*std::pow(m_poly.m_parm.get_sigma(),6);
-    double k =  1./2. * m_poly.m_parm.get_bond(); 
+    const double A = 4*m_poly.m_parm.get_epsilon()*std::pow(m_poly.m_parm.get_sigma(),12);
+    const double B = 4*m_poly.m_parm.get_epsilon()*std::pow(m_poly.m_parm.get_sigma(),6);
+    const double k =  1./2. * m_poly.m_parm.get_bond(); 
 };
 
 #endif /* POTENTIAL_H_ */
