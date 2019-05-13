@@ -5,8 +5,6 @@
 .*
 # conformation file
 *.xyz
-# data file
-*.dat
 # object folder
 obj
 LEDy

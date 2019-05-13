@@ -42,12 +42,15 @@ public:
 	float get_hradius() { return m_hradius; }
   float get_epsilon() { return m_epsilon; }
   float get_sigma() { return m_sigma; }
+  float get_rcut() { return m_rcut; }
+  float get_gamma() { return m_gamma; }
 
 private:
 	// dynamic parameters
 	int m_nstep = 100;		// number of step
 	int m_print = 100;		// verbosity
 	float m_timestep = 1.;		// timestep
+  float m_gamma = 1.; // parameter for langevin dynamics
 
 	// system parameters
 	float m_temp = 2.;		// system temperature [K]
@@ -56,7 +59,7 @@ private:
 
 	// polymer parameters
 	float m_pmass = 1.;		// mass
-	int m_psphere = 100;		// number of interacting sphere
+	int m_psphere = 10;		// number of interacting sphere
 	float m_pdist = 10.;		// length of bond [angstrom]
 	float m_bond = 15.;		// spring constant of harmonic oscillator (bond)
 	float m_hradius = 5.;		// hard core radius of sphere
@@ -64,6 +67,7 @@ private:
   // potential parameters
   float m_epsilon = 5.; // parameter for LJ potential
   float m_sigma = 4.; // parameter for LJ potential
+  float m_rcut = 5.; // parameter for LJ potential action
 
 };
 

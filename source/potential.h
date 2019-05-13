@@ -13,22 +13,50 @@
 class Potential
 {
   public:
-	  Potential(Parameters parm, Polymer & poly) : m_poly(poly) { };
-	  ~Potential() { };
+    // default constructor
+    Potential()  { };
     
-    // function that return lennard jones potential 
-    std::vector<double> lennard_jones(int );
-
-    // spring chain forces  
-    std::vector<double> harmonic_spring( );
-
+	  Potential(Parameters parm) : m_poly(parm),
+                                 m_conf(parm),
+                                 m_epsilon(parm.get_epsilon()),
+                                 m_sigma(parm.get_sigma()),
+                                 m_box(parm.get_box()),
+                                 m_rcut(parm.get_rcut())
+                                   
+    { 
+    };
+    
+    // construct potential from Polymer and set of parameters
+    Potential(Polymer& poly, Parameters parm) : m_poly(poly),
+                                               m_conf(parm),
+                                               m_epsilon(parm.get_epsilon()),
+                                               m_sigma(parm.get_sigma()),
+                                               m_box(parm.get_box()),
+                                               m_rcut(parm.get_rcut())
+                                               
+    {
+    };
+	 
+    ~Potential() 
+    { 
+    };
+    
+    const Polymer & get_poly() const {  return m_poly; }
+    void lennard_jones_f();
+    void harmonic_spring_f();
+      
   private:
-	  Polymer m_poly;
+    Polymer m_poly;
+    Utils m_conf;
+    
+    // potential parameters
+    double m_epsilon = 1.;
+    double m_sigma = 1.;
+    double m_box = 10.;
+    double m_rcut = 5.; 
 
-    // function constant
-    const double A = 4*m_poly.m_parm.get_epsilon()*std::pow(m_poly.m_parm.get_sigma(),12);
-    const double B = 4*m_poly.m_parm.get_epsilon()*std::pow(m_poly.m_parm.get_sigma(),6);
-    const double k =  1./2. * m_poly.m_parm.get_bond(); 
+    //const double k =   m_poly.get_bond(); 
+    double k=100;
 };
 
 #endif /* POTENTIAL_H_ */
