@@ -30,7 +30,7 @@ OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o dynamic
 DEBUG := -g
 WARNING := -Wall -Wextra
 
-CXXFLAGS := $(CXXFLAGS) -std=c++17 -O2 -larmadillo
+CXXFLAGS := $(CXXFLAGS) -std=c++17 -O2
 LDFLAGS := -lpthread
 
 all: $(TARGET)

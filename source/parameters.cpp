@@ -39,7 +39,7 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "print" ) set_parm(m_print, std::stoi(par));
 				else if( name == "timestep" ) set_parm(m_timestep, std::stof(par));	
 				else if( name == "temp" ) set_parm(m_temp, std::stof(par));
-        else if( name == "box" ) set_parm(m_box, std::stof(par));
+                else if( name == "box" ) set_parm(m_box, std::stof(par));
 				else if( name == "init" ) set_parm(m_init, par);
 				else if( name == "psphere") set_parm( m_psphere, std::stoi(par));
 				else if( name == "pmass" ) set_parm(m_pmass, std::stof(par));
@@ -48,8 +48,8 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "hradius" ) set_parm(m_hradius, stof(par));
 				else if( name == "epsilon" ) set_parm(m_epsilon, stof(par));
 				else if( name == "sigma" ) set_parm(m_sigma, stof(par));
-        else if( name == "rcut" ) set_parm(m_rcut, stof(par));
-        else if( name == "gamma" ) set_parm(m_gamma, stof(par));
+                else if( name == "rcut" ) set_parm(m_rcut, stof(par));
+                else if( name == "gamma" ) set_parm(m_gamma, stof(par));
 			}
 		}
 	}

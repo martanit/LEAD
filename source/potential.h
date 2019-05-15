@@ -16,23 +16,13 @@ class Potential
     // default constructor
     Potential()  { };
     
-	  Potential(Parameters parm) : m_poly(parm),
-                                 m_conf(parm),
-                                 m_epsilon(parm.get_epsilon()),
-                                 m_sigma(parm.get_sigma()),
-                                 m_box(parm.get_box()),
-                                 m_rcut(parm.get_rcut())
-                                   
-    { 
-    };
-    
     // construct potential from Polymer and set of parameters
-    Potential(Polymer& poly, Parameters parm) : m_poly(poly),
+    Potential(Polymer& poly, Potential_Parameters parm) : m_poly(poly),
                                                m_conf(parm),
-                                               m_epsilon(parm.get_epsilon()),
-                                               m_sigma(parm.get_sigma()),
-                                               m_box(parm.get_box()),
-                                               m_rcut(parm.get_rcut())
+                                               m_pot_epsilon(parm.get_epsilon()),
+                                               m_pot_sigma(parm.get_sigma()),
+                                               m_pot_box(parm.get_box()),
+                                               m_pot_rcut(parm.get_rcut())
                                                
     {
     };
@@ -40,8 +30,10 @@ class Potential
     ~Potential() 
     { 
     };
-    
+   
+    void set_new_polymer(Polymer& poly) { m_poly = poly;}
     const Polymer & get_poly() const {  return m_poly; }
+
     void lennard_jones_f();
     void harmonic_spring_f();
       
@@ -50,10 +42,10 @@ class Potential
     Utils m_conf;
     
     // potential parameters
-    double m_epsilon = 1.;
-    double m_sigma = 1.;
-    double m_box = 10.;
-    double m_rcut = 5.; 
+    double m_pot_epsilon = 1.;
+    double m_pot_sigma = 1.;
+    double m_pot_box = 10.;
+    double m_pot_rcut = 5.; 
 
     double k =  m_poly.get_bond(); 
 };

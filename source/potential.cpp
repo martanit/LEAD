@@ -16,7 +16,7 @@ void Potential::lennard_jones_f()
       
       dr = std::sqrt( std::pow(r[0],2) + std::pow(r[1],2) + std::pow(r[2],2));
       
-      if(dr < m_rcut) {
+      if(dr < m_pot_rcut) {
         fx = (r[0] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));
         fy = (r[1] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));
         fz = (r[2] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));
