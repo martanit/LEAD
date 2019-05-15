@@ -5,6 +5,7 @@
 void Dynamics::euler()
 {
   for(unsigned int i=0; i<(*m_poly).get_poly_sphere(); ++i){
+  
     (*m_poly_new).set_x((*m_poly).get_x(i)+(*m_poly).get_vx(i)*m_timestep, i);
     (*m_poly_new).set_y((*m_poly).get_y(i)+(*m_poly).get_vy(i)*m_timestep, i);
     (*m_poly_new).set_z((*m_poly).get_z(i)+(*m_poly).get_vz(i)*m_timestep, i);
@@ -13,8 +14,8 @@ void Dynamics::euler()
     (*m_poly_new).set_vy((*m_poly).get_vy(i)+(*m_poly).get_force_y(i)/(*m_poly).get_poly_mass()*m_timestep, i);
     (*m_poly_new).set_vz((*m_poly).get_vz(i)+(*m_poly).get_force_z(i)/(*m_poly).get_poly_mass()*m_timestep, i);
   }
-
-    m_poly=std::make_unique<Polymer>(*m_poly_new);
+   
+  m_poly=std::make_unique<Polymer>(*m_poly_new);
 }
 
 void Dynamics::velocity_verlet()
@@ -153,7 +154,7 @@ void Dynamics::langevin_overdamped()
 void Dynamics::scale_factor()
 {
   double sum2(0.), scale_factor(0.);
-  for( int i = 0; i<(*m_poly).get_poly_sphere(); ++i){
+  for( unsigned int i = 0; i<(*m_poly).get_poly_sphere(); ++i){
     
     sum2 += std::pow((*m_poly).get_vx(i),2)+
             std::pow((*m_poly).get_vy(i),2)+
@@ -172,12 +173,12 @@ void Dynamics::scale_factor()
 void Dynamics::run()
 {
   for(unsigned int i=0; i<m_parm.get_nstep(); ++i){ 
-    m_pot.lennard_jones_f();
+  //  m_pot.lennard_jones_f();
     m_pot.harmonic_spring_f();
     m_poly = std::make_unique<Polymer>(m_pot.get_poly());
     //if(i==0) this->langevin_euler();
     // else this->langevin_verlet();
-    this-> langevin_overdamped();
+    this-> euler();
     m_poly = std::make_unique<Polymer>(this->get_poly());  
     m_pot = Potential(*m_poly, m_parm);
     

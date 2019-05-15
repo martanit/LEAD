@@ -55,8 +55,7 @@ class Potential
     double m_box = 10.;
     double m_rcut = 5.; 
 
-    //const double k =   m_poly.get_bond(); 
-    double k=100;
+    double k =  m_poly.get_bond(); 
 };
 
 #endif /* POTENTIAL_H_ */

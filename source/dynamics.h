@@ -23,7 +23,7 @@ class Dynamics
                                                 m_temp(parm.get_temp()),
                                                 m_gamma(parm.get_gamma())
     {
-     m_parm=parm;
+      m_parm=parm;
       m_poly = std::make_unique<Polymer>(poly);
       m_poly_new = std::make_unique<Polymer>(*m_poly);
       m_poly_old = std::make_unique<Polymer>(*m_poly);

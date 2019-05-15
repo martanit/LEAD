@@ -68,7 +68,7 @@ void Polymer::poly_configuration()
 			double t = 2*M_PI*uniform01(mt);
 			// uniform distribution on sphere
       double p = acos(1 - 2 * uniform01(mt));
-				
+      
       m_poly_r_v(i,0) = m_conf.pbc( m_poly_r_v(i-1,0)+d*std::sin(p)*std::cos(t) );
       m_poly_r_v(i,1) = m_conf.pbc( m_poly_r_v(i-1,1)+d*std::sin(p)*std::sin(t) );
       m_poly_r_v(i,2) = m_conf.pbc( m_poly_r_v(i-1,2)+d*std::cos(p) );
@@ -96,25 +96,16 @@ void Polymer::poly_velocity()
   std::random_device rd;
   std::mt19937 mt(rd());
   std::uniform_real_distribution<double> uniform01(-0.5,0.5);
-  for( int i = 0; i<m_poly_sphere; i++){
-    
-    m_poly_r_v(i,3) = uniform01(mt);
-    m_poly_r_v(i,4) = uniform01(mt);
-    m_poly_r_v(i,5) = uniform01(mt);
-  
-    sum[0] +=  m_poly_r_v(i,3);
-    sum[1] +=  m_poly_r_v(i,4);
-    sum[2] +=  m_poly_r_v(i,5);
+  for( unsigned int i = 0; i<m_poly_sphere; i++){
+    for( auto k : {3,4,5}) m_poly_r_v(i,k) = uniform01(mt);
+    for( auto k : {3,4,5}) sum[k-3] +=  m_poly_r_v(i,k);
   }
   
-  for( int i=0; i<3; i++) 
+  for( unsigned short int i=0; i<3; i++) 
     sum[i] /= m_poly_sphere;
    
   for( int i = 0; i<m_poly_sphere; i++){
-    
-    m_poly_r_v(i,3) = m_poly_r_v(i,3)-sum[1];
-    m_poly_r_v(i,4) = m_poly_r_v(i,4)-sum[2];
-    m_poly_r_v(i,5) = m_poly_r_v(i,5)-sum[3];
+    for( auto k : {3,4,5}) m_poly_r_v(i,k) = m_poly_r_v(i,k)-sum[k-3];
   }
 }
 

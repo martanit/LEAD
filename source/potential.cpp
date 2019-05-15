@@ -8,14 +8,13 @@ void Potential::lennard_jones_f()
   m_poly.reset_force();
   double dr;
   std::vector<double> r(3, 0.0);
-  for (int i=0; i<m_poly.get_poly_sphere(); ++i )
-    for (int j=i+2; j < m_poly.get_poly_sphere(); ++j){
-      
+  for (unsigned int i=0; i<m_poly.get_poly_sphere(); ++i )
+    for (unsigned int j=i+2; j < m_poly.get_poly_sphere(); ++j){
       r[0] = m_conf.pbc( m_poly.get_x(i) - m_poly.get_x(j) ); 
       r[1] = m_conf.pbc( m_poly.get_y(i) - m_poly.get_y(j) );
       r[2] = m_conf.pbc( m_poly.get_z(i) - m_poly.get_z(j) );
       
-      dr= std::sqrt( std::pow(r[0],2) + std::pow(r[1],2) + std::pow(r[2],2));
+      dr = std::sqrt( std::pow(r[0],2) + std::pow(r[1],2) + std::pow(r[2],2));
       
       if(dr < m_rcut) {
         fx = (r[0] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));

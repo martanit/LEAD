@@ -52,6 +52,7 @@ class Polymer {
     void set_vx(double vx, int i) { m_poly_r_v(i,3) = vx; };
     void set_vy(double vy, int i) { m_poly_r_v(i,4) = vy; };
     void set_vz(double vz, int i) { m_poly_r_v(i,5) = vz; };
+    
     void reset_force();    
     void set_force(int, double, double, double);
     void add_force(int, double, double, double);    
