@@ -17,7 +17,7 @@ class Potential
     Potential()  { };
     
     // construct potential from Polymer and set of parameters
-    Potential(Polymer& poly, Potential_Parameters parm) : m_poly(poly),
+    Potential(Polymer& poly, Parameters parm) : m_poly(poly),
                                                m_conf(parm),
                                                m_pot_epsilon(parm.get_epsilon()),
                                                m_pot_sigma(parm.get_sigma()),

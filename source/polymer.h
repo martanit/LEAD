@@ -14,9 +14,9 @@ class Polymer {
   	// default constructor: assing default parameters to polymer
   	Polymer();
   	// assign passed parameters to polymer
-  	Polymer(Polymer_Parameters );
+  	Polymer(Parameters );
   	// contruct polymer from x, y, z coordinate file and assign parameters
-  	Polymer(Polymer_Parameters, std::string);
+  	Polymer(Parameters, std::string);
   	
     ~Polymer();
     	
@@ -47,13 +47,13 @@ class Polymer {
     const double& get_fy(int i) const { return m_poly_fy[i]; };
     const double& get_fz(int i) const { return m_poly_fz[i]; };
     
-    void set_x(double x, int i) { m_poly_x[i] = x; };
-    void set_y(double y, int i) { m_poly_y[i] = y; };
-    void set_z(double z, int i) { m_poly_z[i] = z; };
+    inline void set_x(double x, int i) { m_poly_x[i] = x; };
+    inline void set_y(double y, int i) { m_poly_y[i] = y; };
+    inline void set_z(double z, int i) { m_poly_z[i] = z; };
     
-    void set_vx(double vx, int i) { m_poly_vx[i] = vx; };
-    void set_vy(double vy, int i) { m_poly_vy[i] = vy; };
-    void set_vz(double vz, int i) { m_poly_vz[i] = vz; };
+    inline void set_vx(double vx, int i) { m_poly_vx[i] = vx; };
+    inline void set_vy(double vy, int i) { m_poly_vy[i] = vy; };
+    inline void set_vz(double vz, int i) { m_poly_vz[i] = vz; };
     
     void reset_force();    
     void set_force(int, double, double, double);
@@ -76,6 +76,7 @@ class Polymer {
 	float m_poly_dist = 2.;		    // length of bond [angstrom]
 	float m_poly_bond = 10.;		// spring constant of harmonic oscillator (bond)
 	float m_poly_hradius = 0.2;		// hard core radius of sphere
+    std::string m_poly_init = "init.dat";
     
     std::vector<double> m_poly_x; 
     std::vector<double> m_poly_y; 

@@ -11,7 +11,7 @@ Polymer::Polymer()
     this->poly_velocity();
 }
 
-Polymer::Polymer(Polymer_Parameters parm) : m_conf(parm),
+Polymer::Polymer(Parameters parm) : m_conf(parm),
                                             m_poly_mass(parm.get_pmass()),
                                             m_poly_sphere(parm.get_psphere()),
                                             m_poly_dist(parm.get_pdist()),
@@ -24,7 +24,7 @@ Polymer::Polymer(Polymer_Parameters parm) : m_conf(parm),
   this->poly_velocity();
 }
 
-Polymer::Polymer (Polymer_Parameters parm, std::string poly_xyz) : m_conf(parm),
+Polymer::Polymer (Parameters parm, std::string poly_xyz) : m_conf(parm),
                                                                    m_poly_mass(parm.get_pmass()),
                                                                    m_poly_sphere(parm.get_psphere()),
                                                                    m_poly_dist(parm.get_pdist()),

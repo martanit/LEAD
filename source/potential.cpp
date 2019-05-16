@@ -5,7 +5,7 @@ void Potential::lennard_jones_f()
   double fx(0.),
          fy(0.),
          fz(0.);
-  m_poly.reset_force();
+//  m_poly.reset_force();
   double dr;
   std::vector<double> r(3, 0.0);
   for (unsigned int i=0; i<m_poly.get_poly_sphere(); ++i )
@@ -32,7 +32,7 @@ void  Potential::harmonic_spring_f()
   double spring_x(0.),
          spring_y(0.),
          spring_z(0.);
-  m_poly.reset_force();
+//  m_poly.reset_force();
   for (int i=0; i<m_poly.get_poly_sphere()-1; ++i ){
       spring_x = -k * (m_conf.pbc( m_poly.dist(i, i+1) - m_poly.get_poly_dist())) * 
               ( m_conf.pbc( m_poly.get_x(i) - m_poly.get_x(i+1)))/m_poly.dist(i, i+1);
