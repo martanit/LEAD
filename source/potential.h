@@ -9,6 +9,7 @@
 #define POTENTIAL_H_
 
 #include "polymer.h"
+#include "utils.h"
 
 class Potential
 {
@@ -18,11 +19,10 @@ class Potential
     
     // construct potential from Polymer and set of parameters
     Potential(Polymer& poly, Parameters parm) : m_poly(poly),
-                                               m_conf(parm),
-                                               m_pot_epsilon(parm.get_epsilon()),
-                                               m_pot_sigma(parm.get_sigma()),
-                                               m_pot_box(parm.get_box()),
-                                               m_pot_rcut(parm.get_rcut())
+                                                m_pot_epsilon(parm.get_epsilon()),
+                                                m_pot_sigma(parm.get_sigma()),
+                                                m_pot_rcut(parm.get_rcut()),
+                                                m_box(parm.get_box())
                                                
     {
     };
@@ -36,18 +36,19 @@ class Potential
 
     void lennard_jones_f();
     void harmonic_spring_f();
-      
+
+    friend const double pbc(double r);
+
   private:
     Polymer m_poly;
-    Utils m_conf;
     
     // potential parameters
     double m_pot_epsilon = 1.;
     double m_pot_sigma = 1.;
-    double m_pot_box = 10.;
     double m_pot_rcut = 5.; 
 
     double k =  m_poly.get_bond(); 
+    double m_box = 50.;
 };
 
 #endif /* POTENTIAL_H_ */
