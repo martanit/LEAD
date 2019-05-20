@@ -8,6 +8,7 @@
 #include <iostream> 	// std::cerr
 #include <fstream>	// std::ifstream
 #include <sstream>	// std::istringstream
+#include <vector>
 
 #ifndef PARAMETERS_H_
 #define PARAMETERS_H_
@@ -18,12 +19,15 @@ public:
 	// default constructor
 	Parameters(void) { };
 	// constructor
-	Parameters( std::string );
+	Parameters( std::string, std::string, std::string );
 	~Parameters();
 	
-	// function that read parameters from file
+	// function that read parameters, ctcf and 
+    // coupling probability (for extruder) from file
 	bool read_parm( std::string );
-	
+    bool read_ctcf( std::string );
+    bool read_coupling_prob( std::string );
+
 	// function that store different type parameters
 	template <typename myType>
 	void set_parm( myType& m_parm, myType parm )  { m_parm = parm; }
@@ -46,6 +50,11 @@ public:
     float get_epsilon() { return m_epsilon; }
     float get_sigma() { return m_sigma; }
     float get_rcut() { return m_rcut; }
+    
+    std::vector<bool> get_ctcf() { return m_ctcf; };
+    std::vector<double> get_coupling_prob() { return m_coupling_prob; };
+    std::vector<double> get_rate_r() { return m_rate_r; };
+    std::vector<double> get_rate_l() { return m_rate_l; };
 
 protected:
 	// dynamic parameters
@@ -70,6 +79,12 @@ protected:
     float m_epsilon = 1.; // parameter for LJ potential
     float m_sigma = 1.; // parameter for LJ potential
     float m_rcut = 5.; // parameter for LJ potential action
+    
+    // extruder parameters
+    std::vector<bool> m_ctcf;
+    std::vector<double> m_coupling_prob;
+    std::vector<double> m_rate_l = {0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8};
+    std::vector<double> m_rate_r = {0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8};
 };
 /*
 class Polymer_Parameters : public Parameters 

@@ -7,9 +7,11 @@
 
 #include "parameters.h"
 
-Parameters::Parameters( std::string file_name )
+Parameters::Parameters( std::string file_name, std::string ctcf, std::string prob )
 {
 	this -> read_parm( file_name );
+    this -> read_ctcf( ctcf);
+    this -> read_coupling_prob(prob);
 }
 
 Parameters::~Parameters()
@@ -54,5 +56,53 @@ bool Parameters::read_parm( std::string file_name )
 		}
 	}
 	parm_file.close();
+	return 0;
+}
+
+bool Parameters::read_ctcf( std::string file_name)
+{
+    bool x;
+
+	// read file
+	std::ifstream ctcf_file;
+	ctcf_file.open( file_name, std::fstream::in );
+
+	// return error if read file fail
+	if( ctcf_file.fail() ) {
+		throw "ERROR: Impossible to open parameters file "+file_name;
+		return 1;
+	}
+
+	std::string line;
+	while ( std::getline(ctcf_file, line) ) {
+		std::istringstream iss(line);
+	    iss >> x;		
+        m_ctcf.push_back(x);
+    }
+	ctcf_file.close();
+	return 0;
+}
+
+bool Parameters::read_coupling_prob( std::string file_name)
+{
+    double p;
+
+	// read file
+	std::ifstream coupling_prob_file;
+	coupling_prob_file.open( file_name, std::fstream::in );
+
+	// return error if read file fail
+	if( coupling_prob_file.fail() ) {
+		throw "ERROR: Impossible to open parameters file "+file_name;
+		return 1;
+	}
+
+	std::string line;
+	while ( std::getline(coupling_prob_file, line) ) {
+		std::istringstream iss(line);
+	    iss >> p;		
+        m_coupling_prob.push_back(p);
+    }
+	coupling_prob_file.close();
 	return 0;
 }

@@ -10,14 +10,16 @@
 #include "potential.h"
 #include "integrator.h"
 #include "dynamics.h"
+#include "extruder.h"
 
 int main() {
   
-  Parameters parm("parameters.in");
-  
+  Parameters parm("parameters.in", "ctcf.in", "coupling_probability.in");
+    
   //Polymer poly_init(poly_par, "initial_chain.xyz");
   Polymer poly_init(parm);
-  Dynamics dyn(poly_init, parm);
+  Extruder extr(parm, poly_init);
+  Dynamics dyn(poly_init, extr, parm);
   print_xyz(poly_init, "traj.xyz");
   
   dyn.run(); 

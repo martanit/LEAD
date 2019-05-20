@@ -152,6 +152,22 @@ void Integrator::langevin_overdamped()
   m_poly=std::make_unique<Polymer>(*m_poly_new);
 }
 
+void Integrator::markov_chain()
+{
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> transition_prob(0, 1);
+    if((*m_extr).get_r()!=((*m_poly).get_poly_sphere()-1))
+         if (( (*m_extr).get_rate_r((int)(*m_extr).get_r())) > transition_prob(mt)) (*m_extr).set_r((*m_extr).get_r()+1); 
+    if((*m_extr).get_l()!=0){
+         if (( (*m_extr).get_rate_l((*m_extr).get_l())) > transition_prob(mt) ){
+            
+             (*m_extr).set_l((*m_extr).get_l()-1);
+         }
+    }
+}
+
+
 void Integrator::scale_factor()
 {
   double sum2(0.), scale_factor(0.);
@@ -170,4 +186,5 @@ void Integrator::scale_factor()
      (*m_poly).set_vz(pbc((*m_poly).get_vz(i) * scale_factor), i);
    }
 }
+
 
