@@ -126,9 +126,8 @@ void Integrator::langevin_overdamped()
   std::random_device rd;
   std::mt19937 mt(rd());
   std::normal_distribution<double> gauss_term(0., 1.);
-  double stoch_term = std::sqrt(2.*m_integrator_gamma*m_integrator_temp/m_integrator_timestep);
+  double stoch_term = std::sqrt(2.*m_integrator_gamma*m_integrator_temp/(m_integrator_timestep*(*m_poly).get_poly_mass()));
 
-  
   for(unsigned int i=0; i<(*m_poly).get_poly_sphere(); ++i){
     (*m_poly_new).set_x(pbc((*m_poly).get_x(i)+
                      ((*m_poly).get_fx(i)+
@@ -142,12 +141,6 @@ void Integrator::langevin_overdamped()
                      ((*m_poly).get_fz(i)+
                      stoch_term*gauss_term(mt))*m_integrator_timestep/m_integrator_gamma), i);
 
-    (*m_poly).set_vx(pbc((*m_poly_new).get_x(i)-(*m_poly).get_x(i))/m_integrator_timestep, i); 
-    
-    (*m_poly).set_vy(pbc((*m_poly_new).get_y(i)-(*m_poly).get_y(i))/m_integrator_timestep, i); 
-    
-    (*m_poly).set_vz(pbc((*m_poly_new).get_z(i)-(*m_poly).get_z(i))/m_integrator_timestep, i); 
-  
     }
   m_poly=std::make_unique<Polymer>(*m_poly_new);
 }
@@ -158,13 +151,11 @@ void Integrator::markov_chain()
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> transition_prob(0, 1);
     if((*m_extr).get_r()!=((*m_poly).get_poly_sphere()-1))
-         if (( (*m_extr).get_rate_r((int)(*m_extr).get_r())) > transition_prob(mt)) (*m_extr).set_r((*m_extr).get_r()+1); 
-    if((*m_extr).get_l()!=0){
-         if (( (*m_extr).get_rate_l((*m_extr).get_l())) > transition_prob(mt) ){
-            
-             (*m_extr).set_l((*m_extr).get_l()-1);
-         }
-    }
+         if ((( (*m_extr).get_rate_r((int)(*m_extr).get_r())) > transition_prob(mt)) 
+                 and (*m_extr).get_ctcf()[(*m_extr).get_r()+1]!=1) (*m_extr).set_r((*m_extr).get_r()+1); 
+    if((*m_extr).get_l()!=0)
+         if ((( (*m_extr).get_rate_l((*m_extr).get_l())) > transition_prob(mt)  
+                 and (*m_extr).get_ctcf()[(*m_extr).get_l()-1]!=1) ) (*m_extr).set_l((*m_extr).get_l()-1);
 }
 
 

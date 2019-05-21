@@ -59,7 +59,7 @@ class Integrator
     void scale_factor();
     
     friend const double pbc(double r);
-  private:
+  protected:
     std::unique_ptr<Polymer> m_poly;
     std::unique_ptr<Polymer> m_poly_new;
     std::unique_ptr<Polymer> m_poly_old;

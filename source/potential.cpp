@@ -54,14 +54,13 @@ void Potential::extruder_spring_f()
   double spring_x(0.),
          spring_y(0.),
          spring_z(0.);
-  
-      spring_x = -k_extr * pbc( m_poly.dist(m_extr.get_l(), m_extr.get_r()) - m_poly.get_poly_dist()) * 
+      spring_x = -k_extr * pbc( m_poly.dist(m_extr.get_l(), m_extr.get_r()) - extr_lenght) * 
                       pbc( m_poly.get_x(m_extr.get_l()) - m_poly.get_x(m_extr.get_r()))
                       /m_poly.dist(m_extr.get_l(), m_extr.get_r());
-      spring_y = -k_extr * pbc( m_poly.dist(m_extr.get_l(), m_extr.get_r()) - m_poly.get_poly_dist()) * 
+      spring_y = -k_extr * pbc( m_poly.dist(m_extr.get_l(), m_extr.get_r()) - extr_lenght) * 
                       pbc( m_poly.get_y(m_extr.get_l()) - m_poly.get_y(m_extr.get_r()))
                       /m_poly.dist(m_extr.get_l(), m_extr.get_r());
-      spring_z = -k_extr * pbc( m_poly.dist(m_extr.get_l(), m_extr.get_r()) - m_poly.get_poly_dist()) * 
+      spring_z = -k_extr * pbc( m_poly.dist(m_extr.get_l(), m_extr.get_r()) - extr_lenght) * 
                       pbc( m_poly.get_z(m_extr.get_l()) - m_poly.get_z(m_extr.get_r()))
                       /m_poly.dist(m_extr.get_l(), m_extr.get_r());
       

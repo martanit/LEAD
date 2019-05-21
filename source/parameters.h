@@ -19,7 +19,7 @@ public:
 	// default constructor
 	Parameters(void) { };
 	// constructor
-	Parameters( std::string, std::string, std::string );
+	Parameters( std::string, std::string, std::string,std::string );
 	~Parameters();
 	
 	// function that read parameters, ctcf and 
@@ -27,6 +27,7 @@ public:
 	bool read_parm( std::string );
     bool read_ctcf( std::string );
     bool read_coupling_prob( std::string );
+    bool read_rate( std::string );
 
 	// function that store different type parameters
 	template <typename myType>
@@ -53,8 +54,8 @@ public:
     
     std::vector<bool> get_ctcf() { return m_ctcf; };
     std::vector<double> get_coupling_prob() { return m_coupling_prob; };
-    std::vector<double> get_rate_r() { return m_rate_r; };
     std::vector<double> get_rate_l() { return m_rate_l; };
+    std::vector<double> get_rate_r() { return m_rate_r; };
 
 protected:
 	// dynamic parameters
@@ -83,49 +84,8 @@ protected:
     // extruder parameters
     std::vector<bool> m_ctcf;
     std::vector<double> m_coupling_prob;
-    std::vector<double> m_rate_l = {0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8};
-    std::vector<double> m_rate_r = {0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8};
-};
-/*
-class Polymer_Parameters : public Parameters 
-{ 
-public: 
-    Polymer_Parameters(std::string file_name) : Parameters(file_name) {};
-
-    float get_pmass() { return m_pmass; }
-	int get_psphere() { return m_psphere; }
-	float get_pdist() { return m_pdist; }
-	float get_bond() { return m_bond; }
-	float get_hradius() { return m_hradius; }
+    std::vector<double> m_rate_l;
+    std::vector<double> m_rate_r;
 };
 
-class Integrator_Parameters : public Parameters 
-{ 
-public: 
-    Integrator_Parameters(std::string file_name) : Parameters(file_name) {};
-
-	float get_timestep() { return m_timestep; }
-    float get_gamma() { return m_gamma; }
-    float get_temp() { return m_temp; }
-};
-
-class Potential_Parameters : public Parameters 
-{ 
-public: 
-    Potential_Parameters(std::string file_name) : Parameters(file_name) {};
-
-    float get_epsilon() { return m_epsilon; }
-    float get_sigma() { return m_sigma; }
-    float get_rcut() { return m_rcut; }
-};
-
-class Dynamics_Parameters : public Parameters 
-{ 
-public: 
-    Dynamics_Parameters(std::string file_name) : Parameters(file_name) {};
-
-	int get_nstep() { return m_nstep; }
-	int get_print() { return m_print; }
-};
-*/
 #endif /* PARAMETERS_H_ */

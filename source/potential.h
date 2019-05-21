@@ -53,7 +53,8 @@ class Potential
     double m_pot_rcut = 5.; 
 
     double k =  m_poly.get_bond(); 
-    double k_extr = 100;
+    double k_extr = m_poly.get_bond()*2.;
+    double extr_lenght = m_poly.get_poly_dist()/10.; 
     double m_box = 50.;
 };
 

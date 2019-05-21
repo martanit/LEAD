@@ -4,18 +4,21 @@ void Extruder::place_extruder(Polymer poly){
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_int_distribution<> try_extruder_pos(1, poly.get_poly_sphere()-2);
+    std::uniform_real_distribution<double> coupling_try(0, 1);
     bool set = 0;
     int tmp_extr_pos;
-    
+    double tmp_coupling_try;
+
     while(!set){
         tmp_extr_pos = try_extruder_pos(mt);
+        tmp_coupling_try = coupling_try(mt);
         if((m_ctcf[tmp_extr_pos]==0 and 
           (m_ctcf[tmp_extr_pos-1]==0 or  m_ctcf[tmp_extr_pos+1]==0)) 
-            and m_coupling_prob[tmp_extr_pos]>0.5){
+            and m_coupling_prob[tmp_extr_pos]>tmp_coupling_try){
           
               if ( tmp_extr_pos!=0 and
                    m_ctcf[tmp_extr_pos-1]==0 and 
-                   m_coupling_prob[tmp_extr_pos-1]>0.5 ) 
+                   m_coupling_prob[tmp_extr_pos-1]>tmp_coupling_try ) 
                 {
                 m_extruder_r = tmp_extr_pos;
                 m_extruder_l = tmp_extr_pos-1;
@@ -24,7 +27,7 @@ void Extruder::place_extruder(Polymer poly){
 
               else if (tmp_extr_pos!=poly.get_poly_sphere() and 
                        m_ctcf[tmp_extr_pos+1]==0 and 
-                       m_coupling_prob[tmp_extr_pos+1]>0.5 ){
+                       m_coupling_prob[tmp_extr_pos+1]>tmp_coupling_try ){
                 m_extruder_l = tmp_extr_pos;
                 m_extruder_r = tmp_extr_pos+1;
                 set = 1;

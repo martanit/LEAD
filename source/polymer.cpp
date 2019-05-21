@@ -173,12 +173,13 @@ bool print_xyz(Polymer& poly, std::string out_xyz )
 	
   output << poly.m_poly_sphere << std::endl << std::endl;
 	for( int i = 0; i< poly.m_poly_sphere; i++){
-		output << "\tAu\t\t\t" << poly.m_poly_x[i] << "\t\t\t" << poly.m_poly_y[i] << "\t\t\t" << poly.m_poly_z[i] << "\t\t\t" << poly.m_poly_vx[i] << "\t\t\t" << poly.m_poly_vy[i] << "\t\t\t" << poly.m_poly_vz[i] << std::endl;
+        output << "\tAu\t\t\t" << poly.m_poly_x[i] << "\t\t\t" << poly.m_poly_y[i] << "\t\t\t" << poly.m_poly_z[i] << "\t\t\t" << poly.m_poly_vx[i] << "\t\t\t" << poly.m_poly_vy[i] << "\t\t\t" << poly.m_poly_vz[i] << std::endl;
 	}
 
   output.close();
   return 0;
 }
+
 
 bool read_xyz(Polymer& poly, std::string in_xyz)
 {

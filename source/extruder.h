@@ -1,9 +1,12 @@
 #ifndef EXTRUDER_H_
 #define EXTRUDER_H_
 
-#include "polymer.h"
 #include "parameters.h"
+#include "polymer.h"
+
 #include <random>
+#include <vector>
+#include <fstream>
 
 class Extruder  {
 
@@ -30,9 +33,11 @@ class Extruder  {
         
         const int& get_r() const {  return m_extruder_r; };
         const int& get_l() const {  return m_extruder_l; };
-        const double& get_rate_r(int pos) const {return m_rate_r[pos]; };
-        const double& get_rate_l(int pos) const {return m_rate_l[pos]; };
         
+        const double& get_rate_l(int pos) const {return m_rate_l[pos]; };
+        const double& get_rate_r(int pos) const {return m_rate_r[pos]; };
+
+        const std::vector<bool>& get_ctcf() const {return m_ctcf;};        
         void set_r(double r){ m_extruder_r = r; } 
         void set_l(double l){ m_extruder_l = l; } 
 
@@ -40,8 +45,8 @@ class Extruder  {
     protected:
         int m_extruder_r, m_extruder_l;
         
-        std::vector<double> m_rate_l,
-                            m_rate_r;
+        std::vector<double> m_rate_l;
+        std::vector<double> m_rate_r;
         
         std::vector<bool> m_ctcf;
         std::vector<double> m_coupling_prob;

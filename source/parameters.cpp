@@ -7,11 +7,12 @@
 
 #include "parameters.h"
 
-Parameters::Parameters( std::string file_name, std::string ctcf, std::string prob )
+Parameters::Parameters( std::string file_name, std::string ctcf, std::string prob, std::string rate )
 {
 	this -> read_parm( file_name );
-    this -> read_ctcf( ctcf);
-    this -> read_coupling_prob(prob);
+    this -> read_ctcf( ctcf );
+    this -> read_coupling_prob( prob );
+    this -> read_rate( rate );
 }
 
 Parameters::~Parameters()
@@ -104,5 +105,31 @@ bool Parameters::read_coupling_prob( std::string file_name)
         m_coupling_prob.push_back(p);
     }
 	coupling_prob_file.close();
+	return 0;
+}
+
+bool Parameters::read_rate( std::string file_name)
+{
+    double l;
+    double r;
+
+	// read file
+	std::ifstream rate_file;
+	rate_file.open( file_name, std::fstream::in );
+
+	// return error if read file fail
+	if( rate_file.fail() ) {
+		throw "ERROR: Impossible to open parameters file "+file_name;
+		return 1;
+	}
+
+	std::string line;
+	while ( std::getline(rate_file, line) ) {
+		std::istringstream iss(line);
+	    iss >> l >> r;		
+        m_rate_l.push_back(l);
+        m_rate_r.push_back(r);
+    }
+	rate_file.close();
 	return 0;
 }
