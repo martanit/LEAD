@@ -10,7 +10,6 @@
 
 #include "polymer.h"
 #include "extruder.h"
-#include "utils.h"
 
 class Potential
 {
@@ -41,9 +40,9 @@ class Potential
     void lennard_jones_f();
     void harmonic_spring_f();
     void extruder_spring_f(); 
-    friend const double pbc(double r);
 
-  private:
+  protected:
+
     Polymer m_poly;
     Extruder m_extr;
 
@@ -53,7 +52,7 @@ class Potential
     double m_pot_rcut = 5.; 
 
     double k =  m_poly.get_bond(); 
-    double k_extr = m_poly.get_bond()*2.;
+    double k_extr = m_poly.get_bond()*5.;
     double extr_lenght = m_poly.get_poly_dist()/10.; 
     double m_box = 50.;
 };

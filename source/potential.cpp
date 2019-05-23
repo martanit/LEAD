@@ -17,9 +17,9 @@ void Potential::lennard_jones_f()
       dr = std::sqrt( std::pow(r[0],2) + std::pow(r[1],2) + std::pow(r[2],2));
       
       if(dr < m_pot_rcut) {
-        lj_x = (r[0] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));
-        lj_y = (r[1] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));
-        lj_z = (r[2] * (48.0/std::pow(dr,14) - 24.0/std::pow(dr,8)));
+        lj_x = (r[0] * m_pot_epsilon * (48.0*std::pow(m_pot_sigma,12)/std::pow(dr,14) - 24.0*std::pow(m_pot_sigma,6)/std::pow(dr,8)));
+        lj_y = (r[1] * m_pot_epsilon * (48.0*std::pow(m_pot_sigma,12)/std::pow(dr,14) - 24.0*std::pow(m_pot_sigma,6)/std::pow(dr,8)));
+        lj_z = (r[2] * m_pot_epsilon * (48.0*std::pow(m_pot_sigma,12)/std::pow(dr,14) - 24.0*std::pow(m_pot_sigma,6)/std::pow(dr,8)));
         
         m_poly.add_force(i, lj_x, lj_y, lj_z);
         m_poly.add_force(j, -lj_x, -lj_y, -lj_z);

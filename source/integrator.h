@@ -8,14 +8,13 @@
 #ifndef INTEGRATOR_H_
 #define INTEGRATOR_H_
 
-#include "polymer.h"
-#include "potential.h"
 #include <cmath>
 #include <memory>
-#include "utils.h"
+
+#include "polymer.h"
+#include "potential.h"
 #include "extruder.h"
 
-//const double& pbc(double r);
 class Integrator
 {
   public: 
@@ -33,15 +32,15 @@ class Integrator
 
     ~Integrator()
     {
-/*        delete m_poly;
-        delete m_poly_new;
-        delete m_poly_old;
-        delete m_extr;
-  */  };
+    /*    delete m_poly.release();
+        delete m_poly_new.release();
+        delete m_poly_old.release();
+        delete m_extr.release();
+   */ };
 
     // Function to get polymer
-    void set_new_polymer(Polymer& poly) { *m_poly = poly;}
-    void set_new_extruder(Extruder& extr) { *m_extr = extr;}
+    void set_new_polymer(Polymer& poly) { m_poly = std::make_unique<Polymer>(poly);}
+    void set_new_extruder(Extruder& extr) { m_extr = std::make_unique<Extruder>(extr);}
     const Polymer & get_poly() const {  return *m_poly; }
     const Extruder & get_extr() const {  return *m_extr; }
     
@@ -58,7 +57,6 @@ class Integrator
     // Thermostat
     void scale_factor();
     
-    friend const double pbc(double r);
   protected:
     std::unique_ptr<Polymer> m_poly;
     std::unique_ptr<Polymer> m_poly_new;

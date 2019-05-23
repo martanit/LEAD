@@ -68,7 +68,6 @@ class Polymer {
 
     friend bool print_xyz(Polymer&, std::string);
     friend bool read_xyz(Polymer&, std::string);
-    friend const double pbc(double r);
 
   private:
     

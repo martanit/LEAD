@@ -126,7 +126,7 @@ void Integrator::langevin_overdamped()
   std::random_device rd;
   std::mt19937 mt(rd());
   std::normal_distribution<double> gauss_term(0., 1.);
-  double stoch_term = std::sqrt(2.*m_integrator_gamma*m_integrator_temp/(m_integrator_timestep*(*m_poly).get_poly_mass()));
+  double stoch_term = std::sqrt(2.*m_integrator_gamma*m_integrator_temp/m_integrator_timestep);
 
   for(unsigned int i=0; i<(*m_poly).get_poly_sphere(); ++i){
     (*m_poly_new).set_x(pbc((*m_poly).get_x(i)+

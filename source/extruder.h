@@ -1,12 +1,18 @@
+/*
+ * dynamics.h
+ *
+ *  Created on: May 20, 2019
+ *  	Author: martanit
+ */
 #ifndef EXTRUDER_H_
 #define EXTRUDER_H_
-
-#include "parameters.h"
-#include "polymer.h"
 
 #include <random>
 #include <vector>
 #include <fstream>
+
+#include "parameters.h"
+#include "polymer.h"
 
 class Extruder  {
 
