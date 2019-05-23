@@ -91,13 +91,15 @@ void Polymer::poly_configuration()
 
 bool Polymer::is_overlap(int lenght)
 {
-	bool is_overlap = false;
+    bool is_overlap = false;
 	for(unsigned int j = 0; j<lenght; j++){
-		if( m_poly_hradius > 
-        this->dist(j, lenght)) 
-      is_overlap = true;
-		else is_overlap = false;		
-	}
+		if( this->dist(j, lenght) < (2*m_poly_hradius)) {
+            is_overlap = true;
+            break;
+        }
+		else 
+            is_overlap = false;		
+        }
 	return is_overlap;
 }
 

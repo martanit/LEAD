@@ -34,13 +34,13 @@ void  Potential::harmonic_spring_f()
          spring_z(0.);
   
   for (int i=0; i<m_poly.get_poly_sphere()-1; ++i ){
-      spring_x = -k * pbc( m_poly.dist(i, i+1) - m_poly.get_poly_dist()) * 
+      spring_x = -k * pbc( m_poly.dist(i, i+1) - m_pot_sigma) * 
                       pbc( m_poly.get_x(i) - m_poly.get_x(i+1))
                       /m_poly.dist(i, i+1);
-      spring_y = -k * pbc( m_poly.dist(i, i+1) - m_poly.get_poly_dist()) * 
+      spring_y = -k * pbc( m_poly.dist(i, i+1) - m_pot_sigma) * 
                       pbc( m_poly.get_y(i) - m_poly.get_y(i+1))
                       /m_poly.dist(i, i+1);
-      spring_z = -k * pbc( m_poly.dist(i, i+1) - m_poly.get_poly_dist()) * 
+      spring_z = -k * pbc( m_poly.dist(i, i+1) - m_pot_sigma) * 
                       pbc( m_poly.get_z(i) - m_poly.get_z(i+1))
                       /m_poly.dist(i, i+1);
       
