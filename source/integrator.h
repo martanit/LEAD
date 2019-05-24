@@ -39,15 +39,10 @@ class Integrator
    */ };
 
     // Function to get polymer
-<<<<<<< HEAD
-    inline void set_new_polymer(Polymer& poly) { *m_poly = poly;}
-    inline const Polymer & get_poly() const {  return *m_poly; }
-=======
     void set_new_polymer(Polymer& poly) { m_poly = std::make_unique<Polymer>(poly);}
     void set_new_extruder(Extruder& extr) { m_extr = std::make_unique<Extruder>(extr);}
     const Polymer & get_poly() const {  return *m_poly; }
     const Extruder & get_extr() const {  return *m_extr; }
->>>>>>> 608e69bd3f7f70a81d7400f213e161aff156fe32
     
     // polymer integrators
     void euler();
