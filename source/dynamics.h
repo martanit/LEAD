@@ -17,7 +17,7 @@
 class Dynamics :  public Integrator, public Potential
 {
   public: 
-    Dynamics(Polymer &poly, Extruder &extr, Parameters parm) : 
+    Dynamics(Polymer &poly, std::vector<Extruder&> extr, Parameters parm) : 
                                    Integrator(poly, extr, parm), 
                                    Potential(poly, extr,  parm), 
                                    m_dynamics_print(parm.get_print()),
@@ -33,14 +33,14 @@ class Dynamics :  public Integrator, public Potential
 
     // Function to get polymer and extruder
     const Polymer & get_poly() const {  return *m_poly; }
-    const Extruder & get_extr() const {  return *m_extr; }
+    const std::vector<Extruder&> get_extr() const {  return *m_extr; }
 
     void run();
 
   private:
 
     std::unique_ptr<Polymer> m_poly;
-    std::unique_ptr<Extruder> m_extr;
+    std::unique_ptr<std::vector<Extruder>> m_extr;
 
     int m_dynamics_print = 100;
     int m_dynamics_nstep = 100000;

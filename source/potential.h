@@ -18,7 +18,7 @@ class Potential
 //    Potential()  { };
     
     // construct potential from Polymer and set of parameters
-    Potential(Polymer& poly, Extruder& extr, Parameters parm) : m_poly(poly),
+    Potential(Polymer& poly, std::vector<Extruder&> extr, Parameters parm) : m_poly(poly),
                                                                 m_extr(extr),
                                                                 m_pot_epsilon(parm.get_epsilon()),
                                                                 m_pot_sigma(parm.get_sigma()),
@@ -33,9 +33,9 @@ class Potential
     };
    
     void set_new_polymer(Polymer& poly) { m_poly = poly;}
-    void set_new_extruder(Extruder& extr) { m_extr = extr;}
+    void set_new_extruder(std::vector<Extruder&> extr) { m_extr = extr;}
     const Polymer & get_poly() const {  return m_poly; }
-    const Extruder & get_extr() const {  return m_extr; }
+    const std::vector<Extruder& > get_extr() const {  return m_extr; }
 
     void lennard_jones_f();
     void harmonic_spring_f();
@@ -44,7 +44,7 @@ class Potential
   protected:
 
     Polymer m_poly;
-    Extruder m_extr;
+    std::vector<Extruder> m_extr;
 
     // potential parameters
     double m_pot_epsilon = 1.;

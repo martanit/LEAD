@@ -150,12 +150,14 @@ void Integrator::markov_chain()
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> transition_prob(0, 1);
-    if((*m_extr).get_r()!=((*m_poly).get_poly_sphere()-1))
-         if ((( (*m_extr).get_rate_r((int)(*m_extr).get_r())) > transition_prob(mt)) 
-                 and (*m_extr).get_ctcf()[(*m_extr).get_r()+1]!=1) (*m_extr).set_r((*m_extr).get_r()+1); 
-    if((*m_extr).get_l()!=0)
-         if ((( (*m_extr).get_rate_l((*m_extr).get_l())) > transition_prob(mt)  
-                 and (*m_extr).get_ctcf()[(*m_extr).get_l()-1]!=1) ) (*m_extr).set_l((*m_extr).get_l()-1);
+    for(auto&& i: m_extr){
+       if((*i).get_r()!=((*m_poly).get_poly_sphere()-1))
+             if ((( (*i).get_rate_r((int)(*i).get_r())) > transition_prob(mt)) 
+                     and (*i).get_ctcf()[(*i).get_r()+1]!=1) (*i).set_r((*i).get_r()+1); 
+      if((*i).get_l()!=0)
+             if ((( (*i).get_rate_l((*i).get_l())) > transition_prob(mt)  
+                     and (*i).get_ctcf()[(*i).get_l()-1]!=1) ) (*i).set_l((*i).get_l()-1);
+    }
 }
 
 

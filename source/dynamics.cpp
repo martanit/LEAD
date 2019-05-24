@@ -4,6 +4,14 @@ void Dynamics::run()
 {
     for(unsigned int i=0; i<m_dynamics_nstep; ++i){ 
       
+        if(i%m_dynamics_nstep == 0){
+            
+        
+        
+        
+        
+        } 
+        
         (*m_poly).reset_force();
       
         Potential::set_new_polymer(*m_poly);
@@ -12,7 +20,7 @@ void Dynamics::run()
         this->extruder_spring_f();
         this->lennard_jones_f();
         this->harmonic_spring_f();
-      
+        
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
         m_extr = std::make_unique<Extruder>(Potential::get_extr()); 
 
