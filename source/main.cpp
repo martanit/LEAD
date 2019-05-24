@@ -15,8 +15,8 @@ int main() {
   
   Parameters parm("parameters.in");
   
-  //Polymer poly_init(poly_par, "initial_chain.xyz");
-  Polymer poly_init(parm);
+ Polymer poly_init(parm, "initial_chain_100.xyz");
+//  Polymer poly_init(parm);
   Dynamics dyn(poly_init, parm);
   print_xyz(poly_init, "traj.xyz");
   

@@ -31,8 +31,8 @@ class Potential
     { 
     };
    
-    void set_new_polymer(Polymer& poly) { m_poly = poly;}
-    const Polymer & get_poly() const {  return m_poly; }
+    inline void set_new_polymer(Polymer& poly) { m_poly = poly;}
+    inline const Polymer & get_poly() const {  return m_poly; }
 
     void lennard_jones_f();
     void harmonic_spring_f();

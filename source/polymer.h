@@ -35,17 +35,17 @@ class Polymer {
 	double dist(int , int );
 
     // fuction to access sphere coordinates, velocities and forces
-    const double& get_x(int i) const { return m_poly_x[i]; };
-    const double& get_y(int i) const { return m_poly_y[i]; };
-    const double& get_z(int i) const { return m_poly_z[i]; };
+    inline const double& get_x(int i) const { return m_poly_x[i]; };
+    inline const double& get_y(int i) const { return m_poly_y[i]; };
+    inline const double& get_z(int i) const { return m_poly_z[i]; };
     
-    const double& get_vx(int i) const { return m_poly_vx[i]; };
-    const double& get_vy(int i) const { return m_poly_vy[i]; };
-    const double& get_vz(int i) const { return m_poly_vz[i]; };
-    
-    const double& get_fx(int i) const { return m_poly_fx[i]; };
-    const double& get_fy(int i) const { return m_poly_fy[i]; };
-    const double& get_fz(int i) const { return m_poly_fz[i]; };
+    inline const double& get_vx(int i) const { return m_poly_vx[i]; };
+    inline const double& get_vy(int i) const { return m_poly_vy[i]; };
+    inline const double& get_vz(int i) const { return m_poly_vz[i]; };
+   
+    inline const double& get_fx(int i) const { return m_poly_fx[i]; };
+    inline const double& get_fy(int i) const { return m_poly_fy[i]; };
+    inline const double& get_fz(int i) const { return m_poly_fz[i]; };
     
     inline void set_x(double x, int i) { m_poly_x[i] = x; };
     inline void set_y(double y, int i) { m_poly_y[i] = y; };
@@ -60,10 +60,10 @@ class Polymer {
     void add_force(int, double, double, double);    
     
     // function to access polymer parameters
-    const int& get_poly_sphere() const { return m_poly_sphere; };
-    const float& get_poly_dist() const { return m_poly_dist; };
-    const float& get_bond() const  { return m_poly_bond; };
-    const float& get_poly_mass() const { return m_poly_mass; };
+    inline const int& get_poly_sphere() const { return m_poly_sphere; };
+    inline const float& get_poly_dist() const { return m_poly_dist; };
+    inline const float& get_bond() const  { return m_poly_bond; };
+    inline const float& get_poly_mass() const { return m_poly_mass; };
 
     friend bool print_xyz(Polymer&, std::string);
     friend bool read_xyz(Polymer&, std::string);

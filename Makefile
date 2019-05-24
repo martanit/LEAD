@@ -29,7 +29,7 @@ OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integra
 DEBUG := -g
 WARNING := -Wall -Wextra
 
-CXXFLAGS := $(CXXFLAGS) -std=c++17 -O2
+CXXFLAGS := $(CXXFLAGS) -std=c++17 -O3
 LDFLAGS := -lpthread
 
 all: $(TARGET)
