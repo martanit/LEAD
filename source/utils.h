@@ -1,17 +1,10 @@
+#ifndef UTILS_H_
+#define UTILS_H_
+
 #include <cmath>
 #include "parameters.h"
+// algorithm for periodic boundary conditions with side L=box
+//static const double pbc(double r) { return  r - this->m_box * std::rint(r/this->m_box); };
+static const double pbc(double r) { return  r; };
 
-class Utils 
-{  
-  public: 
-    Utils() {};
-    Utils(Parameters parm) : m_box(parm.get_box()) { };  
-
-    ~Utils(){ };
-    // algorithm for periodic boundary conditions with side L=box
-    // double pbc(double r) { return  r - m_box * std::rint(r/m_box); };
-   double pbc(double r) { return  r; };
- 
-  private:
-    double m_box = 10.;
-};
+#endif /* UTILS_H_ */

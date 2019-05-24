@@ -4,7 +4,9 @@
 # ignore hidden file
 .*
 # conformation file
-*.xyz
+*.xyz *.r
 # object folder
 obj
 LEDy
+# output folder
+output

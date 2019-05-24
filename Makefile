@@ -24,12 +24,12 @@ OBJPATH=./obj/
 CXX := $(GCC47_BINDIR)$(CXX)
 
 TARGET := LEDy
-OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o )
+OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o)
 
 DEBUG := -g
 WARNING := -Wall -Wextra
 
-CXXFLAGS := $(CXXFLAGS) -std=c++17 -O3
+CXXFLAGS := $(CXXFLAGS) -std=c++17 -O2
 LDFLAGS := -lpthread
 
 all: $(TARGET)

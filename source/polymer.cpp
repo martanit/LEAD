@@ -11,12 +11,12 @@ Polymer::Polymer()
     this->poly_velocity();
 }
 
-Polymer::Polymer(Parameters parm) : m_conf(parm),
-                                            m_poly_mass(parm.get_pmass()),
-                                            m_poly_sphere(parm.get_psphere()),
-                                            m_poly_dist(parm.get_pdist()),
-                                            m_poly_bond(parm.get_bond()),
-                                            m_poly_hradius(parm.get_hradius())
+Polymer::Polymer(Parameters parm) : m_poly_mass(parm.get_pmass()),
+                                    m_poly_sphere(parm.get_psphere()),
+                                    m_poly_dist(parm.get_pdist()),
+                                    m_poly_bond(parm.get_bond()),
+                                    m_poly_hradius(parm.get_hradius()),
+                                    m_box(parm.get_box())
 {
   this->set_size(); 
   this->reset_force();
@@ -24,12 +24,12 @@ Polymer::Polymer(Parameters parm) : m_conf(parm),
   this->poly_velocity();
 }
 
-Polymer::Polymer (Parameters parm, std::string poly_xyz) : m_conf(parm),
-                                                                   m_poly_mass(parm.get_pmass()),
-                                                                   m_poly_sphere(parm.get_psphere()),
-                                                                   m_poly_dist(parm.get_pdist()),
-                                                                   m_poly_bond(parm.get_bond()),
-                                                                   m_poly_hradius(parm.get_hradius())
+Polymer::Polymer (Parameters parm, std::string poly_xyz) : m_poly_mass(parm.get_pmass()),
+                                                           m_poly_sphere(parm.get_psphere()),
+                                                           m_poly_dist(parm.get_pdist()),
+                                                           m_poly_bond(parm.get_bond()),
+                                                           m_poly_hradius(parm.get_hradius()),
+                                                           m_box(parm.get_box())
 {
    this->set_size(); 
    this->reset_force();
@@ -61,9 +61,9 @@ void Polymer::first_sphere()
     std::random_device rd;
     std::mt19937 mt (rd());
     std::uniform_real_distribution<double> dist(0., 1.);
-	m_poly_x[0] = m_conf.pbc( dist(mt) );   // x
-	m_poly_y[0] = m_conf.pbc( dist(mt) );   // y
-	m_poly_z[0] = m_conf.pbc( dist(mt) );	// z	
+	m_poly_x[0] = pbc( dist(mt) );   // x
+	m_poly_y[0] = pbc( dist(mt) );   // y
+	m_poly_z[0] = pbc( dist(mt) );	// z	
 }
 
 void Polymer::poly_configuration()
@@ -81,9 +81,9 @@ void Polymer::poly_configuration()
 			// uniform distribution on sphere
             double p = acos(1 - 2 * uniform01(mt));
       
-            m_poly_x[i] = m_conf.pbc( m_poly_x[i-1]+d*std::sin(p)*std::cos(t) );
-            m_poly_y[i] = m_conf.pbc( m_poly_y[i-1]+d*std::sin(p)*std::sin(t) );
-            m_poly_z[i] = m_conf.pbc( m_poly_z[i-1]+d*std::cos(p) );
+            m_poly_x[i] = pbc( m_poly_x[i-1]+d*std::sin(p)*std::cos(t) );
+            m_poly_y[i] = pbc( m_poly_y[i-1]+d*std::sin(p)*std::sin(t) );
+            m_poly_z[i] = pbc( m_poly_z[i-1]+d*std::cos(p) );
 			is_overlap = this->is_overlap(i);
 		}
 	}
@@ -91,13 +91,15 @@ void Polymer::poly_configuration()
 
 bool Polymer::is_overlap(int lenght)
 {
-	bool is_overlap = false;
+    bool is_overlap = false;
 	for(unsigned int j = 0; j<lenght; j++){
-		if( m_poly_hradius > 
-        this->dist(j, lenght)) 
-      is_overlap = true;
-		else is_overlap = false;		
-	}
+		if( this->dist(j, lenght) < (2*m_poly_hradius)) {
+            is_overlap = true;
+            break;
+        }
+		else 
+            is_overlap = false;		
+        }
 	return is_overlap;
 }
 
@@ -173,12 +175,13 @@ bool print_xyz(Polymer& poly, std::string out_xyz )
 	
   output << poly.m_poly_sphere << std::endl << std::endl;
 	for( int i = 0; i< poly.m_poly_sphere; i++){
-		output << "\tAu\t\t\t" << poly.m_poly_x[i] << "\t\t\t" << poly.m_poly_y[i] << "\t\t\t" << poly.m_poly_z[i] << "\t\t\t" << poly.m_poly_vx[i] << "\t\t\t" << poly.m_poly_vy[i] << "\t\t\t" << poly.m_poly_vz[i] << std::endl;
+        output << "\tAu\t\t\t" << poly.m_poly_x[i] << "\t\t\t" << poly.m_poly_y[i] << "\t\t\t" << poly.m_poly_z[i] << "\t\t\t" << poly.m_poly_vx[i] << "\t\t\t" << poly.m_poly_vy[i] << "\t\t\t" << poly.m_poly_vz[i] << std::endl;
 	}
 
   output.close();
   return 0;
 }
+
 
 bool read_xyz(Polymer& poly, std::string in_xyz)
 {

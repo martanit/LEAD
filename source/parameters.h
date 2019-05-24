@@ -8,6 +8,7 @@
 #include <iostream> 	// std::cerr
 #include <fstream>	// std::ifstream
 #include <sstream>	// std::istringstream
+#include <vector>
 
 #ifndef PARAMETERS_H_
 #define PARAMETERS_H_
@@ -18,12 +19,16 @@ public:
 	// default constructor
 	Parameters(void) { };
 	// constructor
-	Parameters( std::string );
+	Parameters( std::string, std::string, std::string,std::string );
 	~Parameters();
 	
-	// function that read parameters from file
+	// function that read parameters, ctcf and 
+    // coupling probability (for extruder) from file
 	bool read_parm( std::string );
-	
+    bool read_ctcf( std::string );
+    bool read_coupling_prob( std::string );
+    bool read_rate( std::string );
+
 	// function that store different type parameters
 	template <typename myType>
 	void set_parm( myType& m_parm, myType parm )  { m_parm = parm; }
@@ -46,6 +51,11 @@ public:
     float get_epsilon() { return m_epsilon; }
     float get_sigma() { return m_sigma; }
     float get_rcut() { return m_rcut; }
+    
+    std::vector<bool> get_ctcf() { return m_ctcf; };
+    std::vector<double> get_coupling_prob() { return m_coupling_prob; };
+    std::vector<double> get_rate_l() { return m_rate_l; };
+    std::vector<double> get_rate_r() { return m_rate_r; };
 
 protected:
 	// dynamic parameters
@@ -70,47 +80,12 @@ protected:
     float m_epsilon = 1.; // parameter for LJ potential
     float m_sigma = 1.; // parameter for LJ potential
     float m_rcut = 5.; // parameter for LJ potential action
-};
-/*
-class Polymer_Parameters : public Parameters 
-{ 
-public: 
-    Polymer_Parameters(std::string file_name) : Parameters(file_name) {};
-
-    float get_pmass() { return m_pmass; }
-	int get_psphere() { return m_psphere; }
-	float get_pdist() { return m_pdist; }
-	float get_bond() { return m_bond; }
-	float get_hradius() { return m_hradius; }
+    
+    // extruder parameters
+    std::vector<bool> m_ctcf;
+    std::vector<double> m_coupling_prob;
+    std::vector<double> m_rate_l;
+    std::vector<double> m_rate_r;
 };
 
-class Integrator_Parameters : public Parameters 
-{ 
-public: 
-    Integrator_Parameters(std::string file_name) : Parameters(file_name) {};
-
-	float get_timestep() { return m_timestep; }
-    float get_gamma() { return m_gamma; }
-    float get_temp() { return m_temp; }
-};
-
-class Potential_Parameters : public Parameters 
-{ 
-public: 
-    Potential_Parameters(std::string file_name) : Parameters(file_name) {};
-
-    float get_epsilon() { return m_epsilon; }
-    float get_sigma() { return m_sigma; }
-    float get_rcut() { return m_rcut; }
-};
-
-class Dynamics_Parameters : public Parameters 
-{ 
-public: 
-    Dynamics_Parameters(std::string file_name) : Parameters(file_name) {};
-
-	int get_nstep() { return m_nstep; }
-	int get_print() { return m_print; }
-};
-*/
 #endif /* PARAMETERS_H_ */
