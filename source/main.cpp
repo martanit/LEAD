@@ -13,7 +13,6 @@
 #include "extruder.h"
 
 int main() {
-  
   Parameters parm("input/parameters.in", "input/ctcf.in", "input/coupling_probability.in", "input/rate.in");
     
   //Polymer poly_init(poly_par, "initial_chain.xyz");
