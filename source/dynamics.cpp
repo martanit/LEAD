@@ -21,7 +21,7 @@ void Dynamics::run()
       
         this->markov_chain();
         this->langevin_overdamped();
-   //     this->euler();
+        
         m_poly = std::make_unique<Polymer>(Integrator::get_poly()); 
         m_extr = std::make_unique<Extruder>(Integrator::get_extr());
 

@@ -20,10 +20,10 @@ class Potential
     // construct potential from Polymer and set of parameters
     Potential(Polymer& poly, Extruder& extr, Parameters parm) : m_poly(poly),
                                                                 m_extr(extr),
-                                                m_pot_epsilon(parm.get_epsilon()),
-                                                m_pot_sigma(parm.get_sigma()),
-                                                m_pot_rcut(parm.get_rcut()),
-                                                m_box(parm.get_box())
+                                                                m_pot_epsilon(parm.get_epsilon()),
+                                                                m_pot_sigma(parm.get_sigma()),
+                                                                m_pot_rcut(parm.get_rcut()),
+                                                                m_box(parm.get_box())
                                                
     {
     };
