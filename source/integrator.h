@@ -27,7 +27,8 @@ class Integrator
       m_poly = std::make_unique<Polymer>(poly);
       m_poly_new = std::make_unique<Polymer>(*m_poly);
       m_poly_old = std::make_unique<Polymer>(*m_poly);
-      m_extr = std::make_unique<Extruder>(extr);
+      for(auto & i : extr)
+	      m_extr.push_back(std::make_unique<Extruder>(i));
     };
 
     ~Integrator()
@@ -40,9 +41,12 @@ class Integrator
 
     // Function to get polymer
     void set_new_polymer(Polymer& poly) { m_poly = std::make_unique<Polymer>(poly);}
-    void set_new_extruder(std::vector<Extruder&> extr) { m_extr = std::make_unique<Extruder>(extr);}
+    void set_new_extruder(std::vector<Extruder> extr) { 
+      for(auto & i : extr)
+	      m_extr.push_back(std::make_unique<Extruder>(i));
+	}
     const Polymer & get_poly() const {  return *m_poly; }
-    const std::vector<Extruder &> get_extr() const {  return *m_extr; }
+    const std::vector<Extruder > &get_extr() const {  return *m_extr; }
     
     // polymer integrators
     void euler();
@@ -62,7 +66,7 @@ class Integrator
     std::unique_ptr<Polymer> m_poly_new;
     std::unique_ptr<Polymer> m_poly_old;
     
-    std::unique_ptr<std::vector<Extruder>> m_extr;
+    std::vector<std::unique_ptr<Extruder>> m_extr;
 
     double m_integrator_timestep = 0.0001;
     double m_integrator_gamma=1.;
