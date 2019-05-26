@@ -10,7 +10,7 @@
 
 #include "polymer.h"
 #include "extruder.h"
-
+#include<memory>
 class Potential
 {
   public:
@@ -33,11 +33,10 @@ class Potential
     };
    
     void set_new_polymer(Polymer& poly) { m_poly = poly;}
-    void set_new_extruder(std::vector<std::unique_ptr<Extruder>> extr) { 
-
+    void set_new_extruder(std::vector<std::unique_ptr<Extruder>> &extr) { 
+      m_extr.clear();
 	    for(auto & i : extr) 
 		    m_extr.push_back(*i);
-
     }
     const Polymer & get_poly() const {  return m_poly; }
     const std::vector<Extruder > get_extr() const {  return m_extr; }

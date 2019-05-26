@@ -13,6 +13,7 @@
 
 #include "parameters.h"
 #include "polymer.h"
+#include<memory>
 
 class Extruder  {
 

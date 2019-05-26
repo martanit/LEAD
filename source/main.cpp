@@ -17,7 +17,9 @@ int main() {
     
   //Polymer poly_init(poly_par, "initial_chain.xyz");
   Polymer poly_init(parm);
-  Extruder extr(parm, poly_init);
+ 
+  std::vector<Extruder> extr; 
+  
   Dynamics dyn(poly_init, extr, parm);
   print_xyz(poly_init, "output/traj.xyz");
   

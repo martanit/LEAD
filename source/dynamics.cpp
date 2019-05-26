@@ -2,28 +2,35 @@
 
 void Dynamics::run()
 {
+    
+    std::random_device rd;
+    std::mt19937 mt (rd());
+    std::uniform_real_distribution<double> dist(0., 1.);
+
     for(unsigned int i=0; i<m_dynamics_nstep; ++i){ 
-      
-        if(i%m_dynamics_nstep == 0){
-            
-        
-        
-        
-        
+        if(i == 0){   
+          
+          if( k_on > dist(mt) ) { 
+            Extruder e1(this->get_parm(), *m_poly); 
+          Extruder e2(this->get_parm(), *m_poly); 
+          m_extr.push_back(std::make_unique<Extruder>(e1));
+          m_extr.push_back(std::make_unique<Extruder>(e2));
         } 
         
         (*m_poly).reset_force();
-      
+       
         Potential::set_new_polymer(*m_poly);
         Potential::set_new_extruder(m_extr);
       
         this->extruder_spring_f();
         this->lennard_jones_f();
         this->harmonic_spring_f();
-        
+       
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
-	for (auto &i : Potential::get_extr())
-		m_extr.push_back(std::make_unique<Extruder>(i)); 
+        
+        m_extr.clear(); 
+	      for (auto &i : Potential::get_extr())
+		      m_extr.push_back(std::make_unique<Extruder>(i)); 
 
         Integrator::set_new_polymer(*m_poly);
         Integrator::set_new_extruder(m_extr);
@@ -32,12 +39,18 @@ void Dynamics::run()
         this->langevin_overdamped();
         
         m_poly = std::make_unique<Polymer>(Integrator::get_poly()); 
-	for (const auto &i : Integrator::get_extr())
-		m_extr.push_back(std::make_unique<Extruder>(i)); 
+        
+        m_extr.clear(); 
+	      for (const auto &i : Integrator::get_extr())
+		      m_extr.push_back(std::make_unique<Extruder>(i)); 
 
         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, "output/traj.xyz");
-     //       print_r(*m_poly, *m_extr, "output/loop_extrusion.r");
-        }
+            int num_extr=0;
+            for (auto &i : m_extr){
+              print_r(*m_poly, *i, "output/loop_extrusion_"+std::to_string(num_extr)+".r");
+              ++num_extr;
+              }
+          }
     }
 }

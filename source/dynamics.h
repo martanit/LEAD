@@ -22,10 +22,12 @@ class Dynamics :  public Integrator, public Potential
                                    Potential(poly, extr,  parm), 
                                    m_dynamics_print(parm.get_print()),
                                    m_dynamics_nstep(parm.get_nstep())  
-    {
+    { 
+      m_parm=parm;
         m_poly = std::make_unique<Polymer>(poly); 
+      m_extr.clear();
       	for(auto & i : extr)
-	      m_extr.push_back(std::make_unique<Extruder>(i));
+	        m_extr.push_back(std::make_unique<Extruder>(i));
     };
 
     ~Dynamics()
@@ -35,14 +37,16 @@ class Dynamics :  public Integrator, public Potential
     // Function to get polymer and extruder
     const Polymer & get_poly() const {  return *m_poly; }
     const std::vector<Extruder >  get_extr() const {  
-		std::vector<Extruder> tmp;
-		for (auto & i : m_extr) tmp.push_back(*i);
-	    	return tmp; }
+		  std::vector<Extruder> tmp;
+		  for (auto & i : m_extr) tmp.push_back(*i);
+	    return tmp; 
+    }
 
     void run();
+    Parameters get_parm(){return m_parm;}
 
   private:
-
+    Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     std::vector<std::unique_ptr<Extruder>> m_extr;
 
