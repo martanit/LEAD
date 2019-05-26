@@ -41,12 +41,15 @@ class Integrator
 
     // Function to get polymer
     void set_new_polymer(Polymer& poly) { m_poly = std::make_unique<Polymer>(poly);}
-    void set_new_extruder(std::vector<Extruder> extr) { 
-      for(auto & i : extr)
-	      m_extr.push_back(std::make_unique<Extruder>(i));
-	}
+    void set_new_extruder(std::vector<std::unique_ptr<Extruder>>& extr) {
+	for(const auto &i : extr)
+		m_extr.push_back(std::make_unique<Extruder>(*i));
+	    }
     const Polymer & get_poly() const {  return *m_poly; }
-    const std::vector<Extruder > &get_extr() const {  return *m_extr; }
+    const std::vector<Extruder >  get_extr() const {  
+		std::vector<Extruder> tmp;
+		for (auto & i : m_extr) tmp.push_back(*i);
+	    	return tmp; }
     
     // polymer integrators
     void euler();

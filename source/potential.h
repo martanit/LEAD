@@ -33,7 +33,12 @@ class Potential
     };
    
     void set_new_polymer(Polymer& poly) { m_poly = poly;}
-    void set_new_extruder(std::vector<Extruder> extr) { m_extr = extr;}
+    void set_new_extruder(std::vector<std::unique_ptr<Extruder>> extr) { 
+
+	    for(auto & i : extr) 
+		    m_extr.push_back(*i);
+
+    }
     const Polymer & get_poly() const {  return m_poly; }
     const std::vector<Extruder > get_extr() const {  return m_extr; }
 

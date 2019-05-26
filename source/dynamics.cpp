@@ -15,27 +15,29 @@ void Dynamics::run()
         (*m_poly).reset_force();
       
         Potential::set_new_polymer(*m_poly);
-        Potential::set_new_extruder(*m_extr);
+        Potential::set_new_extruder(m_extr);
       
         this->extruder_spring_f();
         this->lennard_jones_f();
         this->harmonic_spring_f();
         
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
-        m_extr = std::make_unique<Extruder>(Potential::get_extr()); 
+	for (auto &i : Potential::get_extr())
+		m_extr.push_back(std::make_unique<Extruder>(i)); 
 
         Integrator::set_new_polymer(*m_poly);
-        Integrator::set_new_extruder(*m_extr);
+        Integrator::set_new_extruder(m_extr);
       
         this->markov_chain();
         this->langevin_overdamped();
         
         m_poly = std::make_unique<Polymer>(Integrator::get_poly()); 
-        m_extr = std::make_unique<Extruder>(Integrator::get_extr());
+	for (const auto &i : Integrator::get_extr())
+		m_extr.push_back(std::make_unique<Extruder>(i)); 
 
         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, "output/traj.xyz");
-            print_r(*m_poly, *m_extr, "output/loop_extrusion.r");
+     //       print_r(*m_poly, *m_extr, "output/loop_extrusion.r");
         }
     }
 }
