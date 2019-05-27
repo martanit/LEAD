@@ -47,7 +47,8 @@ class Extruder  {
         const std::vector<bool>& get_ctcf() const {return m_ctcf;};        
         void set_r(double r){ m_extruder_r = r; } 
         void set_l(double l){ m_extruder_l = l; } 
-
+        
+        bool extr_overlap(Extruder & extr);
         friend bool print_r(Polymer&, Extruder&, std::string); 
     protected:
         int m_extruder_r, m_extruder_l;

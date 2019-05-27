@@ -41,14 +41,17 @@ class Dynamics :  public Integrator, public Potential
 		  for (auto & i : m_extr) tmp.push_back(*i);
 	    return tmp; 
     }
+    Parameters get_parm(){return m_parm;}
 
     void run();
-    Parameters get_parm(){return m_parm;}
+    void fill_extruder();
+    bool extr_overlap(Extruder & );
 
   private:
     Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     std::vector<std::unique_ptr<Extruder>> m_extr;
+    double k_on = 0.5;
 
     int m_dynamics_print = 100;
     int m_dynamics_nstep = 100000;

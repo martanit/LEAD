@@ -1,4 +1,4 @@
-nstep=100000
+nstep=500000
 print=100
 timestep=0.0001
 temp=2.

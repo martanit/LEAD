@@ -36,6 +36,20 @@ void Extruder::place_extruder(Polymer poly){
     }
 }
 
+bool Extruder::extr_overlap(Extruder & extr)
+{
+    //two extruder cannot bind to sphere
+    //that is already taken from another extr 
+    if((this->get_l() == extr.get_l()) or 
+       (this->get_r() == extr.get_r()) or
+       (this->get_r() == extr.get_l()) or
+       (this->get_l() == extr.get_r())) return true;    
+    //extruder cannot extrude inside loop (?)
+    else if((this->get_l() < extr.get_l()) and 
+            (this->get_r() > extr.get_r())) return true;    
+    else return false;
+}
+
 // Input/Output function for write extruder positiom
 bool print_r(Polymer & poly, Extruder& extr, std::string out_r )
 {	
