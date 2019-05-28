@@ -2,13 +2,11 @@
 
 void Dynamics::run()
 {
-    
-
+   
     for(unsigned int i=0; i<m_dynamics_nstep; ++i){ 
-        if(i%m_dynamics_print == 0){   
-          
+        if(i==0) this->first_fill();
+        if(i%m_dynamics_print == 0)    
             this->fill_extruder();
-        } 
         
         (*m_poly).reset_force();
        
@@ -48,18 +46,45 @@ void Dynamics::run()
     }
 }
 
+void Dynamics::first_fill()
+{
+std::random_device rd;
+std::mt19937 mt (rd());
+std::uniform_real_distribution<double> dist(0., 1.);
+bool is_overl=false;
+std::vector<Extruder> tmp_extruder;
+
+for(int i = 0; i<n_extr; ++i){
+    Extruder e(this->get_parm(), *m_poly); 
+    m_extr.push_back(std::make_unique<Extruder>(e));
+    for(auto & j : m_extr)
+        if((*j).extr_overlap(e)) {
+            is_overl=true;
+            break;
+        }  
+        if( k_on > dist(mt) and !(is_overl)) 
+            m_extr.push_back(std::make_unique<Extruder>(e));
+    }
+}
+
 void Dynamics::fill_extruder()
 {
     std::random_device rd;
     std::mt19937 mt (rd());
     std::uniform_real_distribution<double> dist(0., 1.);
-    int n_extr=2;
     bool is_overl=false;
+
     std::vector<Extruder> tmp_extruder;
-    for(int i = 0; i<n_extr; ++i){
+	for (const auto &i : m_extr)
+        //fill tmp_extruder only with extruder 
+        //that are not undbind
+        if( k_off > dist(mt))
+            tmp_extruder.push_back(*i); 
+  
+    for(int i = 0; i<n_extr-tmp_extruder.size(); ++i){
         Extruder e(this->get_parm(), *m_poly); 
-        for(auto & j : m_extr)
-            if((*j).extr_overlap(e)) {
+        for(auto & j : tmp_extruder)
+            if((j).extr_overlap(e)) {
                 is_overl=true;
                 break;
             }

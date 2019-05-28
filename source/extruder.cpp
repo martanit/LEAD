@@ -41,15 +41,44 @@ bool Extruder::extr_overlap(Extruder & extr)
     //two extruder cannot bind to sphere
     //that is already taken from another extr 
     if((this->get_l() == extr.get_l()) or 
-       (this->get_r() == extr.get_r()) or
-       (this->get_r() == extr.get_l()) or
-       (this->get_l() == extr.get_r())) return true;    
+       (this->get_r() == extr.get_r())) return true;    
     //extruder cannot extrude inside loop (?)
     else if((this->get_l() < extr.get_l()) and 
             (this->get_r() > extr.get_r())) return true;    
     else return false;
 }
 
+bool Extruder::extr_overlap_l(std::vector<std::unique_ptr<Extruder>> & extr)
+{
+    bool is_overl = false;
+    for (auto &i : extr){
+        // same extrusor
+        if((this->get_l() == (*i).get_r()) and
+           (this->get_r() == (*i).get_l())) is_overl = false;
+
+        else if(this->get_l() == (*i).get_r()) {
+            is_overl = true;
+            break;
+        }
+    }
+    return is_overl;
+}
+
+bool Extruder::extr_overlap_r(std::vector<std::unique_ptr<Extruder>> & extr)
+{
+    bool is_overl = false;
+    for (auto &i : extr){
+        // same extrusor
+        if((this->get_l() == (*i).get_r()) and
+           (this->get_r() == (*i).get_l())) is_overl = false;
+
+        else if(this->get_r() == (*i).get_l()) {
+            is_overl = true;
+            break;
+        }
+    }
+    return is_overl;
+}
 // Input/Output function for write extruder positiom
 bool print_r(Polymer & poly, Extruder& extr, std::string out_r )
 {	

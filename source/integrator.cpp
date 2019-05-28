@@ -153,10 +153,12 @@ void Integrator::markov_chain()
     for(auto&& i: m_extr){
        if((*i).get_r()!=((*m_poly).get_poly_sphere()-1))
              if ((( (*i).get_rate_r((int)(*i).get_r())) > transition_prob(mt)) 
-                     and (*i).get_ctcf()[(*i).get_r()+1]!=1) (*i).set_r((*i).get_r()+1); 
-      if((*i).get_l()!=0)
-             if ((( (*i).get_rate_l((*i).get_l())) > transition_prob(mt)  
-                     and (*i).get_ctcf()[(*i).get_l()-1]!=1) ) (*i).set_l((*i).get_l()-1);
+                     and (*i).get_ctcf()[(*i).get_r()]!=1
+                     and !((*i).extr_overlap_r(m_extr))) (*i).set_r((*i).get_r()+1); 
+       if((*i).get_l()!=0)
+             if ((( (*i).get_rate_l((*i).get_l())) > transition_prob(mt))  
+                     and (*i).get_ctcf()[(*i).get_l()]!=(-1)
+                     and !((*i).extr_overlap_l(m_extr))) (*i).set_l((*i).get_l()-1);
     }
 }
 

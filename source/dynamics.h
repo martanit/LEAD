@@ -44,6 +44,7 @@ class Dynamics :  public Integrator, public Potential
     Parameters get_parm(){return m_parm;}
 
     void run();
+    void first_fill();
     void fill_extruder();
     bool extr_overlap(Extruder & );
 
@@ -51,7 +52,10 @@ class Dynamics :  public Integrator, public Potential
     Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     std::vector<std::unique_ptr<Extruder>> m_extr;
-    double k_on = 0.5;
+    double k_on = 0.01;
+    double k_off = 0.9995;
+ // double k_off =1;
+    int n_extr = 2;
 
     int m_dynamics_print = 100;
     int m_dynamics_nstep = 100000;

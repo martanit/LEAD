@@ -52,7 +52,7 @@ public:
     float get_sigma() { return m_sigma; }
     float get_rcut() { return m_rcut; }
     
-    std::vector<bool> get_ctcf() { return m_ctcf; };
+    std::vector<int> get_ctcf() { return m_ctcf; };
     std::vector<double> get_coupling_prob() { return m_coupling_prob; };
     std::vector<double> get_rate_l() { return m_rate_l; };
     std::vector<double> get_rate_r() { return m_rate_r; };
@@ -82,7 +82,7 @@ protected:
     float m_rcut = 5.; // parameter for LJ potential action
     
     // extruder parameters
-    std::vector<bool> m_ctcf;
+    std::vector<int> m_ctcf;
     std::vector<double> m_coupling_prob;
     std::vector<double> m_rate_l;
     std::vector<double> m_rate_r;

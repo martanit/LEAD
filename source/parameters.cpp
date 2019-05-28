@@ -62,7 +62,7 @@ bool Parameters::read_parm( std::string file_name )
 
 bool Parameters::read_ctcf( std::string file_name)
 {
-    bool x;
+    int x;
 
 	// read file
 	std::ifstream ctcf_file;
