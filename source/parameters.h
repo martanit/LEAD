@@ -57,6 +57,10 @@ public:
     std::vector<double> get_rate_l() { return m_rate_l; };
     std::vector<double> get_rate_r() { return m_rate_r; };
 
+    float get_kon() {return m_k_on; }
+    float get_koff() {return m_k_off; }
+    int get_max_extr() {return m_n_max_extr;}
+
 protected:
 	// dynamic parameters
 	int m_nstep = 100;		// number of step
@@ -86,6 +90,11 @@ protected:
     std::vector<double> m_coupling_prob;
     std::vector<double> m_rate_l;
     std::vector<double> m_rate_r;
+    
+    // dynamics extruder parm
+    float m_k_on = 0.5;
+    float m_k_off = 0.998;
+    int m_n_max_extr = 10;
 };
 
 #endif /* PARAMETERS_H_ */

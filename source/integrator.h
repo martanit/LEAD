@@ -14,11 +14,13 @@
 #include "polymer.h"
 #include "potential.h"
 #include "extruder.h"
+#include "vector_extruder.h"
 
 class Integrator
 {
   public: 
-    Integrator(Polymer poly, std::vector<Extruder> extr, Parameters integrator_parm) : 
+    Integrator(Polymer &poly, VectorExtruder &vector_extr, Parameters integrator_parm) : 
+        m_vector_extr(vector_extr),
         m_integrator_timestep(integrator_parm.get_timestep()),
         m_integrator_gamma(integrator_parm.get_gamma()),
         m_integrator_temp(integrator_parm.get_temp()),
@@ -27,9 +29,7 @@ class Integrator
       m_poly = std::make_unique<Polymer>(poly);
       m_poly_new = std::make_unique<Polymer>(*m_poly);
       m_poly_old = std::make_unique<Polymer>(*m_poly);
-      m_extr.clear();
-      for(auto & i : extr)
-	      m_extr.push_back(std::make_unique<Extruder>(i));
+     
     };
 
     ~Integrator()
@@ -40,27 +40,13 @@ class Integrator
         delete m_extr.release();
    */ };
 
-    // Function to get polymer
+    // Function to set and get polymer and vector extruder
     void set_new_polymer(Polymer& poly) { m_poly = std::make_unique<Polymer>(poly);}
-    void set_new_extruder(std::vector<std::unique_ptr<Extruder>>& extr) 
-    {
-    m_extr.clear();
-	  for(const auto &i : extr)
-		  m_extr.push_back(std::make_unique<Extruder>(*i));
-	  }
+    void set_new_extruder(VectorExtruder & new_vector_extr) { m_vector_extr = new_vector_extr; }
     const Polymer & get_poly() const {  return *m_poly; }
-    const std::vector<Extruder >  get_extr() const 
-    {  
-		  std::vector<Extruder> tmp;
-		  for (auto & i : m_extr) tmp.push_back(*i);
-	    return tmp; 
-    }
+    const VectorExtruder & get_extr() const { return m_vector_extr; }
     
     // polymer integrators
-    void euler();
-    void velocity_verlet();
-    void langevin_euler();
-    void langevin_verlet();
     void langevin_overdamped();
     
     // extruder move
@@ -74,7 +60,7 @@ class Integrator
     std::unique_ptr<Polymer> m_poly_new;
     std::unique_ptr<Polymer> m_poly_old;
     
-    std::vector<std::unique_ptr<Extruder>> m_extr;
+    VectorExtruder m_vector_extr;
 
     double m_integrator_timestep = 0.0001;
     double m_integrator_gamma=1.;

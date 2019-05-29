@@ -56,19 +56,19 @@ void Potential::extruder_spring_f()
          spring_z(0.);
 
   //iterate over each extruder
-     for(auto&& i: m_extr) {
-        spring_x = -k_extr * pbc( m_poly.dist(i.get_l(), i.get_r()) - extr_lenght) * 
-                      pbc( m_poly.get_x(i.get_l()) - m_poly.get_x(i.get_r()))
-                      /m_poly.dist(i.get_l(), i.get_r());
-        spring_y = -k_extr * pbc( m_poly.dist(i.get_l(), i.get_r()) - extr_lenght) * 
-                      pbc( m_poly.get_y(i.get_l()) - m_poly.get_y(i.get_r()))
-                      /m_poly.dist(i.get_l(), i.get_r());
-        spring_z = -k_extr * pbc( m_poly.dist(i.get_l(), i.get_r()) - extr_lenght) * 
-                      pbc( m_poly.get_z(i.get_l()) - m_poly.get_z(i.get_r()))
-                      /m_poly.dist(i.get_l(), i.get_r());
+     for(auto &i: m_vector_extr) {
+        spring_x = -k_extr * pbc( m_poly.dist((*i).get_l(), (*i).get_r()) - extr_lenght) * 
+                      pbc( m_poly.get_x((*i).get_l()) - m_poly.get_x((*i).get_r()))
+                      /m_poly.dist((*i).get_l(), (*i).get_r());
+        spring_y = -k_extr * pbc( m_poly.dist((*i).get_l(), (*i).get_r()) - extr_lenght) * 
+                      pbc( m_poly.get_y((*i).get_l()) - m_poly.get_y((*i).get_r()))
+                      /m_poly.dist((*i).get_l(), (*i).get_r());
+        spring_z = -k_extr * pbc( m_poly.dist((*i).get_l(), (*i).get_r()) - extr_lenght) * 
+                      pbc( m_poly.get_z((*i).get_l()) - m_poly.get_z((*i).get_r()))
+                      /m_poly.dist((*i).get_l(), (*i).get_r());
       
-        m_poly.add_force(i.get_l(),spring_x, spring_y, spring_z);
-        m_poly.add_force(i.get_r(), -spring_x, -spring_y, -spring_z);
+        m_poly.add_force((*i).get_l(),spring_x, spring_y, spring_z);
+        m_poly.add_force((*i).get_r(), -spring_x, -spring_y, -spring_z);
     }
 }
 

@@ -24,7 +24,7 @@ OBJPATH=./obj/
 CXX := $(GCC47_BINDIR)$(CXX)
 
 TARGET := LEDy
-OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o)
+OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o vector_extruder.o)
 
 DEBUG := -g
 WARNING := -Wall -Wextra

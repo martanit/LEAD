@@ -11,6 +11,7 @@
 #include "integrator.h"
 #include "dynamics.h"
 #include "extruder.h"
+#include "vector_extruder.h"
 
 int main() {
   Parameters parm("input/parameters.in", "input/ctcf.in", "input/coupling_probability.in", "input/rate.in");
@@ -18,9 +19,10 @@ int main() {
   //Polymer poly_init(poly_par, "initial_chain.xyz");
   Polymer poly_init(parm);
  
-  std::vector<Extruder> extr; 
+  Extruder extr(parm);
+  VectorExtruder v_extr(parm,extr, poly_init); 
   
-  Dynamics dyn(poly_init, extr, parm);
+  Dynamics dyn(poly_init, v_extr, parm);
   print_xyz(poly_init, "output/traj.xyz");
   
   dyn.run(); 

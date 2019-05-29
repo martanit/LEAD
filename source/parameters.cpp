@@ -48,11 +48,14 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "pmass" ) set_parm(m_pmass, std::stof(par));
 				else if( name == "pdist" ) set_parm(m_pdist, std::stof(par));		
 				else if( name == "bond" ) set_parm(m_bond, std::stof(par));
-				else if( name == "hradius" ) set_parm(m_hradius, stof(par));
-				else if( name == "epsilon" ) set_parm(m_epsilon, stof(par));
-				else if( name == "sigma" ) set_parm(m_sigma, stof(par));
-                else if( name == "rcut" ) set_parm(m_rcut, stof(par));
-                else if( name == "gamma" ) set_parm(m_gamma, stof(par));
+				else if( name == "hradius" ) set_parm(m_hradius, std::stof(par));
+				else if( name == "epsilon" ) set_parm(m_epsilon, std::stof(par));
+				else if( name == "sigma" ) set_parm(m_sigma, std::stof(par));
+                else if( name == "rcut" ) set_parm(m_rcut, std::stof(par));
+                else if( name == "gamma" ) set_parm(m_gamma, std::stof(par));
+                else if( name == "k_on" ) set_parm(m_k_on, std::stof(par));
+                else if( name == "k_off" ) set_parm(m_k_off, std::stof(par));
+                else if( name == "n_max_extr" ) set_parm(m_n_max_extr, std::stoi(par));
 			}
 		}
 	}

@@ -9,17 +9,15 @@
 #define POTENTIAL_H_
 
 #include "polymer.h"
-#include "extruder.h"
+#include "vector_extruder.h"
 #include<memory>
+
 class Potential
 {
   public:
-    // default constructor
-//    Potential()  { };
-    
     // construct potential from Polymer and set of parameters
-    Potential(Polymer& poly, std::vector<Extruder> extr, Parameters parm) : m_poly(poly),
-                                                                m_extr(extr),
+    Potential(Polymer& poly, VectorExtruder& vector_extr, Parameters parm) : m_poly(poly),
+                                                                m_vector_extr(vector_extr),
                                                                 m_pot_epsilon(parm.get_epsilon()),
                                                                 m_pot_sigma(parm.get_sigma()),
                                                                 m_pot_rcut(parm.get_rcut()),
@@ -32,14 +30,11 @@ class Potential
     { 
     };
    
-    void set_new_polymer(Polymer& poly) { m_poly = poly;}
-    void set_new_extruder(std::vector<std::unique_ptr<Extruder>> &extr) { 
-      m_extr.clear();
-	    for(auto & i : extr) 
-		    m_extr.push_back(*i);
-    }
+    void set_new_polymer(Polymer& new_poly) { m_poly = new_poly;}
+    void set_new_extruder(VectorExtruder& new_vector_extr) { m_vector_extr = new_vector_extr; }
+
     const Polymer & get_poly() const {  return m_poly; }
-    const std::vector<Extruder > get_extr() const {  return m_extr; }
+    const VectorExtruder & get_extr() const {  return m_vector_extr; }
 
     void lennard_jones_f();
     void harmonic_spring_f();
@@ -48,7 +43,7 @@ class Potential
   protected:
 
     Polymer m_poly;
-    std::vector<Extruder> m_extr;
+    VectorExtruder m_vector_extr;
 
     // potential parameters
     double m_pot_epsilon = 1.;

@@ -21,7 +21,7 @@ Polymer::Polymer(Parameters parm) : m_poly_mass(parm.get_pmass()),
   this->set_size(); 
   this->reset_force();
   this->poly_configuration();
-  this->poly_velocity();
+  //this->poly_velocity();
 }
 
 Polymer::Polymer (Parameters parm, std::string poly_xyz) : m_poly_mass(parm.get_pmass()),
