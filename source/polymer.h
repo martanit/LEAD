@@ -33,7 +33,7 @@ class Polymer {
     void poly_velocity();
     
    	 // calculate distance between atoms
-	double dist(int , int );
+	double dist(const int& , const int& );
 
     // fuction to access sphere coordinates, velocities and forces
     inline const double& get_x(int i) const { return m_poly_x[i]; };
@@ -57,8 +57,7 @@ class Polymer {
     inline void set_vz(double vz, int i) { m_poly_vz[i] = vz; };
     
     void reset_force();    
-    void set_force(int, double, double, double);
-    void add_force(int, double, double, double);    
+    void add_force(const int&, const double&, const double&, const double&);    
     
     // function to access polymer parameters
     inline const int& get_poly_sphere() const { return m_poly_sphere; };
@@ -70,7 +69,8 @@ class Polymer {
     friend bool read_xyz(Polymer&, std::string);
 
   private:
-    
+    double d = 0.;
+
     // polymer parameters
 	float m_poly_mass = 1.;		    // mass
 	int m_poly_sphere = 100;		// number of interacting sphere
@@ -92,6 +92,9 @@ class Polymer {
                         m_poly_fy, 
                         m_poly_fz; 
     
+    std::mt19937 mt { std::random_device{}() };    
+    std::uniform_real_distribution<double> uniform01;
+    std::uniform_real_distribution<double> uniform0505;
 };
 
 

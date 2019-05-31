@@ -1,14 +1,7 @@
 #include "extruder.h"
 
 void Extruder::place_extruder(Polymer poly){
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_int_distribution<> try_extruder_pos(1, poly.get_poly_sphere()-2);
-    std::uniform_real_distribution<double> coupling_try(0, 1);
-
-    bool set = 0;
-    int tmp_extr_pos;
-    double tmp_coupling_try;
+   set =0.; 
     while(!set){
         tmp_extr_pos = try_extruder_pos(mt);
         tmp_coupling_try = coupling_try(mt);
@@ -35,15 +28,13 @@ void Extruder::place_extruder(Polymer poly){
     }
 }
 
-bool Extruder::extr_overlap(Extruder & extr)
+bool Extruder::extr_overlap(Extruder & extr) 
 {
     //two extruder cannot bind to sphere
     //that is already taken from another extr 
-    if((this->m_extruder_l == extr.m_extruder_l) or 
+    if((this->m_extruder_l == extr.m_extruder_l) and 
        (this->m_extruder_r == extr.m_extruder_r)) return true;    
-    //extruder cannot extrude inside loop (?)
-    else if((this->m_extruder_l < extr.m_extruder_l) and 
-            (this->m_extruder_r > extr.m_extruder_r)) return true;    
+    
     else return false;
 }
 

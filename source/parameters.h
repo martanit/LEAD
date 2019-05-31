@@ -19,7 +19,8 @@ public:
 	// default constructor
 	Parameters(void) { };
 	// constructor
-	Parameters( std::string, std::string, std::string,std::string );
+	Parameters( std::string, std::string, std::string, std::string );
+	Parameters( std::string, std::string, std::string );
 	~Parameters();
 	
 	// function that read parameters, ctcf and 
@@ -52,14 +53,19 @@ public:
     float get_sigma() { return m_sigma; }
     float get_rcut() { return m_rcut; }
     
-    std::vector<int> get_ctcf() { return m_ctcf; };
-    std::vector<double> get_coupling_prob() { return m_coupling_prob; };
-    std::vector<double> get_rate_l() { return m_rate_l; };
-    std::vector<double> get_rate_r() { return m_rate_r; };
+    float get_permeability() { return m_perm_ctcf; } 
+    const std::vector<int>& get_ctcf() const { return m_ctcf; };
+    const std::vector<double>& get_coupling_prob() const { return m_coupling_prob; };
+   
+    const float& get_rate_l() const { return m_rate_l; };
+    const float& get_rate_r() const { return m_rate_r; };
 
-    float get_kon() {return m_k_on; }
-    float get_koff() {return m_k_off; }
-    int get_max_extr() {return m_n_max_extr;}
+    const float& get_kon() const {return m_k_on; }
+    const float& get_koff() const {return m_k_off; }
+    const int& get_max_extr() const {return m_n_max_extr;}
+
+    const std::vector<double>& get_rate_vl() { return m_rate_vl; };
+    const std::vector<double>& get_rate_vr() { return m_rate_vr; };
 
 protected:
 	// dynamic parameters
@@ -86,11 +92,16 @@ protected:
     float m_rcut = 5.; // parameter for LJ potential action
     
     // extruder parameters
+    float m_perm_ctcf = 0.9;
     std::vector<int> m_ctcf;
     std::vector<double> m_coupling_prob;
-    std::vector<double> m_rate_l;
-    std::vector<double> m_rate_r;
+    float m_rate_l;
+    float m_rate_r;
     
+    //use for different rate for each sphere
+    std::vector<double> m_rate_vl;
+    std::vector<double> m_rate_vr;
+
     // dynamics extruder parm
     float m_k_on = 0.5;
     float m_k_off = 0.998;

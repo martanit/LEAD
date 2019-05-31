@@ -12,7 +12,14 @@ Parameters::Parameters( std::string file_name, std::string ctcf, std::string pro
 	this -> read_parm( file_name );
     this -> read_ctcf( ctcf );
     this -> read_coupling_prob( prob );
+// using when passing file with different rate per sphere
     this -> read_rate( rate );
+}
+Parameters::Parameters( std::string file_name, std::string ctcf, std::string prob )
+{
+	this -> read_parm( file_name );
+    this -> read_ctcf( ctcf );
+    this -> read_coupling_prob( prob );
 }
 
 Parameters::~Parameters()
@@ -55,7 +62,10 @@ bool Parameters::read_parm( std::string file_name )
                 else if( name == "gamma" ) set_parm(m_gamma, std::stof(par));
                 else if( name == "k_on" ) set_parm(m_k_on, std::stof(par));
                 else if( name == "k_off" ) set_parm(m_k_off, std::stof(par));
+                else if( name == "rate_l" ) set_parm(m_rate_l, std::stof(par));
+                else if( name == "rate_r" ) set_parm(m_rate_r, std::stof(par));
                 else if( name == "n_max_extr" ) set_parm(m_n_max_extr, std::stoi(par));
+                else if( name == "permeability_ctcf" ) set_parm(m_perm_ctcf, std::stof(par));
 			}
 		}
 	}
@@ -111,6 +121,7 @@ bool Parameters::read_coupling_prob( std::string file_name)
 	return 0;
 }
 
+// using when passing file with different rate per sphere
 bool Parameters::read_rate( std::string file_name)
 {
     double l;
@@ -130,8 +141,8 @@ bool Parameters::read_rate( std::string file_name)
 	while ( std::getline(rate_file, line) ) {
 		std::istringstream iss(line);
 	    iss >> l >> r;		
-        m_rate_l.push_back(l);
-        m_rate_r.push_back(r);
+        m_rate_vl.push_back(l);
+        m_rate_vr.push_back(r);
     }
 	rate_file.close();
 	return 0;

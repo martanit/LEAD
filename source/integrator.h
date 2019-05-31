@@ -10,7 +10,7 @@
 
 #include <cmath>
 #include <memory>
-
+#include <random>
 #include "polymer.h"
 #include "potential.h"
 #include "extruder.h"
@@ -24,12 +24,14 @@ class Integrator
         m_integrator_timestep(integrator_parm.get_timestep()),
         m_integrator_gamma(integrator_parm.get_gamma()),
         m_integrator_temp(integrator_parm.get_temp()),
-        m_box(integrator_parm.get_box())
+        m_box(integrator_parm.get_box()),
+        gauss_term(0,1),
+        transition_prob(0.,1.)
     {
+      stoch_term =  std::sqrt(2.*m_integrator_gamma*
+                                m_integrator_temp/
+                                m_integrator_timestep);
       m_poly = std::make_unique<Polymer>(poly);
-      m_poly_new = std::make_unique<Polymer>(*m_poly);
-      m_poly_old = std::make_unique<Polymer>(*m_poly);
-     
     };
 
     ~Integrator()
@@ -51,21 +53,24 @@ class Integrator
     
     // extruder move
     void markov_chain();
+    // using vector for rate
+    void markov_chain_rate();
 
-    // Thermostat
-    void scale_factor();
+  private:
+
+    std::mt19937 mt {std::random_device{}()};    
+    std::normal_distribution<double> gauss_term;
+    std::uniform_real_distribution<double> transition_prob;
     
-  protected:
     std::unique_ptr<Polymer> m_poly;
-    std::unique_ptr<Polymer> m_poly_new;
-    std::unique_ptr<Polymer> m_poly_old;
-    
     VectorExtruder m_vector_extr;
 
+    double stoch_term = 0;
     double m_integrator_timestep = 0.0001;
     double m_integrator_gamma=1.;
     double m_integrator_temp = 1.;
-    
+    double permeability_ctcf = 0.9;
+
     double m_box = 50.;
 };
 #endif /* INTEGRATOR_H_ */

@@ -48,12 +48,23 @@ class Potential
     // potential parameters
     double m_pot_epsilon = 1.;
     double m_pot_sigma = 1.;
+    double m_pot_sigma_12 = std::pow(m_pot_sigma,12);
+    double m_pot_sigma_6 = std::pow(m_pot_sigma,6);
     double m_pot_rcut = 5.; 
 
     double k =  m_poly.get_bond(); 
     double k_extr = m_poly.get_bond()*5.;
     double extr_lenght = m_poly.get_poly_dist()/10.; 
     double m_box = 50.;
+ 
+    double dr;
+    double spring_x = 0.,
+           spring_y = 0.,
+           spring_z = 0.;
+
+    double lj_x = 0.,
+           lj_y = 0.,
+           lj_z = 0.;
 };
 
 #endif /* POTENTIAL_H_ */

@@ -16,7 +16,9 @@ Polymer::Polymer(Parameters parm) : m_poly_mass(parm.get_pmass()),
                                     m_poly_dist(parm.get_pdist()),
                                     m_poly_bond(parm.get_bond()),
                                     m_poly_hradius(parm.get_hradius()),
-                                    m_box(parm.get_box())
+                                    m_box(parm.get_box()),
+                                    uniform01(0.,1.),
+                                    uniform0505(-0.5, 0.5)
 {
   this->set_size(); 
   this->reset_force();
@@ -29,7 +31,9 @@ Polymer::Polymer (Parameters parm, std::string poly_xyz) : m_poly_mass(parm.get_
                                                            m_poly_dist(parm.get_pdist()),
                                                            m_poly_bond(parm.get_bond()),
                                                            m_poly_hradius(parm.get_hradius()),
-                                                           m_box(parm.get_box())
+                                                           m_box(parm.get_box()),
+                                                           uniform01(0.,1.),
+                                                           uniform0505(-0.5, 0.5)
 {
    this->set_size(); 
    this->reset_force();
@@ -58,20 +62,14 @@ void Polymer::set_size()
 
 void Polymer::first_sphere()
 {	
-    std::random_device rd;
-    std::mt19937 mt (rd());
-    std::uniform_real_distribution<double> dist(0., 1.);
-	m_poly_x[0] = pbc( dist(mt) );   // x
-	m_poly_y[0] = pbc( dist(mt) );   // y
-	m_poly_z[0] = pbc( dist(mt) );	// z	
+	m_poly_x[0] = pbc( uniform01(mt) );   // x
+	m_poly_y[0] = pbc( uniform01(mt) );   // y
+	m_poly_z[0] = pbc( uniform01(mt) );	// z	
 }
 
 void Polymer::poly_configuration()
 {
     double d = m_poly_dist;
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> uniform01(0., 1.);
 	this->first_sphere();
 	for(unsigned int i = 1; i<m_poly_sphere; i++){
 		bool is_overlap = true;
@@ -107,13 +105,10 @@ void Polymer::poly_velocity()
 {
     std::vector<double> sum(3, 0.0);
 
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_real_distribution<double> uniform01(-0.5,0.5);
     for( unsigned int i = 0; i<m_poly_sphere; i++){
-        m_poly_vx[i] =  uniform01(mt);
-        m_poly_vy[i] =  uniform01(mt);
-        m_poly_vz[i] =  uniform01(mt);
+        m_poly_vx[i] =  uniform0505(mt);
+        m_poly_vy[i] =  uniform0505(mt);
+        m_poly_vz[i] =  uniform0505(mt);
       
         sum[0] += m_poly_vx[i];    
         sum[1] += m_poly_vy[i];    
@@ -130,13 +125,13 @@ void Polymer::poly_velocity()
     }
 }
 
-double Polymer::dist(int i, int j)
+double Polymer::dist(const int& i, const int& j)
 {
     
-    double dist = std::sqrt(std::pow(m_poly_x[i]-m_poly_x[j], 2)+
+    d = std::sqrt(std::pow(m_poly_x[i]-m_poly_x[j], 2)+
                             std::pow(m_poly_y[i]-m_poly_y[j], 2)+
                             std::pow(m_poly_z[i]-m_poly_z[j], 2));
-    return (dist < 10E-9) ? 10E-9 : dist;
+    return (d < 10E-9) ? 10E-9 : d;
 }
 
 void Polymer::reset_force()
@@ -146,14 +141,7 @@ void Polymer::reset_force()
     std::fill(m_poly_fz.begin(), m_poly_fz.end(), 0.);
 }
 
-void Polymer::set_force(int i, double fx, double fy, double fz)
-{
-    m_poly_fx[i] = fx;
-    m_poly_fy[i] = fy;
-    m_poly_fz[i] = fz;
-}
-
-void Polymer::add_force(int i, double fx, double fy, double fz)
+void Polymer::add_force(const int& i, const double& fx, const double& fy, const double& fz)
 {
     m_poly_fx[i] += fx;
     m_poly_fy[i] += fy;

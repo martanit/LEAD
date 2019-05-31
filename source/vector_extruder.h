@@ -19,7 +19,7 @@
 class VectorExtruder {
 
     public:
-        VectorExtruder(Parameters parm, Extruder extr, Polymer& poly) : m_extr(extr),
+        VectorExtruder(Parameters parm, Extruder& extr, Polymer& poly) : m_extr(extr),
                                                                         m_kon(parm.get_kon()),
                                                                         m_koff(parm.get_koff()),
                                                                         m_n_max_extr(parm.get_max_extr())
@@ -27,6 +27,7 @@ class VectorExtruder {
             this -> first_fill(poly);
         };
 
+        // copy constructor
         VectorExtruder(const VectorExtruder& vector_extr) : m_extr(vector_extr.m_extr){
             m_kon = vector_extr.m_kon;
             m_koff = vector_extr.m_koff;
@@ -41,11 +42,6 @@ class VectorExtruder {
         bool overlap_l(Extruder &);
         bool overlap_r(Extruder &);
         
-
-        
-
-        //using iterator = std::vector<std::unique_ptr<Extruder>>::iterator;
-        //using const_iterator = std::vector<std::unique_ptr<Extruder>>::const_iterator;
         auto begin() { return m_vector_extr.begin(); }
         auto begin() const { return m_vector_extr.begin(); }
         auto end() { return m_vector_extr.end(); }
@@ -54,7 +50,6 @@ class VectorExtruder {
         void operator = (const VectorExtruder& lhs ) { 
             m_vector_extr.clear();
             for(auto& i : (lhs.m_vector_extr)) 
-
                 m_vector_extr.push_back(std::make_unique<Extruder>(*i));
         }
         

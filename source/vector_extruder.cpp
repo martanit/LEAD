@@ -7,20 +7,24 @@ void VectorExtruder::first_fill(Polymer & poly)
     std::uniform_real_distribution<double> dist(0., 1.);
     bool is_overl=false;
 
+    std::vector<Extruder> tmp_extruder;
     for(int i = 0; i<m_n_max_extr; ++i){
         m_extr.place_extruder(poly); 
         if(i==0)
-            m_vector_extr.push_back(std::make_unique<Extruder>(m_extr));
+            tmp_extruder.push_back(m_extr);
         else{
-            for(auto &j : m_vector_extr)
-                if((*j).extr_overlap(m_extr)) {
+            for(auto &j : tmp_extruder)
+                if(j.extr_overlap(m_extr)) {
                     is_overl=true;
                     break;
                 }  
             if( m_kon > dist(mt) and !(is_overl)) 
-                m_vector_extr.push_back(std::make_unique<Extruder>(m_extr));
+                tmp_extruder.push_back(m_extr);
         }    
     }
+    m_vector_extr.clear();
+    for( const auto &i : tmp_extruder)
+        m_vector_extr.push_back(std::make_unique<Extruder>(i));
 }
 
 void VectorExtruder::update(Polymer &poly)
