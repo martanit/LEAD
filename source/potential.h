@@ -44,7 +44,14 @@ class Potential
 
     Polymer m_poly;
     VectorExtruder m_vector_extr;
+    double x, y, z;
+    unsigned n = 20000;
+    unsigned r = n*(n-1)/2;
 
+    std::vector<double> forces_local_x;
+    std::vector<double> forces_local_y;
+    std::vector<double> forces_local_z;
+    
     // potential parameters
     double m_pot_epsilon = 1.;
     double m_pot_sigma = 1.;

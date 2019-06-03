@@ -49,7 +49,7 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "print" ) set_parm(m_print, std::stoi(par));
 				else if( name == "timestep" ) set_parm(m_timestep, std::stof(par));	
 				else if( name == "temp" ) set_parm(m_temp, std::stof(par));
-                else if( name == "box" ) set_parm(m_box, std::stof(par));
+        else if( name == "box" ) set_parm(m_box, std::stof(par));
 				else if( name == "init" ) set_parm(m_init, par);
 				else if( name == "psphere") set_parm( m_psphere, std::stoi(par));
 				else if( name == "pmass" ) set_parm(m_pmass, std::stof(par));
@@ -58,14 +58,14 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "hradius" ) set_parm(m_hradius, std::stof(par));
 				else if( name == "epsilon" ) set_parm(m_epsilon, std::stof(par));
 				else if( name == "sigma" ) set_parm(m_sigma, std::stof(par));
-                else if( name == "rcut" ) set_parm(m_rcut, std::stof(par));
-                else if( name == "gamma" ) set_parm(m_gamma, std::stof(par));
-                else if( name == "k_on" ) set_parm(m_k_on, std::stof(par));
-                else if( name == "k_off" ) set_parm(m_k_off, std::stof(par));
-                else if( name == "rate_l" ) set_parm(m_rate_l, std::stof(par));
-                else if( name == "rate_r" ) set_parm(m_rate_r, std::stof(par));
-                else if( name == "n_max_extr" ) set_parm(m_n_max_extr, std::stoi(par));
-                else if( name == "permeability_ctcf" ) set_parm(m_perm_ctcf, std::stof(par));
+        else if( name == "rcut" ) set_parm(m_rcut, std::stof(par));
+        else if( name == "gamma" ) set_parm(m_gamma, std::stof(par));
+        else if( name == "k_on" ) set_parm(m_k_on, std::stof(par));
+        else if( name == "k_off" ) set_parm(m_k_off, std::stof(par));
+        else if( name == "rate_l" ) set_parm(m_rate_l, std::stof(par));
+        else if( name == "rate_r" ) set_parm(m_rate_r, std::stof(par));
+        else if( name == "n_max_extr" ) set_parm(m_n_max_extr, std::stoi(par));
+        else if( name == "permeability_ctcf" ) set_parm(m_perm_ctcf, std::stof(par));
 			}
 		}
 	}

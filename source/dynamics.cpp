@@ -29,7 +29,7 @@ void Dynamics::run()
 
         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, "output/traj.xyz");
-            int num_extr=0;
+         //   int num_extr=0;
            // for (auto &i : m_vector_extr){
            //   print_r(*m_poly, *i, "output/loop_extrusion_"+std::to_string(num_extr)+".r");
            //   ++num_extr;
