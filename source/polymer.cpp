@@ -148,6 +148,15 @@ void Polymer::add_force(const int& i, const double& fx, const double& fy, const 
     m_poly_fz[i] += fz;
 }
 
+void Polymer::reset_energy()
+{
+   m_poly_e=0.;
+}
+
+void Polymer::add_energy(const double& e)
+{
+    m_poly_e += e;
+}
 // Input/Output function for read and write polymers
 bool print_xyz(Polymer& poly, std::string out_xyz )
 {	

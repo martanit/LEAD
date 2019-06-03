@@ -11,10 +11,11 @@ void Dynamics::run()
         Potential::set_new_polymer(*m_poly);
         Potential::set_new_extruder(m_vector_extr);
       
+        this->kinetic();
         this->extruder_spring_f();
-        this->lennard_jones_f();
+        this->lennard_jones_f(i, true);
         this->harmonic_spring_f();
-       
+        
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
         m_vector_extr = Potential::get_extr();
 
@@ -26,6 +27,8 @@ void Dynamics::run()
 
         m_poly = std::make_unique<Polymer>(Integrator::get_poly()); 
         m_vector_extr = Integrator::get_extr();
+        
+        std::cout << (*m_poly).get_energy() << std::endl;
 
         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, "output/traj.xyz");

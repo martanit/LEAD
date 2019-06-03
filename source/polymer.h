@@ -48,6 +48,8 @@ class Polymer {
     inline const double& get_fy(int i) const { return m_poly_fy[i]; };
     inline const double& get_fz(int i) const { return m_poly_fz[i]; };
     
+    inline const double& get_energy() const { return m_poly_e; };
+    
     inline void set_x(double x, int i) { m_poly_x[i] = x; };
     inline void set_y(double y, int i) { m_poly_y[i] = y; };
     inline void set_z(double z, int i) { m_poly_z[i] = z; };
@@ -59,6 +61,9 @@ class Polymer {
     void reset_force();    
     void add_force(const int&, const double&, const double&, const double&);    
     
+    void reset_energy();    
+    void add_energy(const double&);    
+
     // function to access polymer parameters
     inline const int& get_poly_sphere() const { return m_poly_sphere; };
     inline const float& get_poly_dist() const { return m_poly_dist; };
@@ -91,7 +96,8 @@ class Polymer {
     std::vector<double> m_poly_fx, 
                         m_poly_fy, 
                         m_poly_fz; 
-    
+    double m_poly_e = 0.;
+
     std::mt19937 mt { std::random_device{}() };    
     std::uniform_real_distribution<double> uniform01;
     std::uniform_real_distribution<double> uniform0505;

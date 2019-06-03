@@ -17,7 +17,12 @@ void Integrator::langevin_overdamped()
     (*m_poly).set_z(pbc((*m_poly).get_z(i)+
                      ((*m_poly).get_fz(i)+
                      stoch_term*gauss_term(mt))*m_integrator_timestep/m_integrator_gamma), i);
+    
+    (*m_poly).set_vx(((*m_poly).get_fx(i)+stoch_term*gauss_term(mt))/m_integrator_gamma, i);
+    (*m_poly).set_vy(((*m_poly).get_fy(i)+stoch_term*gauss_term(mt))/m_integrator_gamma, i);
+    (*m_poly).set_vz(((*m_poly).get_fz(i)+stoch_term*gauss_term(mt))/m_integrator_gamma, i);
   }
+
 }
 
 void Integrator::markov_chain()

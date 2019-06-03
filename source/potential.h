@@ -21,8 +21,8 @@ class Potential
                                                                 m_pot_epsilon(parm.get_epsilon()),
                                                                 m_pot_sigma(parm.get_sigma()),
                                                                 m_pot_rcut(parm.get_rcut()),
-                                                                m_box(parm.get_box())
-                                               
+                                                                m_box(parm.get_box()),
+                                                                sphere(poly.get_poly_sphere())
     {
     };
 	 
@@ -36,21 +36,16 @@ class Potential
     const Polymer & get_poly() const {  return m_poly; }
     const VectorExtruder & get_extr() const {  return m_vector_extr; }
 
-    void lennard_jones_f();
+    void lennard_jones_f(int, bool);
     void harmonic_spring_f();
     void extruder_spring_f(); 
+    void kinetic();
 
   protected:
 
     Polymer m_poly;
     VectorExtruder m_vector_extr;
-    double x, y, z;
-    unsigned n = 20000;
-    unsigned r = n*(n-1)/2;
 
-    std::vector<double> forces_local_x;
-    std::vector<double> forces_local_y;
-    std::vector<double> forces_local_z;
     
     // potential parameters
     double m_pot_epsilon = 1.;
@@ -61,17 +56,22 @@ class Potential
 
     double k =  m_poly.get_bond(); 
     double k_extr = m_poly.get_bond()*5.;
-    double extr_lenght = m_poly.get_poly_dist()/10.; 
+    double extr_lenght = m_poly.get_poly_dist(); 
     double m_box = 50.;
  
+    bool attractive = true;
     double dr;
+    double x, y, z;
+    std::vector<std::vector<unsigned int> > sphere;
+    
+    double f_x = 0.,
+           f_y = 0.,
+           f_z = 0.;
+    
     double spring_x = 0.,
            spring_y = 0.,
            spring_z = 0.;
 
-    double lj_x = 0.,
-           lj_y = 0.,
-           lj_z = 0.;
 };
 
 #endif /* POTENTIAL_H_ */
