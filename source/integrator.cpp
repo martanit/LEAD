@@ -18,11 +18,25 @@ void Integrator::langevin_overdamped()
                      ((*m_poly).get_fz(i)+
                      stoch_term*gauss_term(mt))*m_integrator_timestep/m_integrator_gamma), i);
     
-    (*m_poly).set_vx(((*m_poly).get_fx(i)+stoch_term*gauss_term(mt))/m_integrator_gamma, i);
-    (*m_poly).set_vy(((*m_poly).get_fy(i)+stoch_term*gauss_term(mt))/m_integrator_gamma, i);
-    (*m_poly).set_vz(((*m_poly).get_fz(i)+stoch_term*gauss_term(mt))/m_integrator_gamma, i);
-  }
+    (*m_poly).set_vx((1-(m_integrator_gamma/(*m_poly).get_poly_mass())*
+                      m_integrator_timestep)*(*m_poly).get_vx(i)+
+                      std::sqrt(2*m_integrator_temp*m_integrator_timestep*
+                     m_integrator_gamma/(*m_poly).get_poly_mass())*
+                     gauss_term(mt), i);
 
+    (*m_poly).set_vy((1-(m_integrator_gamma/(*m_poly).get_poly_mass())*
+                      m_integrator_timestep)*(*m_poly).get_vy(i)+
+                      std::sqrt(2*m_integrator_temp*m_integrator_timestep*
+                     m_integrator_gamma/(*m_poly).get_poly_mass())*
+                     gauss_term(mt), i);
+    
+    (*m_poly).set_vz((1-(m_integrator_gamma/(*m_poly).get_poly_mass())*
+                      m_integrator_timestep)*(*m_poly).get_vz(i)+
+                      std::sqrt(2*m_integrator_temp*m_integrator_timestep*
+                     m_integrator_gamma/(*m_poly).get_poly_mass())*
+                     gauss_term(mt), i);
+
+  }
 }
 
 void Integrator::markov_chain()

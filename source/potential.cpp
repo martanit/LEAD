@@ -14,7 +14,6 @@ void Potential::kinetic()
 }
 void Potential::lennard_jones_f(int step, bool attarctive)
 {
-  
   if(step%100==0 or step==0){
     for (unsigned int i=0; i<m_poly.get_poly_sphere(); ++i ){
         sphere[i].clear();
@@ -26,59 +25,41 @@ void Potential::lennard_jones_f(int step, bool attarctive)
             
             dr = x*x + y*y + z*z;
 
+            // calculate points that are into m_pot_rcut^2
             if(dr < m_pot_rcut*m_pot_rcut){
-                f_x = x * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
-                f_y = y * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
-                f_z = z * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
-                
-                if(attractive){
-                    f_x -=  x * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-                    f_y -=  y * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-                    f_z -=  z * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-                   
-                    m_poly.add_energy(-4*m_pot_epsilon*m_pot_sigma_6/std::pow(dr,3));
-                }
-
-                m_poly.add_force(i, f_x, f_y, f_z);
-                m_poly.add_force(k, -f_x, -f_y, -f_z);
-                
-                m_poly.add_energy(4*m_pot_epsilon*m_pot_sigma_12/std::pow(dr,6));
-                // calculate points that are into m_pot_rcut^2
                 sphere[i].push_back(j);
             }
         }
     }
   }
-  else{ 
-    for(unsigned int i=0; i<m_poly.get_poly_sphere(); ++i){
-            for (auto && k : sphere[i]){
+  for(unsigned int i=0; i<m_poly.get_poly_sphere(); ++i){
+    for (auto && k : sphere[i]){
                 
-                x = pbc( m_poly.get_x(i) - m_poly.get_x(k)); 
-                y = pbc( m_poly.get_y(i) - m_poly.get_y(k));
-                z = pbc( m_poly.get_z(i) - m_poly.get_z(k));
-            
-                dr = x*x + y*y + z*z;
-                if(dr < m_pot_rcut*m_pot_rcut){
-                    f_x = x * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
-                    f_y = y * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7); 
-                    f_z = z * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
-                
-                    if(attractive){
-                        f_x -=  x * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-                        f_y -=  y * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-                        f_z -=  z * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-                        
-                        m_poly.add_energy(-4*m_pot_epsilon*m_pot_sigma_6/std::pow(dr,3));
-                    }
-                   
-                    m_poly.add_force(i, f_x, f_y, f_z);
-                    m_poly.add_force(k, -f_x, -f_y, -f_z);
-                    
-                    m_poly.add_energy(4*m_pot_epsilon*m_pot_sigma_12/std::pow(dr,6));
-                }
-            }
-        }
-    }
+       x = pbc( m_poly.get_x(i) - m_poly.get_x(k)); 
+       y = pbc( m_poly.get_y(i) - m_poly.get_y(k));
+       z = pbc( m_poly.get_z(i) - m_poly.get_z(k));
+       
+       dr = x*x + y*y + z*z;
+       if(dr < m_pot_rcut*m_pot_rcut){
+           f_x = x * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
+           f_y = y * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7); 
+           f_z = z * m_pot_epsilon * 48.0*m_pot_sigma_12/std::pow(dr,7);
+       
+           if(attractive){
+               f_x -=  x * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
+               f_y -=  y * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
+               f_z -=  z * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
+               
+               m_poly.add_energy(-4*m_pot_epsilon*m_pot_sigma_6/std::pow(dr,3));
+           }
+          
+           m_poly.add_force(i, f_x, f_y, f_z);
+           m_poly.add_force(k, -f_x, -f_y, -f_z);
+           
+           m_poly.add_energy(4*m_pot_epsilon*m_pot_sigma_12/std::pow(dr,6));
+       }
+     }
+  }
 }
 
 void  Potential::harmonic_spring_f()
