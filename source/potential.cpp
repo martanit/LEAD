@@ -12,7 +12,8 @@ void Potential::kinetic()
         m_poly.add_energy(k_x+k_y+k_z);
     }
 }
-void Potential::lennard_jones_f(int step, bool attarctive)
+
+void Potential::lennard_jones_f(int step, bool attarctive, bool compute_energy)
 {
   if(step%100==0 or step==0){
     for (unsigned int i=0; i<m_poly.get_poly_sphere(); ++i ){
@@ -32,6 +33,7 @@ void Potential::lennard_jones_f(int step, bool attarctive)
         }
     }
   }
+  
   for(unsigned int i=0; i<m_poly.get_poly_sphere(); ++i){
     for (auto && k : sphere[i]){
                 
@@ -49,21 +51,23 @@ void Potential::lennard_jones_f(int step, bool attarctive)
                f_x -=  x * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
                f_y -=  y * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
                f_z -=  z * m_pot_epsilon*24*m_pot_sigma_6/std::pow(dr,4);
-               
-               m_poly.add_energy(-4*m_pot_epsilon*m_pot_sigma_6/std::pow(dr,3));
+
+               if(compute_energy) m_poly.add_energy(-4*m_pot_epsilon*
+                                                    m_pot_sigma_6/std::pow(dr,3));
            }
           
            m_poly.add_force(i, f_x, f_y, f_z);
            m_poly.add_force(k, -f_x, -f_y, -f_z);
            
-           m_poly.add_energy(4*m_pot_epsilon*m_pot_sigma_12/std::pow(dr,6));
+           if(compute_energy) m_poly.add_energy(4*m_pot_epsilon*
+                                                m_pot_sigma_12/std::pow(dr,6));
        }
      }
   }
 }
 
-void  Potential::harmonic_spring_f()
-{
+void  Potential::harmonic_spring_f(bool compute_energy)
+{ 
   for (int i=0; i<m_poly.get_poly_sphere()-1; ++i ){
       spring_x = -k * pbc( m_poly.dist(i, i+1) - m_pot_sigma) * 
                       pbc( m_poly.get_x(i) - m_poly.get_x(i+1))
@@ -78,7 +82,7 @@ void  Potential::harmonic_spring_f()
       m_poly.add_force(i,spring_x, spring_y, spring_z);
       m_poly.add_force(i+1, -spring_x, -spring_y, -spring_z);
 
-      m_poly.add_energy(k*pbc( m_poly.dist(i, i+1) - m_pot_sigma)*
+      if(compute_energy) m_poly.add_energy(k*pbc( m_poly.dist(i, i+1) - m_pot_sigma)*
                           pbc( m_poly.dist(i, i+1) - m_pot_sigma)/2.); 
   }
 }
@@ -101,9 +105,4 @@ void Potential::extruder_spring_f()
         m_poly.add_force((*i).get_r(), -spring_x, -spring_y, -spring_z);
     }
 }
-
-
-
-
-
 

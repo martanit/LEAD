@@ -39,8 +39,10 @@ class VectorExtruder {
         void update(Polymer &);
 
         friend bool extr_overlap(Extruder & extr);
-        bool overlap_l(Extruder &);
-        bool overlap_r(Extruder &);
+        bool overlap_lr(Extruder &);
+        bool overlap_rl(Extruder &);
+        bool overlap_ll(Extruder &);
+        bool overlap_rr(Extruder &);
         
         auto begin() { return m_vector_extr.begin(); }
         auto begin() const { return m_vector_extr.begin(); }

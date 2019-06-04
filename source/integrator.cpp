@@ -4,7 +4,6 @@
 
 void Integrator::langevin_overdamped()
 {
-//#pragma omp parallel for  
   for(unsigned int i=0; i<(*m_poly).get_poly_sphere(); ++i){
     (*m_poly).set_x(pbc((*m_poly).get_x(i)+
                      ((*m_poly).get_fx(i)+
@@ -42,14 +41,25 @@ void Integrator::langevin_overdamped()
 void Integrator::markov_chain()
 {
     for(auto&& i: m_vector_extr){
+        // right side go foward to right
        if((*i).get_r()!=((*m_poly).get_poly_sphere()-1))
-             if (( (*i).get_rate_r() > transition_prob(mt)) 
+             if (( (*i).get_rate_fwr() > transition_prob(mt)) 
                      and ((*i).get_ctcf()[(*i).get_r()]!=1 or permeability_ctcf < transition_prob(mt)) 
-                     and !(m_vector_extr.overlap_r(*i))) (*i).set_r((*i).get_r()+1); 
+                     and !(m_vector_extr.overlap_rl(*i))) (*i).set_r((*i).get_r()+1); 
+       // right side go backward to left
+             if (( (*i).get_rate_bwr() > transition_prob(mt)) 
+                     and ((*i).get_ctcf()[(*i).get_r()]!=(-1) or permeability_ctcf < transition_prob(mt)) 
+                     and !(m_vector_extr.overlap_rr(*i))) (*i).set_r((*i).get_r()-1); 
+       
+       // left side go forward to left
        if((*i).get_l()!=0)
-             if (( (*i).get_rate_l() > transition_prob(mt))  
+             if (( (*i).get_rate_fwl() > transition_prob(mt))  
                      and ((*i).get_ctcf()[(*i).get_l()]!=(-1) or permeability_ctcf < transition_prob(mt)) 
-                     and !(m_vector_extr.overlap_l(*i))) (*i).set_l((*i).get_l()-1);
+                     and !(m_vector_extr.overlap_lr(*i))) (*i).set_l((*i).get_l()-1);
+       // left side go backward to right
+             if (( (*i).get_rate_bwl() > transition_prob(mt))  
+                     and ((*i).get_ctcf()[(*i).get_l()]!=1 or permeability_ctcf < transition_prob(mt)) 
+                     and !(m_vector_extr.overlap_ll(*i))) (*i).set_l((*i).get_l()+1);
     }
 }
 
@@ -57,12 +67,21 @@ void Integrator::markov_chain_rate()
 {
     for(auto&& i: m_vector_extr){
        if((*i).get_r()!=((*m_poly).get_poly_sphere()-1))
-             if (( (*i).get_rate_vr((int)(*i).get_r()) > transition_prob(mt)) 
+             if (( (*i).get_rate_vfwr((int)(*i).get_r()) > transition_prob(mt)) 
                      and (*i).get_ctcf()[(*i).get_r()]!=1
-                     and !(m_vector_extr.overlap_r(*i))) (*i).set_r((*i).get_r()+1); 
+                     and !(m_vector_extr.overlap_rl(*i))) (*i).set_r((*i).get_r()+1); 
+
+       if (( (*i).get_rate_vbwr((int)(*i).get_r()) > transition_prob(mt)) 
+                     and (*i).get_ctcf()[(*i).get_r()]!=(-1)
+                     and !(m_vector_extr.overlap_rr(*i))) (*i).set_r((*i).get_r()-1); 
+       
        if((*i).get_l()!=0)
-             if (( (*i).get_rate_vl((int)(*i).get_l()) > transition_prob(mt))  
+             if (( (*i).get_rate_vfwl((int)(*i).get_l()) > transition_prob(mt))  
                      and (*i).get_ctcf()[(*i).get_l()]!=(-1)
-                     and !(m_vector_extr.overlap_l(*i))) (*i).set_l((*i).get_l()-1);
+                     and !(m_vector_extr.overlap_lr(*i))) (*i).set_l((*i).get_l()-1);
+       
+       if (( (*i).get_rate_vbwl((int)(*i).get_l()) > transition_prob(mt))  
+                     and (*i).get_ctcf()[(*i).get_l()]!=1
+                     and !(m_vector_extr.overlap_ll(*i))) (*i).set_l((*i).get_l()+1);
     }
 }

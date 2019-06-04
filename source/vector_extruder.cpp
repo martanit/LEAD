@@ -56,7 +56,7 @@ void VectorExtruder::update(Polymer &poly)
         m_vector_extr.push_back(std::make_unique<Extruder>(i));
 }
 
-bool VectorExtruder::overlap_l(Extruder & extr)
+bool VectorExtruder::overlap_lr(Extruder & extr)
 {
     bool is_overl = false;
     for (auto &i : m_vector_extr){
@@ -71,7 +71,21 @@ bool VectorExtruder::overlap_l(Extruder & extr)
     return is_overl;
 }
 
-bool VectorExtruder::overlap_r(Extruder & extr)
+bool VectorExtruder::overlap_ll(Extruder & extr)
+{
+    bool is_overl = false;
+    for (auto &i : m_vector_extr){
+        // same extrusor
+        if(extr == (*i)) is_overl = false;
+
+        else if(extr.get_l() == (*i).get_l()) {
+            is_overl = true;
+            break;
+        }
+    }
+    return is_overl;
+}
+bool VectorExtruder::overlap_rl(Extruder & extr)
 {
     bool is_overl = false;
     for (auto &i : m_vector_extr){
@@ -86,3 +100,17 @@ bool VectorExtruder::overlap_r(Extruder & extr)
     return is_overl;
 }
 
+bool VectorExtruder::overlap_rr(Extruder & extr)
+{
+    bool is_overl = false;
+    for (auto &i : m_vector_extr){
+        // same extrusor
+        if(extr == (*i)) is_overl = false;
+
+        else if(extr.get_r() == (*i).get_r()) {
+            is_overl = true;
+            break;
+        }
+    }
+    return is_overl;
+}

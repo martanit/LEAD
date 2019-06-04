@@ -57,15 +57,19 @@ public:
     const std::vector<int>& get_ctcf() const { return m_ctcf; };
     const std::vector<double>& get_coupling_prob() const { return m_coupling_prob; };
    
-    const float& get_rate_l() const { return m_rate_l; };
-    const float& get_rate_r() const { return m_rate_r; };
+    const float& get_rate_fwl() const { return m_rate_fwl; };
+    const float& get_rate_fwr() const { return m_rate_fwr; };
+    const float& get_rate_bwl() const { return m_rate_bwl; };
+    const float& get_rate_bwr() const { return m_rate_bwr; };
 
     const float& get_kon() const {return m_k_on; }
     const float& get_koff() const {return m_k_off; }
     const int& get_max_extr() const {return m_n_max_extr;}
 
-    const std::vector<double>& get_rate_vl() { return m_rate_vl; };
-    const std::vector<double>& get_rate_vr() { return m_rate_vr; };
+    const std::vector<double>& get_rate_vfwl() { return m_rate_vfwl; };
+    const std::vector<double>& get_rate_vfwr() { return m_rate_vfwr; };
+    const std::vector<double>& get_rate_vbwl() { return m_rate_vbwl; };
+    const std::vector<double>& get_rate_vbwr() { return m_rate_vbwr; };
 
 protected:
 	// dynamic parameters
@@ -95,13 +99,18 @@ protected:
     float m_perm_ctcf = 0.9;
     std::vector<int> m_ctcf;
     std::vector<double> m_coupling_prob;
-    float m_rate_l;
-    float m_rate_r;
+    
+    float m_rate_fwl;
+    float m_rate_fwr;
+    float m_rate_bwl;
+    float m_rate_bwr;
     
     //use for different rate for each sphere
-    std::vector<double> m_rate_vl;
-    std::vector<double> m_rate_vr;
-
+    std::vector<double> m_rate_vfwl;
+    std::vector<double> m_rate_vfwr;
+    std::vector<double> m_rate_vbwl;
+    std::vector<double> m_rate_vbwr;
+    
     // dynamics extruder parm
     float m_k_on = 0.5;
     float m_k_off = 0.998;

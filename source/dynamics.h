@@ -28,7 +28,7 @@ class Dynamics :  public Integrator, public Potential
       m_parm=parm;
       m_poly = std::make_unique<Polymer>(poly); 
     };
-
+    
     ~Dynamics()
     {
     };
@@ -38,12 +38,16 @@ class Dynamics :  public Integrator, public Potential
     const VectorExtruder & get_extr() const { return m_vector_extr; }
     Parameters get_parm(){ return m_parm; }
 
-    void run();
+    void run_extrusion();
+    void run(bool);
+    double delta_h();
 
   private:
     Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     VectorExtruder m_vector_extr;
+    Polymer m_poly_old;
+    double deltaH, A, B, C;
 
     int m_dynamics_print = 100;
     int m_dynamics_nstep = 100000;
