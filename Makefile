@@ -31,6 +31,7 @@ WARNING := -Wall -Wextra
 
 #CXXFLAGS := $(CXXFLAGS) -std=c++17 -Ofast -fopenmp 
 CXXFLAGS := $(CXXFLAGS) -std=c++17 -Ofast
+#LDFLAGS := -lpthread -lCGAL -lboost_system -lgmp 
 LDFLAGS := -lpthread
 
 all: $(TARGET)

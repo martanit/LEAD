@@ -11,6 +11,7 @@
 #include "polymer.h"
 #include "vector_extruder.h"
 #include<memory>
+//#include "my_point_property_map.h"
 
 class Potential
 {
@@ -46,8 +47,16 @@ class Potential
 
     Polymer m_poly;
     VectorExtruder m_vector_extr;
-
+/*
+    typedef CGAL::Search_traits_3 <K> Traits_base;
+    typedef CGAL::Search_traits_adapter < Point_and_int, My_point_property_map, Traits_base > Traits;
+    typedef CGAL::Fuzzy_iso_box<Traits> Fuzzy_ib;
+    typedef CGAL::Kd_tree<Traits> Tree; 
     
+    std::vector<Point_3> points;
+    std::vector<int> indices;
+    std::vector<Point_and_int> result;
+  */
     // potential parameters
     double m_pot_epsilon = 1.;
     double m_pot_sigma = 1.;
@@ -63,7 +72,7 @@ class Potential
     bool attractive = true;
     double dr;
     double x, y, z;
-    std::vector<std::vector<unsigned int> > sphere;
+    std::vector<std::vector<int> > sphere;
     
     double f_x = 0.,
            f_y = 0.,
