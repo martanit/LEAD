@@ -38,7 +38,7 @@ void VectorExtruder::update(Polymer &poly)
 	for ( const auto &i : m_vector_extr)
         //fill tmp_extruder only with extruder 
         //that are not undbind
-        if( m_koff > dist(mt))
+        if( m_koff < dist(mt))
             tmp_extruder.push_back(*i); 
   
     for(int i = 0; i<m_n_max_extr-tmp_extruder.size(); ++i){

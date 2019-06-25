@@ -113,7 +113,7 @@ protected:
     
     // dynamics extruder parm
     float m_k_on = 0.5;
-    float m_k_off = 0.998;
+    float m_k_off = 0.001;
     int m_n_max_extr = 10;
 };
 

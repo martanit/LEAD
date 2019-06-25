@@ -30,7 +30,7 @@ DEBUG := -g
 WARNING := -Wall -Wextra
 
 #CXXFLAGS := $(CXXFLAGS) -std=c++17 -Ofast -fopenmp 
-CXXFLAGS := $(CXXFLAGS) -std=c++17 -Ofast
+CXXFLAGS := $(CXXFLAGS) -std=c++17 -O3 --fast-math
 #LDFLAGS := -lpthread -lCGAL -lboost_system -lgmp 
 LDFLAGS := -lpthread
 

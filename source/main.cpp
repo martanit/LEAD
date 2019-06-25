@@ -19,9 +19,9 @@ int main() {
     bool extrusion=true;  
     bool compute_energy = false;
   
-  Polymer poly_init(parm);
-  Extruder extr(parm);
-  VectorExtruder v_extr(parm,extr, poly_init); 
+    Polymer poly_init(parm);
+    Extruder extr(parm);
+    VectorExtruder v_extr(parm,extr, poly_init); 
  
   Dynamics dyn(poly_init, v_extr, parm);
 

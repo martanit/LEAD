@@ -11,7 +11,7 @@ void Dynamics::run_extrusion()
        
         Potential::set_new_polymer(*m_poly);
         Potential::set_new_extruder(m_vector_extr);
-      
+
         this->extruder_spring_f();
         this->lennard_jones_f(i, true, compute_energy);
         this->harmonic_spring_f(compute_energy);

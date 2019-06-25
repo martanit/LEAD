@@ -48,16 +48,14 @@ Polymer::~Polymer()
 void Polymer::set_size()
 {
     m_poly_x.resize(m_poly_sphere);  
-    m_poly_y.resize(m_poly_sphere); 
-    m_poly_z.resize(m_poly_sphere); 
-    
-    m_poly_vx.resize(m_poly_sphere);
-    m_poly_vy.resize(m_poly_sphere); 
-    m_poly_vz.resize(m_poly_sphere); 
-    
-    m_poly_fx.resize(m_poly_sphere); 
-    m_poly_fy.resize(m_poly_sphere); 
-    m_poly_fz.resize(m_poly_sphere);
+    m_poly_y.resize(m_poly_sphere);  
+    m_poly_z.resize(m_poly_sphere);  
+    m_poly_vx.resize(m_poly_sphere);  
+    m_poly_vy.resize(m_poly_sphere);  
+    m_poly_vz.resize(m_poly_sphere);  
+    m_poly_fx.resize(m_poly_sphere);  
+    m_poly_fy.resize(m_poly_sphere);  
+    m_poly_fz.resize(m_poly_sphere);  
 }
 
 void Polymer::first_sphere()

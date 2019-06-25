@@ -63,7 +63,7 @@ class VectorExtruder {
         // maximum number of extruder
         int m_n_max_extr = 3;
         double m_kon = 0.9;
-        double m_koff = 0.999;
+        double m_koff = 0.001;
 };  
 
 #endif /*EXTRUDER_VECTOR_H_*/
