@@ -5,30 +5,29 @@
  *      Author: martanit
  */
 
+#include "dynamics.h"
+#include "extruder.h"
+#include "integrator.h"
 #include "parameters.h"
 #include "polymer.h"
 #include "potential.h"
-#include "integrator.h"
-#include "dynamics.h"
-#include "extruder.h"
 #include "vector_extruder.h"
 
 int main() {
-  Parameters parm("input/parameters.in", "input/ctcf.in", "input/coupling_probability.in");
-  
-  
-    Polymer poly_init(parm);
-    Extruder extr(parm);
-    VectorExtruder v_extr(parm,extr, poly_init); 
- 
-    Dynamics dyn(poly_init, v_extr, parm);
+  Parameters parm("input/parameters.in", "input/ctcf.in",
+                  "input/coupling_probability.in");
+  Polymer poly_init(parm);
+  Extruder extr(parm);
+  VectorExtruder v_extr(parm, extr, poly_init);
 
-    print_xyz(poly_init, "output/traj.xyz");
-  
-    dyn.run_extrusion();
+  Dynamics dyn(poly_init, v_extr, parm);
 
-    Polymer poly_last = dyn.get_poly();
-    print_xyz(poly_last, "output/traj.xyz");
-  
-    return 0;
+  print_xyz(poly_init, "output/traj.xyz");
+
+  dyn.run_extrusion();
+
+  Polymer poly_last = dyn.get_poly();
+  print_xyz(poly_last, "output/traj.xyz");
+
+  return 0;
 }

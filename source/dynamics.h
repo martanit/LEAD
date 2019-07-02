@@ -8,45 +8,37 @@
 #ifndef DYNAMICS_H_
 #define DYNAMICS_H_
 
+#include "extruder.h"
+#include "integrator.h"
 #include "parameters.h"
 #include "polymer.h"
 #include "potential.h"
-#include "integrator.h"
-#include "extruder.h"
 #include "vector_extruder.h"
 
-class Dynamics :  public Integrator, public Potential
-{
-  public: 
-    Dynamics(Polymer &poly, VectorExtruder & vector_extr, Parameters parm) : 
-                                   Integrator(poly, vector_extr, parm), 
-                                   Potential(poly, vector_extr,  parm), 
-                                   m_vector_extr(vector_extr),
-                                   m_dynamics_print(parm.get_print()),
-                                   m_dynamics_nstep(parm.get_nstep())
-                                   
-    { 
-      m_parm=parm;
-      m_poly = std::make_unique<Polymer>(poly); 
-    };
-    
-    ~Dynamics()
-    {
-    };
+class Dynamics : public Integrator, public Potential {
+public:
+  Dynamics(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
+      : Integrator(poly, vector_extr, parm), Potential(poly, vector_extr, parm),
+        m_vector_extr(vector_extr), m_dynamics_print(parm.get_print()),
+        m_dynamics_nstep(parm.get_nstep())
 
-    // Function to get polymer and extruder
-    const Polymer & get_poly() const {  return *m_poly; }
-    const VectorExtruder & get_extr() const { return m_vector_extr; }
-    Parameters get_parm(){ return m_parm; }
+  {
+    m_poly = std::make_unique<Polymer>(poly);
+  };
 
-    void run_extrusion();
+  ~Dynamics(){};
 
-  private:
-    Parameters m_parm;
-    std::unique_ptr<Polymer> m_poly;
-    VectorExtruder m_vector_extr;
+  // Function to get polymer and extruder
+  const Polymer &get_poly() const { return *m_poly; }
+  const VectorExtruder &get_extr() const { return m_vector_extr; }
 
-    int m_dynamics_print = 100;
-    int m_dynamics_nstep = 100000;
+  void run_extrusion();
+
+private:
+  std::unique_ptr<Polymer> m_poly;
+  VectorExtruder m_vector_extr;
+
+  int m_dynamics_print = 100;
+  int m_dynamics_nstep = 100000;
 };
 #endif /* DYNAMICS_H_ */
