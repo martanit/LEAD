@@ -22,7 +22,8 @@ class VectorExtruder {
         VectorExtruder(Parameters parm, Extruder& extr, Polymer& poly) : m_extr(extr),
                                                                         m_kon(parm.get_kon()),
                                                                         m_koff(parm.get_koff()),
-                                                                        m_n_max_extr(parm.get_max_extr())
+                                                                        m_n_max_extr(parm.get_max_extr()),
+                                                                        integrator_timestep(parm.get_timestep())
         {
             this -> first_fill(poly);
         };
@@ -32,6 +33,7 @@ class VectorExtruder {
             m_kon = vector_extr.m_kon;
             m_koff = vector_extr.m_koff;
             m_n_max_extr = vector_extr.m_n_max_extr;    
+            integrator_timestep = vector_extr.integrator_timestep;
         };
 
         ~VectorExtruder(){};
@@ -64,6 +66,7 @@ class VectorExtruder {
         int m_n_max_extr = 3;
         double m_kon = 0.9;
         double m_koff = 0.001;
+        double integrator_timestep=0;
 };  
 
 #endif /*EXTRUDER_VECTOR_H_*/

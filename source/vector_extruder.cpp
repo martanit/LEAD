@@ -6,10 +6,11 @@ void VectorExtruder::first_fill(Polymer & poly)
     std::mt19937 mt (rd());
     std::uniform_real_distribution<double> dist(0., 1.);
     bool is_overl=false;
-
+    
     std::vector<Extruder> tmp_extruder;
     for(int i = 0; i<m_n_max_extr; ++i){
         m_extr.place_extruder(poly); 
+        // Fill m_vector extr with almost one extruder
         if(i==0)
             tmp_extruder.push_back(m_extr);
         else{
@@ -18,7 +19,7 @@ void VectorExtruder::first_fill(Polymer & poly)
                     is_overl=true;
                     break;
                 }  
-            if( m_kon > dist(mt) and !(is_overl)) 
+            if((m_n_max_extr*m_kon*integrator_timestep/poly.get_poly_sphere()) > dist(mt) and !(is_overl))
                 tmp_extruder.push_back(m_extr);
         }    
     }
@@ -29,6 +30,7 @@ void VectorExtruder::first_fill(Polymer & poly)
 
 void VectorExtruder::update(Polymer &poly)
 {
+  //std::cout << m_vector_extr.size() << std::endl;
     std::random_device rd;
     std::mt19937 mt (rd());
     std::uniform_real_distribution<double> dist(0., 1.);
@@ -38,17 +40,17 @@ void VectorExtruder::update(Polymer &poly)
 	for ( const auto &i : m_vector_extr)
         //fill tmp_extruder only with extruder 
         //that are not undbind
-        if( m_koff < dist(mt))
+        if( (m_vector_extr.size()*m_koff*integrator_timestep) < dist(mt))
             tmp_extruder.push_back(*i); 
-  
-    for(int i = 0; i<m_n_max_extr-tmp_extruder.size(); ++i){
+    
+  for(int i = 0; i<m_n_max_extr-tmp_extruder.size(); ++i){
         m_extr.place_extruder(poly); 
         for(auto &j : tmp_extruder )
             if((j).extr_overlap(m_extr)) {
                 is_overl=true;
                 break;
             }
-        if( m_kon > dist(mt) and !(is_overl)) 
+       if( (m_n_max_extr*m_kon*integrator_timestep/poly.get_poly_sphere()) > dist(mt) and !(is_overl)) 
             tmp_extruder.push_back(m_extr);
     }
     m_vector_extr.clear();

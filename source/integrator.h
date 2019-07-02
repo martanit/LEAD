@@ -24,7 +24,6 @@ class Integrator
         m_integrator_timestep(integrator_parm.get_timestep()),
         m_integrator_gamma(integrator_parm.get_gamma()),
         m_integrator_temp(integrator_parm.get_temp()),
-        m_box(integrator_parm.get_box()),
         gauss_term(0,1),
         transition_prob(0.,1.)
     {
@@ -53,8 +52,6 @@ class Integrator
     
     // extruder move
     void markov_chain();
-    // using vector for rate
-    void markov_chain_rate();
 
   private:
 
@@ -64,13 +61,11 @@ class Integrator
     
     std::unique_ptr<Polymer> m_poly;
     VectorExtruder m_vector_extr;
-
+    
+    double gauss_term_sphere;
     double stoch_term = 0;
     double m_integrator_timestep = 0.0001;
     double m_integrator_gamma=1.;
     double m_integrator_temp = 1.;
-    double permeability_ctcf = 0.9;
-
-    double m_box = 50.;
 };
 #endif /* INTEGRATOR_H_ */

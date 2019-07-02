@@ -7,14 +7,6 @@
 
 #include "parameters.h"
 
-Parameters::Parameters( std::string file_name, std::string ctcf, std::string prob, std::string rate )
-{
-	this -> read_parm( file_name );
-    this -> read_ctcf( ctcf );
-    this -> read_coupling_prob( prob );
-// using when passing file with different rate per sphere
-    this -> read_rate( rate );
-}
 Parameters::Parameters( std::string file_name, std::string ctcf, std::string prob )
 {
 	this -> read_parm( file_name );
@@ -49,7 +41,6 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "print" ) set_parm(m_print, std::stoi(par));
 				else if( name == "timestep" ) set_parm(m_timestep, std::stof(par));	
 				else if( name == "temp" ) set_parm(m_temp, std::stof(par));
-        else if( name == "box" ) set_parm(m_box, std::stof(par));
 				else if( name == "init" ) set_parm(m_init, par);
 				else if( name == "psphere") set_parm( m_psphere, std::stoi(par));
 				else if( name == "pmass" ) set_parm(m_pmass, std::stof(par));
@@ -57,7 +48,7 @@ bool Parameters::read_parm( std::string file_name )
 				else if( name == "bond" ) set_parm(m_bond, std::stof(par));
 				else if( name == "hradius" ) set_parm(m_hradius, std::stof(par));
 				else if( name == "epsilon" ) set_parm(m_epsilon, std::stof(par));
-				else if( name == "sigma" ) set_parm(m_sigma, std::stof(par));
+				else if( name == "rmin" ) set_parm(m_rmin, std::stof(par));
         else if( name == "rcut" ) set_parm(m_rcut, std::stof(par));
         else if( name == "gamma" ) set_parm(m_gamma, std::stof(par));
         else if( name == "k_on" ) set_parm(m_k_on, std::stof(par));
@@ -123,33 +114,3 @@ bool Parameters::read_coupling_prob( std::string file_name)
 	return 0;
 }
 
-// using when passing file with different rate per sphere
-bool Parameters::read_rate( std::string file_name)
-{
-    double fwl;
-    double fwr;
-    double bwl;
-    double bwr;
-
-	// read file
-	std::ifstream rate_file;
-	rate_file.open( file_name, std::fstream::in );
-
-	// return error if read file fail
-	if( rate_file.fail() ) {
-		throw "ERROR: Impossible to open parameters file "+file_name;
-		return 1;
-	}
-
-	std::string line;
-	while ( std::getline(rate_file, line) ) {
-		std::istringstream iss(line);
-	    iss >> fwl >> fwr >> bwl >> bwr;		
-        m_rate_vfwl.push_back(fwl);
-        m_rate_vfwr.push_back(fwr);
-        m_rate_vbwl.push_back(bwl);
-        m_rate_vbwr.push_back(bwr);
-    }
-	rate_file.close();
-	return 0;
-}

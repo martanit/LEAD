@@ -16,7 +16,6 @@ Polymer::Polymer(Parameters parm) : m_poly_mass(parm.get_pmass()),
                                     m_poly_dist(parm.get_pdist()),
                                     m_poly_bond(parm.get_bond()),
                                     m_poly_hradius(parm.get_hradius()),
-                                    m_box(parm.get_box()),
                                     uniform01(0.,1.),
                                     uniform0505(-0.5, 0.5)
 {
@@ -31,7 +30,6 @@ Polymer::Polymer (Parameters parm, std::string poly_xyz) : m_poly_mass(parm.get_
                                                            m_poly_dist(parm.get_pdist()),
                                                            m_poly_bond(parm.get_bond()),
                                                            m_poly_hradius(parm.get_hradius()),
-                                                           m_box(parm.get_box()),
                                                            uniform01(0.,1.),
                                                            uniform0505(-0.5, 0.5)
 {
@@ -60,9 +58,9 @@ void Polymer::set_size()
 
 void Polymer::first_sphere()
 {	
-	m_poly_x[0] = pbc( uniform01(mt) );   // x
-	m_poly_y[0] = pbc( uniform01(mt) );   // y
-	m_poly_z[0] = pbc( uniform01(mt) );	// z	
+	m_poly_x[0] = ( uniform01(mt) );   // x
+	m_poly_y[0] = ( uniform01(mt) );   // y
+	m_poly_z[0] = ( uniform01(mt) );	// z	
 }
 
 void Polymer::poly_configuration()
@@ -77,9 +75,9 @@ void Polymer::poly_configuration()
 			// uniform distribution on sphere
             double p = acos(1 - 2 * uniform01(mt));
       
-            m_poly_x[i] = pbc( m_poly_x[i-1]+d*std::sin(p)*std::cos(t) );
-            m_poly_y[i] = pbc( m_poly_y[i-1]+d*std::sin(p)*std::sin(t) );
-            m_poly_z[i] = pbc( m_poly_z[i-1]+d*std::cos(p) );
+            m_poly_x[i] = ( m_poly_x[i-1]+d*std::sin(p)*std::cos(t) );
+            m_poly_y[i] = ( m_poly_y[i-1]+d*std::sin(p)*std::sin(t) );
+            m_poly_z[i] = ( m_poly_z[i-1]+d*std::cos(p) );
 			is_overlap = this->is_overlap(i);
 		}
 	}

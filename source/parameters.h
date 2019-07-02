@@ -19,7 +19,6 @@ public:
 	// default constructor
 	Parameters(void) { };
 	// constructor
-	Parameters( std::string, std::string, std::string, std::string );
 	Parameters( std::string, std::string, std::string );
 	~Parameters();
 	
@@ -28,7 +27,6 @@ public:
 	bool read_parm( std::string );
     bool read_ctcf( std::string );
     bool read_coupling_prob( std::string );
-    bool read_rate( std::string );
 
 	// function that store different type parameters
 	template <typename myType>
@@ -41,7 +39,6 @@ public:
     float get_gamma() { return m_gamma; }
     
     float get_temp() { return m_temp; }
-	float get_box() { return m_box; }
     
     float get_pmass() { return m_pmass; }
 	int get_psphere() { return m_psphere; }
@@ -50,7 +47,7 @@ public:
 	float get_hradius() { return m_hradius; }
     
     float get_epsilon() { return m_epsilon; }
-    float get_sigma() { return m_sigma; }
+    float get_rmin() { return m_rmin; }
     float get_rcut() { return m_rcut; }
     
     float get_permeability() { return m_perm_ctcf; } 
@@ -66,10 +63,6 @@ public:
     const float& get_koff() const {return m_k_off; }
     const int& get_max_extr() const {return m_n_max_extr;}
 
-    const std::vector<double>& get_rate_vfwl() { return m_rate_vfwl; };
-    const std::vector<double>& get_rate_vfwr() { return m_rate_vfwr; };
-    const std::vector<double>& get_rate_vbwl() { return m_rate_vbwl; };
-    const std::vector<double>& get_rate_vbwr() { return m_rate_vbwr; };
 
 protected:
 	// dynamic parameters
@@ -80,7 +73,6 @@ protected:
 
 	// system parameters
 	float m_temp = 2.;		// system temperature [K]
-    float m_box = 10.;
 
 	// polymer parameters
 	float m_pmass = 1.;		// mass
@@ -92,7 +84,7 @@ protected:
  
     // potential parameters
     float m_epsilon = 1.; // parameter for LJ potential
-    float m_sigma = 1.; // parameter for LJ potential
+    float m_rmin = 1.; // parameter for LJ potential
     float m_rcut = 5.; // parameter for LJ potential action
     
     // extruder parameters
@@ -104,12 +96,6 @@ protected:
     float m_rate_fwr;
     float m_rate_bwl;
     float m_rate_bwr;
-    
-    //use for different rate for each sphere
-    std::vector<double> m_rate_vfwl;
-    std::vector<double> m_rate_vfwr;
-    std::vector<double> m_rate_vbwl;
-    std::vector<double> m_rate_vbwr;
     
     // dynamics extruder parm
     float m_k_on = 0.5;

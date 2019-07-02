@@ -23,8 +23,7 @@ class Dynamics :  public Integrator, public Potential
                                    Potential(poly, vector_extr,  parm), 
                                    m_vector_extr(vector_extr),
                                    m_dynamics_print(parm.get_print()),
-                                   m_dynamics_nstep(parm.get_nstep()),
-                                   m_poly_old(Polymer(parm))
+                                   m_dynamics_nstep(parm.get_nstep())
                                    
     { 
       m_parm=parm;
@@ -41,15 +40,11 @@ class Dynamics :  public Integrator, public Potential
     Parameters get_parm(){ return m_parm; }
 
     void run_extrusion();
-    void run(bool);
-    double delta_h();
 
   private:
     Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     VectorExtruder m_vector_extr;
-    Polymer m_poly_old;
-    double deltaH, A, B, C;
 
     int m_dynamics_print = 100;
     int m_dynamics_nstep = 100000;

@@ -16,24 +16,19 @@
 int main() {
   Parameters parm("input/parameters.in", "input/ctcf.in", "input/coupling_probability.in");
   
-    bool extrusion=true;  
-    bool compute_energy = false;
   
     Polymer poly_init(parm);
     Extruder extr(parm);
     VectorExtruder v_extr(parm,extr, poly_init); 
  
-  Dynamics dyn(poly_init, v_extr, parm);
+    Dynamics dyn(poly_init, v_extr, parm);
 
-  print_xyz(poly_init, "output/traj.xyz");
+    print_xyz(poly_init, "output/traj.xyz");
   
-  if(!extrusion)
-    dyn.run(compute_energy); 
-  else
     dyn.run_extrusion();
 
-  Polymer poly_last = dyn.get_poly();
-  print_xyz(poly_last, "output/traj.xyz");
+    Polymer poly_last = dyn.get_poly();
+    print_xyz(poly_last, "output/traj.xyz");
   
-  return 0;
+    return 0;
 }

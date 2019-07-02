@@ -18,18 +18,6 @@
 class Extruder  {
 
     public:
-        Extruder(Parameters parm, bool rate) : m_parm(parm),
-                                    m_rate_vfwl(parm.get_rate_vfwl()),
-                                    m_rate_vfwr(parm.get_rate_vfwr()),
-                                    m_rate_vbwl(parm.get_rate_vbwl()),
-                                    m_rate_vbwr(parm.get_rate_vbwr()),
-                                    m_coupling_prob(parm.get_coupling_prob()),
-                                    m_ctcf(parm.get_ctcf()),
-                                    m_perm_ctcf(parm.get_permeability()),
-                                    try_extruder_pos(1, parm.get_psphere()-2),
-                                    coupling_try(0,1)
-        {
-        };
         Extruder(Parameters parm) : m_parm(parm),
                                     m_rate_fwl(parm.get_rate_fwl()),
                                     m_rate_fwr(parm.get_rate_fwr()),
@@ -51,21 +39,17 @@ class Extruder  {
 
         void place_extruder(Polymer poly);
         
-        inline const Extruder& get_extr() const{ return *this;};
-        inline const int& get_r() const {  return m_extruder_r; };
-        inline const int& get_l() const {  return m_extruder_l; };
-        inline const std::vector<int>& get_ctcf() const {return m_ctcf;};        
+        const Extruder& get_extr() const{ return *this;};
+        const int& get_r() const {  return m_extruder_r; };
+        const int& get_l() const {  return m_extruder_l; };
+        const std::vector<int>& get_ctcf() const {return m_ctcf;};        
         
-        inline const double& get_rate_vfwl(int pos) const {return m_rate_vfwl[pos]; };
-        inline const double& get_rate_vfwr(int pos) const {return m_rate_vfwr[pos]; };
-        inline const double& get_rate_vbwl(int pos) const {return m_rate_vbwl[pos]; };
-        inline const double& get_rate_vbwr(int pos) const {return m_rate_vbwr[pos]; };
-
-        inline const double& get_rate_fwl() const {return m_rate_fwl; };
-        inline const double& get_rate_fwr() const {return m_rate_fwr; };
-        inline const double& get_rate_bwl() const {return m_rate_bwl; };
-        inline const double& get_rate_bwr() const {return m_rate_bwr; };
-
+        const double& get_rate_fwl() const { return m_rate_fwl; };
+        const double& get_rate_fwr() const { return m_rate_fwr; };
+        const double& get_rate_bwl() const { return m_rate_bwl; };
+        const double& get_rate_bwr() const { return m_rate_bwr; };
+  
+        const double& get_permeability() const { return m_perm_ctcf; };
         
         void set_r(double r){ m_extruder_r = r; } 
         void set_l(double l){ m_extruder_l = l; } 
@@ -77,11 +61,6 @@ class Extruder  {
     protected:
         int m_extruder_r, m_extruder_l;
         
-        std::vector<double> m_rate_vfwl;
-        std::vector<double> m_rate_vfwr;
-        std::vector<double> m_rate_vbwl;
-        std::vector<double> m_rate_vbwr;
-     
         double m_rate_fwl = 0.0001;
         double m_rate_fwr = 0.0001;
         double m_rate_bwl = 0.0001;

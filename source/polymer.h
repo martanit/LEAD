@@ -2,7 +2,6 @@
 #define POLYMER_H_
 
 #include "parameters.h"
-#include "utils.h"
 
 #include <cmath>
 #include <random>
@@ -83,7 +82,6 @@ class Polymer {
 	  float m_poly_bond = 10.;		// spring constant of harmonic oscillator (bond)
 	  float m_poly_hradius = 0.2;		// hard core radius of sphere
     std::string m_poly_init = "init.dat";
-    double m_box = 50.;
 
     std::vector<double> m_poly_x, m_poly_y, m_poly_z;
     std::vector<double> m_poly_vx, m_poly_vy, m_poly_vz;
