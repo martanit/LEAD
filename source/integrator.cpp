@@ -4,20 +4,18 @@
 
 void Integrator::langevin_overdamped() {
   for (unsigned int i = 0; i < (*m_poly).get_poly_sphere(); ++i) {
-    gauss_term_sphere = gauss_term(mt);
-
     (*m_poly).set_x((*m_poly).get_x(i) +
-                        ((*m_poly).get_fx(i) + stoch_term * gauss_term_sphere) *
+                        ((*m_poly).get_fx(i) + stoch_term * gauss_term(mt)) *
                             m_integrator_timestep / m_integrator_gamma,
                     i);
 
     (*m_poly).set_y((*m_poly).get_y(i) +
-                        ((*m_poly).get_fy(i) + stoch_term * gauss_term_sphere) *
+                        ((*m_poly).get_fy(i) + stoch_term * gauss_term(mt)) *
                             m_integrator_timestep / m_integrator_gamma,
                     i);
 
     (*m_poly).set_z((*m_poly).get_z(i) +
-                        ((*m_poly).get_fz(i) + stoch_term * gauss_term_sphere) *
+                        ((*m_poly).get_fz(i) + stoch_term * gauss_term(mt)) *
                             m_integrator_timestep / m_integrator_gamma,
                     i);
   }

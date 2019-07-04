@@ -20,9 +20,10 @@ public:
   Dynamics(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
       : Integrator(poly, vector_extr, parm), Potential(poly, vector_extr, parm),
         m_vector_extr(vector_extr), m_dynamics_print(parm.get_print()),
-        m_dynamics_nstep(parm.get_nstep())
+        m_dynamics_nstep(parm.get_nstep()), m_poly_old(Polymer(parm))
 
   {
+    m_parm = parm;
     m_poly = std::make_unique<Polymer>(poly);
   };
 
@@ -32,11 +33,16 @@ public:
   const Polymer &get_poly() const { return *m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
 
+  void run(bool);
+  double delta_h();
   void run_extrusion();
 
 private:
+  Parameters m_parm;
   std::unique_ptr<Polymer> m_poly;
   VectorExtruder m_vector_extr;
+  Polymer m_poly_old;
+  double deltaH, A,B,C;
 
   int m_dynamics_print = 100;
   int m_dynamics_nstep = 100000;

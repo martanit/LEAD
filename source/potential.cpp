@@ -54,7 +54,7 @@ void Potential::lennard_jones_f(int step, bool attarctive,
   }
 }
 
-void Potential::harmonic_spring_f() {
+void Potential::harmonic_spring_f(bool compute_energy) {
   for (int i = 0; i < m_poly.get_poly_sphere() - 1; ++i) {
     spring_x = -k * (m_poly.dist(i, i + 1) - m_pot_rmin) *
                (m_poly.get_x(i) - m_poly.get_x(i + 1)) / m_poly.dist(i, i + 1);
@@ -65,6 +65,8 @@ void Potential::harmonic_spring_f() {
 
     m_poly.add_force(i, spring_x, spring_y, spring_z);
     m_poly.add_force(i + 1, -spring_x, -spring_y, -spring_z);
+    if(compute_energy) m_poly.add_energy(k*(m_poly.dist(i,i+1)-m_pot_rmin)*
+                  (m_poly.dist(i,i+1)-m_pot_rmin)/2.);
   }
 }
 
