@@ -1,11 +1,11 @@
 #include "potential.h"
 
-void Potential::lennard_jones_f(int step, bool attarctive,
+void Potential::lennard_jones_f(int step, bool attractive,
                                 bool compute_energy) {
   if (step % 100 == 0 or step == 0) {
     for (unsigned int i = 0; i < m_poly.get_poly_sphere(); ++i) {
       sphere[i].clear();
-      for (unsigned int j = i + 2; j < m_poly.get_poly_sphere(); ++j) {
+      for (unsigned int j = i + 1; j < m_poly.get_poly_sphere(); ++j) {
 
         x = (m_poly.get_x(i) - m_poly.get_x(j));
         y = (m_poly.get_y(i) - m_poly.get_y(j));

@@ -6,8 +6,7 @@ bool read_xyz(Polymer &, std::string);
 Polymer::Polymer(Parameters parm)
     : m_poly_sphere(parm.get_psphere()),
       m_poly_dist(parm.get_distance()), m_poly_spring(parm.get_spring()),
-      m_poly_rinit(parm.get_rinit()), uniform01(0., 1.),
-      uniform0505(-0.5, 0.5) {
+      m_poly_rinit(parm.get_rinit()), uniform01(0., 1.){
   this->set_size();
   this->reset_force();
   this->poly_configuration();
@@ -16,8 +15,7 @@ Polymer::Polymer(Parameters parm)
 Polymer::Polymer(Parameters parm, std::string poly_xyz)
     : m_poly_sphere(parm.get_psphere()),
       m_poly_dist(parm.get_distance()), m_poly_spring(parm.get_spring()),
-      m_poly_rinit(parm.get_rinit()), uniform01(0., 1.),
-      uniform0505(-0.5, 0.5) {
+      m_poly_rinit(parm.get_rinit()), uniform01(0., 1.) {
   this->set_size();
   this->reset_force();
   read_xyz((*this), poly_xyz);
@@ -30,9 +28,6 @@ void Polymer::set_size() {
   m_poly_x.resize(m_poly_sphere);
   m_poly_y.resize(m_poly_sphere);
   m_poly_z.resize(m_poly_sphere);
-  m_poly_vx.resize(m_poly_sphere);
-  m_poly_vy.resize(m_poly_sphere);
-  m_poly_vz.resize(m_poly_sphere);
   m_poly_fx.resize(m_poly_sphere);
   m_poly_fy.resize(m_poly_sphere);
   m_poly_fz.resize(m_poly_sphere);
@@ -138,8 +133,7 @@ bool read_xyz(Polymer &poly, std::string in_xyz) {
   int i = 0;
   while (std::getline(read_conf, line)) {
     std::stringstream iss(line);
-    iss >> name >> poly.m_poly_x[i] >> poly.m_poly_y[i] >> poly.m_poly_z[i] >>
-        poly.m_poly_vx[i] >> poly.m_poly_vy[i] >> poly.m_poly_vz[i];
+    iss >> name >> poly.m_poly_x[i] >> poly.m_poly_y[i] >> poly.m_poly_z[i];
     i++;
   }
   read_conf.close();

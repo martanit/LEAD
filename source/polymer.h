@@ -41,10 +41,6 @@ public:
   const double &get_y(int i) const { return m_poly_y[i]; };
   const double &get_z(int i) const { return m_poly_z[i]; };
 
-  const double &get_vx(int i) const { return m_poly_vx[i]; };
-  const double &get_vy(int i) const { return m_poly_vy[i]; };
-  const double &get_vz(int i) const { return m_poly_vz[i]; };
-
   const double &get_fx(int i) const { return m_poly_fx[i]; };
   const double &get_fy(int i) const { return m_poly_fy[i]; };
   const double &get_fz(int i) const { return m_poly_fz[i]; };
@@ -54,10 +50,6 @@ public:
   void set_x(double x, int i) { m_poly_x[i] = x; };
   void set_y(double y, int i) { m_poly_y[i] = y; };
   void set_z(double z, int i) { m_poly_z[i] = z; };
-
-  void set_vx(double vx, int i) { m_poly_vx[i] = vx; };
-  void set_vy(double vy, int i) { m_poly_vy[i] = vy; };
-  void set_vz(double vz, int i) { m_poly_vz[i] = vz; };
 
   void reset_force();
   void add_force(const int &, const double &, const double &, const double &);
@@ -84,14 +76,12 @@ private:
   std::string m_poly_init = "init.dat";
 
   std::vector<double> m_poly_x, m_poly_y, m_poly_z;
-  std::vector<double> m_poly_vx, m_poly_vy, m_poly_vz;
   std::vector<double> m_poly_fx, m_poly_fy, m_poly_fz;
 
   double m_poly_e = 0.;
 
   std::mt19937 mt{std::random_device{}()};
   std::uniform_real_distribution<double> uniform01;
-  std::uniform_real_distribution<double> uniform0505;
 };
 
 #endif /* POLYMER_H_ */

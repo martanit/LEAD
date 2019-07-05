@@ -56,6 +56,8 @@ run:
 clean:
 	/bin/rm -f $(OBJPATH)*.o
 	/bin/rm -f $(TARGET)
+rmout:
+	/bin/rm ./output/*
 
 # vim: set noexpandtab:
 

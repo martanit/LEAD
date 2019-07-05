@@ -47,10 +47,9 @@ void Dynamics::run(bool compute_energy)
         (*m_poly).reset_energy();
 
         Potential::set_new_polymer(*m_poly);
-
+        // attractive, energy
         this->lennard_jones_f(i, true, compute_energy);
         this->harmonic_spring_f(compute_energy);
-    //    if(compute_energy) if(i!=0) this->kinetic();
 
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
 
@@ -62,7 +61,7 @@ void Dynamics::run(bool compute_energy)
 
         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, "output/traj.xyz");
-            std::cout  << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
+            std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
         }
     }
 }
