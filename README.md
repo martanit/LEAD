@@ -1,6 +1,6 @@
-# LEDy
+# LEAD
 
-### Loop Extrusion Molecular Dynamics
+### Loop Extrusion Active Molecular Dynamics
 
 A program to simulate loop extrusion process in chromatin.
 
