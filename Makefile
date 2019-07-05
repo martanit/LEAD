@@ -23,7 +23,7 @@ OBJPATH=./obj/
 
 CXX := $(GCC47_BINDIR)$(CXX)
 
-TARGET := LEDy
+TARGET := LEAD
 OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o vector_extruder.o)
 
 DEBUG := -g
@@ -36,7 +36,7 @@ LDFLAGS := -lpthread
 
 all: $(TARGET)
 
-LEDy: $(OBJS) $(OBJPATH)main.o
+LEAD: $(OBJS) $(OBJPATH)main.o
 	$(CXX) -o $@ $(OBJS) $(OBJPATH)main.o $(CXXFLAGS) $(LDFLAGS)
 
 $(OBJPATH)main.o: main.cpp $(OBJS)

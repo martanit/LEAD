@@ -69,7 +69,7 @@ void Potential::harmonic_spring_f(bool compute_energy) {
   }
 }
 
-void Potential::extruder_spring_f() {
+void Potential::extruder_spring_f(bool compute_energy) {
   // iterate over each extruder
   for (auto &i : m_vector_extr) {
     spring_x = -k_extr *
@@ -87,5 +87,8 @@ void Potential::extruder_spring_f() {
 
     m_poly.add_force((*i).get_l(), spring_x, spring_y, spring_z);
     m_poly.add_force((*i).get_r(), -spring_x, -spring_y, -spring_z);
+    
+    if(compute_energy) m_poly.add_energy(k*(m_poly.dist((*i).get_l(),(*i).get_r())-extr_lenght)*
+                  (m_poly.dist((*i).get_l(),(*i).get_r())-extr_lenght)/2.);
   }
 }

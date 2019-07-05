@@ -33,9 +33,9 @@ public:
   const Polymer &get_poly() const { return *m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
 
-  void run(bool);
+  void run(bool, bool);
+  void run_extrusion(bool, bool);
   double delta_h();
-  void run_extrusion();
 
 private:
   Parameters m_parm;

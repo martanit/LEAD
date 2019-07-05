@@ -32,7 +32,7 @@ public:
 
   void lennard_jones_f(int, bool, bool);
   void harmonic_spring_f(bool);
-  void extruder_spring_f();
+  void extruder_spring_f(bool);
 
 protected:
   Polymer m_poly;
@@ -47,7 +47,7 @@ protected:
 
   double k = m_poly.get_spring();
   double k_extr = m_poly.get_spring() * 5.;
-  double extr_lenght = m_poly.get_poly_dist()/2.;
+  double extr_lenght = m_poly.get_poly_dist();
 
   bool attractive = true;
   double dr;

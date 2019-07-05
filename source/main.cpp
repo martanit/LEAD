@@ -17,7 +17,8 @@ int main() {
   Parameters parm("input/parameters.in", "input/ctcf.in",
                   "input/coupling_probability.in");
   bool extrusion=true;
-  bool compute_energy=false;
+  bool compute_energy=true;
+  bool attractive=true;
 
   Polymer poly_init(parm);
   Extruder extr(parm);
@@ -28,9 +29,9 @@ int main() {
   print_xyz(poly_init, "output/traj.xyz");
 
   if(!extrusion)
-    dyn.run(compute_energy);
+    dyn.run(attractive, compute_energy);
   else
-    dyn.run_extrusion();
+    dyn.run_extrusion(attractive, compute_energy);
 
   Polymer poly_last = dyn.get_poly();
   print_xyz(poly_last, "output/traj.xyz");

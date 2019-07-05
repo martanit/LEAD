@@ -1,18 +1,20 @@
 #include "dynamics.h"
 
-void Dynamics::run_extrusion() {
+void Dynamics::run_extrusion(bool attractive, bool compute_energy) {
   for (unsigned int i = 0; i < m_dynamics_nstep; ++i) {
+    if(compute_energy) m_poly_old = *m_poly;
     if (i % m_dynamics_print == 0)
       m_vector_extr.update(*m_poly);
 
     (*m_poly).reset_force();
+    if(compute_energy) (*m_poly).reset_energy();
 
     Potential::set_new_polymer(*m_poly);
     Potential::set_new_extruder(m_vector_extr);
 
-    this->extruder_spring_f();
-    this->lennard_jones_f(i, true, false);
-    this->harmonic_spring_f(false);
+    this->extruder_spring_f(compute_energy);
+    this->lennard_jones_f(i, attractive, compute_energy);
+    this->harmonic_spring_f(compute_energy);
 
     m_poly = std::make_unique<Polymer>(Potential::get_poly());
     m_vector_extr = Potential::get_extr();
@@ -28,6 +30,7 @@ void Dynamics::run_extrusion() {
 
     if (i % m_dynamics_print == 0) {
       print_xyz(*m_poly, "output/traj.xyz");
+      std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
       int num_extr = 0;
       for (auto &i : m_vector_extr) {
         print_r(*m_poly, *i,
@@ -38,17 +41,17 @@ void Dynamics::run_extrusion() {
   }
 }
 
-void Dynamics::run(bool compute_energy)
+void Dynamics::run(bool attractive, bool compute_energy)
 {
     for(unsigned int i=0; i<m_dynamics_nstep; ++i){
 
         if(compute_energy) m_poly_old = *m_poly;
         (*m_poly).reset_force();
-        (*m_poly).reset_energy();
+        if(compute_energy) (*m_poly).reset_energy();
 
         Potential::set_new_polymer(*m_poly);
         // attractive, energy
-        this->lennard_jones_f(i, true, compute_energy);
+        this->lennard_jones_f(i, attractive, compute_energy);
         this->harmonic_spring_f(compute_energy);
 
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
