@@ -6,7 +6,6 @@ void Potential::lennard_jones_f(int step, bool attractive,
     for (unsigned int i = 0; i < m_poly.get_poly_sphere(); ++i) {
       sphere[i].clear();
       for (unsigned int j = i + 1; j < m_poly.get_poly_sphere(); ++j) {
-
         x = (m_poly.get_x(i) - m_poly.get_x(j));
         y = (m_poly.get_y(i) - m_poly.get_y(j));
         z = (m_poly.get_z(i) - m_poly.get_z(j));
