@@ -7,6 +7,8 @@
 *.xyz *.r
 # object folder
 obj
-LEDy
+LEAD
 # output folder
 output
+# data folder
+data
