@@ -26,6 +26,7 @@ public:
   bool read_parm(std::string);
   bool read_ctcf(std::string);
   bool read_coupling_prob(std::string);
+  bool print_param();
 
   // function that store different type parameters
   template <typename myType> void set_parm(myType &m_parm, myType parm) {

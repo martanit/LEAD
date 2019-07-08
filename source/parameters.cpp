@@ -5,6 +5,7 @@ Parameters::Parameters(std::string file_name, std::string ctcf,
   this->read_parm(file_name);
   this->read_ctcf(ctcf);
   this->read_coupling_prob(prob);
+  this->print_param();
 }
 
 Parameters::~Parameters() {}
@@ -119,5 +120,43 @@ bool Parameters::read_coupling_prob(std::string file_name) {
     m_coupling_prob.push_back(p);
   }
   coupling_prob_file.close();
+  return 0;
+}
+
+bool Parameters::print_param(){
+ 
+  std::ofstream set_parameters;
+  set_parameters.open("output/parameters.out", std::ofstream::out);
+
+  // return error if read file fail
+  if (set_parameters.fail()) {
+    throw "ERROR: Impossible to write parameters file parameters.out";
+    return 1;
+  }
+  set_parameters << "DYNAMICS PARAMETERS" << std::endl;
+  set_parameters << "Number of step: " << m_nstep << std::endl;
+  set_parameters << "Print: " << m_print << std::endl;
+  set_parameters << "Timestep: " << m_timestep << std::endl;
+  set_parameters << "Gamma: " << m_gamma << std::endl;
+  set_parameters << "Temperature: " << m_temp << std::endl<< std::endl;
+  set_parameters << "POLYMER PARAMETERS" << std::endl;
+  set_parameters << "Number of sphere: " << m_psphere << std::endl;
+  set_parameters << "Lenght of bond: " << m_distance << std::endl;
+  set_parameters << "Spring constant: " << m_spring << std::endl;
+  set_parameters << "Hard core radius of: " << m_rinit << std::endl;
+  set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
+  set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
+  set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl;
+  set_parameters << "EXTRUDER PARAMETERS" << std::endl<<std::endl;
+  set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
+  set_parameters << "Extruder rate fw right: " << m_rate_fwr << std::endl;
+  set_parameters << "Extruder rate bw left: " << m_rate_bwl << std::endl;
+  set_parameters << "Extruder rate bw right: " << m_rate_bwr << std::endl;
+  set_parameters << "Ctcf permeability: " << m_perm_ctcf << std::endl;
+  set_parameters << "Extruder couplng probability: " << m_k_on << std::endl;
+  set_parameters << "Extruder decoupling probability: " << m_k_off << std::endl;
+  set_parameters << "Maximum number of extruder: " << m_n_max_extr << std::endl;
+  
+  set_parameters.close();
   return 0;
 }

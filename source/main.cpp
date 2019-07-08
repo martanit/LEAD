@@ -17,7 +17,7 @@ int main() {
   Parameters parm("input/parameters.in", "input/ctcf.in",
                   "input/coupling_probability.in");
   bool extrusion=true;
-  bool compute_energy=true;
+  bool compute_energy=false;
   bool attractive=true;
 
   Polymer poly_init(parm);

@@ -36,6 +36,8 @@ public:
   void run(bool, bool);
   void run_extrusion(bool, bool);
   double delta_h();
+  void contact_map();
+ 
 
 private:
   Parameters m_parm;

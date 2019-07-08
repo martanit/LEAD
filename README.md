@@ -1,6 +1,6 @@
 # LEAD
 
-### Loop Extrusion Active Molecular Dynamics
+### Loop Extrusion Active Dynamics
 
 A program to simulate loop extrusion process in chromatin.
 

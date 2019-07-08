@@ -3,7 +3,7 @@
 void Dynamics::run_extrusion(bool attractive, bool compute_energy) {
   for (unsigned int i = 0; i < m_dynamics_nstep; ++i) {
     if(compute_energy) m_poly_old = *m_poly;
-    if (i % m_dynamics_print == 0)
+   // if (i % m_dynamics_print == 0)
       m_vector_extr.update(*m_poly);
 
     (*m_poly).reset_force();
@@ -30,7 +30,7 @@ void Dynamics::run_extrusion(bool attractive, bool compute_energy) {
 
     if (i % m_dynamics_print == 0) {
       print_xyz(*m_poly, "output/traj.xyz");
-      std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
+    if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
       int num_extr = 0;
       for (auto &i : m_vector_extr) {
         print_r(*m_poly, *i,
@@ -64,9 +64,12 @@ void Dynamics::run(bool attractive, bool compute_energy)
 
         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, "output/traj.xyz");
-            std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
+          if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
         }
     }
+}
+
+void Dynamics::contact_map(){
 }
 
 double Dynamics::delta_h(){
