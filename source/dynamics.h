@@ -33,8 +33,8 @@ public:
   const Polymer &get_poly() const { return *m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
 
-  void run(bool, bool);
-  void run_extrusion(bool, bool);
+  void run(bool, bool, bool);
+  void run_extrusion(bool, bool, bool);
   double delta_h();
   void contact_map();
  
@@ -47,6 +47,6 @@ private:
   double deltaH, A,B,C;
 
   int m_dynamics_print = 100;
-  int m_dynamics_nstep = 100000;
+  float m_dynamics_nstep = 100000;
 };
 #endif /* DYNAMICS_H_ */

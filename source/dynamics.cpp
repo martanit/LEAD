@@ -1,7 +1,7 @@
 #include "dynamics.h"
 
-void Dynamics::run_extrusion(bool attractive, bool compute_energy) {
-  for (unsigned int i = 0; i < m_dynamics_nstep; ++i) {
+void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy) {
+  for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
     if(compute_energy) m_poly_old = *m_poly;
    // if (i % m_dynamics_print == 0)
       m_vector_extr.update(*m_poly);
@@ -13,8 +13,16 @@ void Dynamics::run_extrusion(bool attractive, bool compute_energy) {
     Potential::set_new_extruder(m_vector_extr);
 
     this->extruder_spring_f(compute_energy);
-    this->lennard_jones_f(i, attractive, compute_energy);
-    this->harmonic_spring_f(compute_energy);
+    if(rouse)
+      this->harmonic_spring_f(compute_energy);
+    if(soft_core){
+      this->harmonic_spring_f(compute_energy);
+      this->soft_core_f(i, compute_energy);
+    }
+    else{
+      this->harmonic_spring_f(compute_energy);
+      this->lennard_jones_f(i, compute_energy);
+    }
 
     m_poly = std::make_unique<Polymer>(Potential::get_poly());
     m_vector_extr = Potential::get_extr();
@@ -41,19 +49,27 @@ void Dynamics::run_extrusion(bool attractive, bool compute_energy) {
   }
 }
 
-void Dynamics::run(bool attractive, bool compute_energy)
+void Dynamics::run(bool rouse, bool soft_core, bool compute_energy)
 {
-    for(unsigned int i=0; i<m_dynamics_nstep; ++i){
+    for(unsigned long int i=0; i<m_dynamics_nstep; ++i){
 
         if(compute_energy) m_poly_old = *m_poly;
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
 
         Potential::set_new_polymer(*m_poly);
-        // attractive, energy
-        this->lennard_jones_f(i, attractive, compute_energy);
-        this->harmonic_spring_f(compute_energy);
-
+        
+	if(rouse)
+	  this->harmonic_spring_f(compute_energy);
+    	if(soft_core){
+	  this->harmonic_spring_f(compute_energy);
+      	  this->soft_core_f(i, compute_energy);
+	}
+	else{
+          this->harmonic_spring_f(compute_energy);
+          this->lennard_jones_f(i, compute_energy);
+	}
+      
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
 
         Integrator::set_new_polymer(*m_poly);

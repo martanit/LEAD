@@ -18,7 +18,7 @@ public:
   // default constructor
   Parameters(void){};
   // constructor
-  Parameters(std::string, std::string, std::string);
+  Parameters(std::string, std::string, std::string, std::string);
   ~Parameters();
 
   // function that read parameters, ctcf and
@@ -26,7 +26,7 @@ public:
   bool read_parm(std::string);
   bool read_ctcf(std::string);
   bool read_coupling_prob(std::string);
-  bool print_param();
+  bool print_param(std::string);
 
   // function that store different type parameters
   template <typename myType> void set_parm(myType &m_parm, myType parm) {
@@ -34,7 +34,7 @@ public:
   }
 
   // auxiliary function to access parameters
-  int get_nstep() { return m_nstep; }
+  float get_nstep() { return m_nstep; }
   int get_print() { return m_print; }
   float get_timestep() { return m_timestep; }
   float get_gamma() { return m_gamma; }
@@ -67,7 +67,7 @@ public:
 
 protected:
   // dynamic parameters
-  int m_nstep = 100;     // number of step
+  float m_nstep = 100;     // number of step
   int m_print = 100;     // verbosity
   float m_timestep = 1.; // timestep
   float m_gamma = 1.;    // parameter for langevin dynamics

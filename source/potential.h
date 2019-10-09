@@ -30,7 +30,8 @@ public:
   const Polymer &get_poly() const { return m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
 
-  void lennard_jones_f(int, bool, bool);
+  void lennard_jones_f(int, bool);
+  void soft_core_f(int, bool);
   void harmonic_spring_f(bool);
   void extruder_spring_f(bool);
 

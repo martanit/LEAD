@@ -13,12 +13,71 @@
 #include "potential.h"
 #include "vector_extruder.h"
 
-int main() {
-  Parameters parm("input/parameters.in", "input/ctcf.in",
-                  "input/coupling_probability.in");
-  bool extrusion=true;
+#include<iostream>
+#include<cstring>
+
+int main(int argc, char** argv) {
+
   bool compute_energy=false;
-  bool attractive=true;
+  bool extrusion=false;
+  bool rouse=false;
+  bool soft_core=false;
+
+  std::string parm_input;
+  std::string parm_output;
+  std::string traj_output;
+
+  if(argc<7){
+	  std::cerr << "Usage: -i parm_input -o parm_output -trj trj_output" <<std::endl;
+	  return 1;
+  }
+  for(int idx=1; idx<6; idx=idx+2){
+	  if(std::string(argv[idx]) == "-i"){
+		  parm_input = std::string(argv[idx+1]);
+		  std::cout << "Input parameters read from: " << "input/"+parm_input << std::endl;
+	  }
+	  else if(std::string(argv[idx]) == "-o"){
+	  	parm_output = std::string(argv[idx+1]);
+		std::cout << "Parameters used written on: " << "output/"+parm_output+".out" << std::endl;
+	  }
+	  else if(std::string(argv[idx]) == "-trj"){
+  		traj_output = std::string(argv[idx+1]);
+		std::cout << "Trajectory written on: " << "output/"+traj_output+".xyz" << std::endl;
+	  }
+ 	  else { 
+		std::cerr << "Usage: -i parm_input -o parm_output -trj trj_output" <<std::endl;
+	  	return 1;
+	  }
+  }
+  if(argc == 7) std::cout << "Using Lennard Jones potential for spring chain without loop extrusion" << std::endl;
+  if(argc > 7){
+  for(int idx=7; idx<argc; idx++){ 
+	  if(std::string(argv[idx])== "-energy"){
+	  	compute_energy=true;
+		std::cout <<"Computing energy..." << std::endl;
+	  }
+	  else if(std::string(argv[idx])== "-le"){
+	  	extrusion=true;
+		std::cout << "Loop extrusion activated" << std::endl;
+	  }
+  	  else if(std::string(argv[idx])== "-rouse"){
+	  	rouse=true;
+		std::cout << "Using only Rouse polymer" << std::endl;
+	  }
+  	  else if(std::string(argv[idx])== "-soft_core"){
+	  	  soft_core=true;
+		  std::cout << "Using only Rouse polymer with soft core repulsion" << std::endl;  
+	  }
+	  else{
+		  std::cerr << "Unknown flag, options are: -energy, -le, -rouse, -soft_core" << std::endl;
+		  return 1;
+  	}
+  	}
+  }
+  
+  Parameters parm("input/"+parm_input, "output/"+parm_output+".out", "input/ctcf.in",
+                  "input/coupling_probability.in");
+  
 
   Polymer poly_init(parm);
   Extruder extr(parm);
@@ -26,15 +85,15 @@ int main() {
 
   Dynamics dyn(poly_init, v_extr, parm);
 
-  print_xyz(poly_init, "output/traj.xyz");
+  print_xyz(poly_init, "output/"+traj_output+".xyz");
 
   if(!extrusion)
-    dyn.run(attractive, compute_energy);
+    dyn.run(rouse, soft_core, compute_energy);
   else
-    dyn.run_extrusion(attractive, compute_energy);
+    dyn.run_extrusion(rouse, soft_core, compute_energy);
 
   Polymer poly_last = dyn.get_poly();
-  print_xyz(poly_last, "output/traj.xyz");
+  print_xyz(poly_last, "output/"+traj_output+".xyz");
 
   return 0;
 }

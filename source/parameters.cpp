@@ -1,11 +1,11 @@
 #include "parameters.h"
 
-Parameters::Parameters(std::string file_name, std::string ctcf,
+Parameters::Parameters(std::string file_name,std::string parm_output, std::string ctcf,
                        std::string prob) {
   this->read_parm(file_name);
   this->read_ctcf(ctcf);
   this->read_coupling_prob(prob);
-  this->print_param();
+  this->print_param(parm_output);
 }
 
 Parameters::~Parameters() {}
@@ -29,7 +29,7 @@ bool Parameters::read_parm(std::string file_name) {
       std::string par;
       if (std::getline(is_line, par)) {
         if (name == "nstep")
-          set_parm(m_nstep, std::stoi(par));
+          set_parm(m_nstep, std::stof(par));
         else if (name == "print")
           set_parm(m_print, std::stoi(par));
         else if (name == "timestep")
@@ -123,10 +123,10 @@ bool Parameters::read_coupling_prob(std::string file_name) {
   return 0;
 }
 
-bool Parameters::print_param(){
- 
+bool Parameters::print_param(std::string parm_output){
+  
   std::ofstream set_parameters;
-  set_parameters.open("output/parameters.out", std::ofstream::out);
+  set_parameters.open(parm_output, std::ofstream::out);
 
   // return error if read file fail
   if (set_parameters.fail()) {
@@ -146,8 +146,8 @@ bool Parameters::print_param(){
   set_parameters << "Hard core radius of: " << m_rinit << std::endl;
   set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
   set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
-  set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl;
-  set_parameters << "EXTRUDER PARAMETERS" << std::endl<<std::endl;
+  set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;
+  set_parameters << "EXTRUDER PARAMETERS" << std::endl;
   set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
   set_parameters << "Extruder rate fw right: " << m_rate_fwr << std::endl;
   set_parameters << "Extruder rate bw left: " << m_rate_bwl << std::endl;
