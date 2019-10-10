@@ -1,6 +1,42 @@
 #include "dynamics.h"
 
-void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy) {
+void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string output)
+{
+    for(unsigned long int i=0; i<m_dynamics_nstep; ++i){
+
+        if(compute_energy) m_poly_old = *m_poly;
+        (*m_poly).reset_force();
+        if(compute_energy) (*m_poly).reset_energy();
+
+        Potential::set_new_polymer(*m_poly);
+        
+	if(rouse)
+	  this->harmonic_spring_f(compute_energy);
+    	if(soft_core){
+	  this->harmonic_spring_f(compute_energy);
+      	  this->soft_core_f(i, compute_energy);
+	}
+	else{
+          this->harmonic_spring_f(compute_energy);
+          this->lennard_jones_f(i, compute_energy);
+	}
+      
+        m_poly = std::make_unique<Polymer>(Potential::get_poly());
+
+        Integrator::set_new_polymer(*m_poly);
+
+        this->langevin_overdamped();
+
+        m_poly = std::make_unique<Polymer>(Integrator::get_poly());
+
+        if(i%m_dynamics_print == 0) {
+            print_xyz(*m_poly, output);
+          if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
+        }
+    }
+}
+
+void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy, std::string output) {
   for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
     if(compute_energy) m_poly_old = *m_poly;
    // if (i % m_dynamics_print == 0)
@@ -37,7 +73,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy) {
     m_vector_extr = Integrator::get_extr();
 
     if (i % m_dynamics_print == 0) {
-      print_xyz(*m_poly, "output/traj.xyz");
+      print_xyz(*m_poly, output);
     if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
       int num_extr = 0;
       for (auto &i : m_vector_extr) {
@@ -47,42 +83,6 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy) {
       }
     }
   }
-}
-
-void Dynamics::run(bool rouse, bool soft_core, bool compute_energy)
-{
-    for(unsigned long int i=0; i<m_dynamics_nstep; ++i){
-
-        if(compute_energy) m_poly_old = *m_poly;
-        (*m_poly).reset_force();
-        if(compute_energy) (*m_poly).reset_energy();
-
-        Potential::set_new_polymer(*m_poly);
-        
-	if(rouse)
-	  this->harmonic_spring_f(compute_energy);
-    	if(soft_core){
-	  this->harmonic_spring_f(compute_energy);
-      	  this->soft_core_f(i, compute_energy);
-	}
-	else{
-          this->harmonic_spring_f(compute_energy);
-          this->lennard_jones_f(i, compute_energy);
-	}
-      
-        m_poly = std::make_unique<Polymer>(Potential::get_poly());
-
-        Integrator::set_new_polymer(*m_poly);
-
-        this->langevin_overdamped();
-
-        m_poly = std::make_unique<Polymer>(Integrator::get_poly());
-
-        if(i%m_dynamics_print == 0) {
-            print_xyz(*m_poly, "output/traj.xyz");
-          if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
-        }
-    }
 }
 
 void Dynamics::contact_map(){

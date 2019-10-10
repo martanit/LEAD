@@ -88,9 +88,9 @@ int main(int argc, char** argv) {
   print_xyz(poly_init, "output/"+traj_output+".xyz");
 
   if(!extrusion)
-    dyn.run(rouse, soft_core, compute_energy);
+    dyn.run(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
   else
-    dyn.run_extrusion(rouse, soft_core, compute_energy);
+    dyn.run_extrusion(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
 
   Polymer poly_last = dyn.get_poly();
   print_xyz(poly_last, "output/"+traj_output+".xyz");
