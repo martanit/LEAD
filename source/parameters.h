@@ -25,6 +25,7 @@ public:
   // coupling probability (for extruder) from file
   bool read_parm(std::string);
   bool read_ctcf(std::string);
+  bool print_ctcf(std::string);
   bool read_coupling_prob(std::string);
   bool print_param(std::string);
 

@@ -21,6 +21,9 @@ void Integrator::langevin_overdamped() {
   }
 }
 
+//sistemare la permeabilità: ho il 90% di rimanere incastrato la PRIMA volta che mi scontro con il ctcf.
+//se rimango incastrato ci rimango per sempre.
+
 void Integrator::markov_chain() {
   for (auto &&i : m_vector_extr) {
     // right side go foward to right

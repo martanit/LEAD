@@ -100,6 +100,24 @@ bool Parameters::read_ctcf(std::string file_name) {
   return 0;
 }
 
+bool Parameters::print_ctcf(std::string ctcf_output){
+  
+  std::ofstream ctcf_out;
+  ctcf_out.open(ctcf_output, std::fstream::out);
+
+  // return error if read file fail
+  if (ctcf_out.fail()) {
+    throw "ERROR: Impossible to open ctcf output file " + ctcf_output ;
+    return 1;
+  }
+
+  for( int i = 0; i< m_ctcf.size(); i++)
+  	ctcf_out << m_ctcf[i] << std::endl;
+  
+  ctcf_out.close();
+  return 0;
+}
+
 bool Parameters::read_coupling_prob(std::string file_name) {
   double p;
 
@@ -130,7 +148,7 @@ bool Parameters::print_param(std::string parm_output){
 
   // return error if read file fail
   if (set_parameters.fail()) {
-    throw "ERROR: Impossible to write parameters file parameters.out";
+    throw "ERROR: Impossible to write parameters file "+parm_output;
     return 1;
   }
   set_parameters << "DYNAMICS PARAMETERS" << std::endl;
