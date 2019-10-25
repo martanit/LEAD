@@ -18,6 +18,8 @@
 class Polymer {
 
 public:
+  // default constructor (called only for m_poly_old in dynamics.h)
+  Polymer(){};
   // assign passed parameters to polymer
   Polymer(Parameters);
   // contruct polymer from x, y, z coordinate file and assign parameters

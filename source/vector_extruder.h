@@ -19,6 +19,7 @@
 class VectorExtruder {
 
 public:
+  VectorExtruder(){};
   VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly)
       : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
         m_n_max_extr(parm.get_max_extr()),

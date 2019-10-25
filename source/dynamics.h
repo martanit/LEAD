@@ -17,10 +17,19 @@
 
 class Dynamics : public Integrator, public Potential {
 public:
+  Dynamics(Polymer &poly, Parameters parm)
+      : Integrator(poly, parm), Potential(poly, parm),
+        m_dynamics_print(parm.get_print()),
+        m_dynamics_nstep(parm.get_nstep())
+
+  {
+    m_parm = parm;
+    m_poly = std::make_unique<Polymer>(poly);
+  };
   Dynamics(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
       : Integrator(poly, vector_extr, parm), Potential(poly, vector_extr, parm),
         m_vector_extr(vector_extr), m_dynamics_print(parm.get_print()),
-        m_dynamics_nstep(parm.get_nstep()), m_poly_old(Polymer(parm))
+        m_dynamics_nstep(parm.get_nstep())
 
   {
     m_parm = parm;

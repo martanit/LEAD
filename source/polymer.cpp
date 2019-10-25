@@ -40,12 +40,14 @@ void Polymer::first_sphere() {
 }
 
 void Polymer::poly_configuration() {
+  unsigned int stuck;
   double d = m_poly_dist;
   this->first_sphere();
   for (unsigned int i = 1; i < m_poly_sphere; i++) {
+    stuck = 0;
     bool is_overlap = true;
     while (is_overlap) {
-
+      stuck++;
       double t = 2 * M_PI * uniform01(mt);
       // uniform distribution on sphere
       double p = acos(1 - 2 * uniform01(mt));
@@ -54,6 +56,10 @@ void Polymer::poly_configuration() {
       m_poly_y[i] = (m_poly_y[i - 1] + d * std::sin(p) * std::sin(t));
       m_poly_z[i] = (m_poly_z[i - 1] + d * std::cos(p));
       is_overlap = this->is_overlap(i);
+	if(stuck > 10000){
+	       std::cout << "I'm not able to construct polymer (due to randomness). Please retry!" << std::endl;
+       	       exit(1);
+	}
     }
   }
 }
@@ -94,6 +100,7 @@ void Polymer::add_force(const int &i, const double &fx, const double &fy,
 void Polymer::reset_energy() { m_poly_e = 0.; }
 
 void Polymer::add_energy(const double &e) { m_poly_e += e; }
+
 // Input/Output function for read and write polymers
 bool print_xyz(Polymer &poly, std::string out_xyz) {
   // open stream to write xyz file

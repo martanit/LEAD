@@ -18,6 +18,16 @@
 
 class Integrator {
 public:
+  Integrator(Polymer &poly, Parameters integrator_parm)
+      : m_integrator_timestep(integrator_parm.get_timestep()),
+        m_integrator_gamma(integrator_parm.get_gamma()),
+        m_integrator_temp(integrator_parm.get_temp()), gauss_term(0, 1),
+        transition_prob(0., 1.) {
+    stoch_term = std::sqrt(2. * m_integrator_gamma * m_integrator_temp /
+                           m_integrator_timestep);
+    m_poly = std::make_unique<Polymer>(poly);
+  };
+
   Integrator(Polymer &poly, VectorExtruder &vector_extr,
              Parameters integrator_parm)
       : m_vector_extr(vector_extr),

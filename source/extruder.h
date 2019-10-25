@@ -18,6 +18,8 @@
 class Extruder {
 
 public:
+  
+  Extruder() {}; 
   Extruder(Parameters parm)
       : m_parm(parm), m_rate_fwl(parm.get_rate_fwl()),
         m_rate_fwr(parm.get_rate_fwr()), m_rate_bwl(parm.get_rate_bwl()),

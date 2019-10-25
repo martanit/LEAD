@@ -3,7 +3,6 @@
 void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string output)
 {
     for(unsigned long int i=0; i<m_dynamics_nstep; ++i){
-
         if(compute_energy) m_poly_old = *m_poly;
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();

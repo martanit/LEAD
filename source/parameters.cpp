@@ -1,4 +1,8 @@
 #include "parameters.h"
+Parameters::Parameters(std::string file_name,std::string parm_output) {
+  this->read_parm(file_name);
+  this->print_param(parm_output);
+}
 
 Parameters::Parameters(std::string file_name,std::string parm_output, std::string ctcf,
                        std::string prob) {

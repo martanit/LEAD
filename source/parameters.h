@@ -18,6 +18,8 @@ public:
   // default constructor
   Parameters(void){};
   // constructor
+  Parameters(std::string, std::string);
+  // constructor
   Parameters(std::string, std::string, std::string, std::string);
   ~Parameters();
 

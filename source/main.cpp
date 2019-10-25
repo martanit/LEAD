@@ -75,25 +75,38 @@ int main(int argc, char** argv) {
   	}
   }
   
-  Parameters parm("input/"+parm_input, "output/"+parm_output+".out", "input/ctcf.in",
-                  "input/coupling_probability.in");
-  
 
+  if(!extrusion){
+  Parameters parm("input/"+parm_input, "output/"+parm_output+".out");
   Polymer poly_init(parm);
-  Extruder extr(parm);
-  VectorExtruder v_extr(parm, extr, poly_init);
-
-  Dynamics dyn(poly_init, v_extr, parm);
-
   print_xyz(poly_init, "output/"+traj_output+".xyz");
-
-  if(!extrusion)
-    dyn.run(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
-  else
-    dyn.run_extrusion(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
-
+  
+  Dynamics dyn(poly_init, parm);
+ 
+  dyn.run(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
+ 
   Polymer poly_last = dyn.get_poly();
   print_xyz(poly_last, "output/"+traj_output+".xyz");
+  
+  }
+  else{
+  
+  Parameters parm("input/"+parm_input, "output/"+parm_output+".out", "input/ctcf.in",
+                  "input/coupling_probability.in");  
+  Polymer poly_init(parm);
+  print_xyz(poly_init, "output/"+traj_output+".xyz");
+  
+  Extruder extr(parm);
+  VectorExtruder v_extr(parm, extr, poly_init);
+  Dynamics dyn(poly_init, v_extr, parm);
+ 
+  dyn.run_extrusion(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
+  
+  Polymer poly_last = dyn.get_poly();
+  print_xyz(poly_last, "output/"+traj_output+".xyz");
+  
+  }
+
 
   return 0;
 }

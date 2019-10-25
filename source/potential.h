@@ -15,6 +15,11 @@
 class Potential {
 public:
   // construct potential from Polymer and set of parameters
+  Potential(Polymer &poly, Parameters parm)
+      : m_poly(poly),
+        m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
+        m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_sphere()){};
+
   Potential(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
       : m_poly(poly), m_vector_extr(vector_extr),
         m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
