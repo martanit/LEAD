@@ -12,7 +12,7 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
-
+#include<chrono>
 #include<iostream>
 #include<cstring>
 
@@ -75,6 +75,7 @@ int main(int argc, char** argv) {
   	}
   }
   
+auto begin = std::chrono::high_resolution_clock::now();
 
   if(!extrusion){
   Parameters parm("input/"+parm_input, "output/"+parm_output+".out");
@@ -106,6 +107,8 @@ int main(int argc, char** argv) {
   print_xyz(poly_last, "output/"+traj_output+".xyz");
   
   }
+ auto end = std::chrono::high_resolution_clock::now();
+  std::cout << std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count()/1e6 << "ms\n";
 
 
   return 0;
