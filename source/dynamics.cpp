@@ -79,7 +79,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy, st
       int num_extr = 0;
       for (auto &i : m_vector_extr) {
         print_r(*m_poly, *i,
-                "output/loop_extrusion_" + std::to_string(num_extr) + ".r");
+                 output + std::to_string(num_extr) + ".le");
         ++num_extr;
       }
     }
