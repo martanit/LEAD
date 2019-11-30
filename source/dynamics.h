@@ -45,7 +45,6 @@ public:
   void run(bool, bool, bool, std::string);
   void run_extrusion(bool, bool, bool, std::string);
   double delta_h();
-  void contact_map();
  
 
 private:

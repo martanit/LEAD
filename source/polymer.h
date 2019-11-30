@@ -14,6 +14,7 @@
 #include <fstream>
 #include <random>
 #include <vector>
+#include <algorithm>
 
 class Polymer {
 
@@ -52,6 +53,9 @@ public:
   void set_x(double x, int i) { m_poly_x[i] = x; };
   void set_y(double y, int i) { m_poly_y[i] = y; };
   void set_z(double z, int i) { m_poly_z[i] = z; };
+  
+  void center();
+  void set_cm();
 
   void reset_force();
   void add_force(const int &, const double &, const double &, const double &);
@@ -68,7 +72,10 @@ public:
   friend bool read_xyz(Polymer &, std::string);
 
 private:
+  
   double d = 0.;
+  double sum_x, sum_y, sum_z;
+  double x_cm, y_cm, z_cm;
 
   // polymer parameters
   int m_poly_sphere = 100;   // number of interacting sphere
