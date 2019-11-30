@@ -21,9 +21,6 @@ void Integrator::langevin_overdamped() {
   }
 }
 
-//sistemare la permeabilità: ho il 90% di rimanere incastrato la PRIMA volta che mi scontro con il ctcf.
-//se rimango incastrato ci rimango per sempre.
-
 void Integrator::markov_chain() {
   for (auto &&i : m_vector_extr) {
     // right side go foward to right
@@ -31,14 +28,14 @@ void Integrator::markov_chain() {
       if (((*i).get_rate_fwr() * m_integrator_timestep >
            transition_prob(mt)) and
           ((*i).get_ctcf()[(*i).get_r()] != 1 or
-           (*i).get_permeability() * m_integrator_timestep <
+           (*i).get_permeability() / 1E6 >
                transition_prob(mt)) and
           !(m_vector_extr.overlap_rl(*i)))
         (*i).set_r((*i).get_r() + 1);
     // right side go backward to left
     if (((*i).get_rate_bwr() * m_integrator_timestep > transition_prob(mt)) and
         ((*i).get_ctcf()[(*i).get_r()] != (-1) or
-         (*i).get_permeability() * m_integrator_timestep <
+         (*i).get_permeability() / 1E6 >
              transition_prob(mt)) and
         !(m_vector_extr.overlap_rr(*i)))
       (*i).set_r((*i).get_r() - 1);
@@ -48,14 +45,14 @@ void Integrator::markov_chain() {
       if (((*i).get_rate_fwl() * m_integrator_timestep >
            transition_prob(mt)) and
           ((*i).get_ctcf()[(*i).get_l()] != (-1) or
-           (*i).get_permeability() * m_integrator_timestep <
+           (*i).get_permeability() / 1E6 >
                transition_prob(mt)) and
           !(m_vector_extr.overlap_lr(*i)))
         (*i).set_l((*i).get_l() - 1);
     // left side go backward to right
     if (((*i).get_rate_bwl() * m_integrator_timestep > transition_prob(mt)) and
         ((*i).get_ctcf()[(*i).get_l()] != 1 or
-         (*i).get_permeability() * m_integrator_timestep <
+         (*i).get_permeability() / 1E6 >
              transition_prob(mt)) and
         !(m_vector_extr.overlap_ll(*i)))
       (*i).set_l((*i).get_l() + 1);

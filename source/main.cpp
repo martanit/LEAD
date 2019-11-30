@@ -34,15 +34,15 @@ int main(int argc, char** argv) {
   for(int idx=1; idx<6; idx=idx+2){
 	  if(std::string(argv[idx]) == "-i"){
 		  parm_input = std::string(argv[idx+1]);
-		  std::cout << "Input parameters read from: " << "input/"+parm_input << std::endl;
+		  std::cout << "Input parameters read from: " << parm_input << std::endl;
 	  }
 	  else if(std::string(argv[idx]) == "-o"){
 	  	parm_output = std::string(argv[idx+1]);
-		std::cout << "Parameters used written on: " << "output/"+parm_output+".out" << std::endl;
+		std::cout << "Parameters used written on: " << parm_output+".out" << std::endl;
 	  }
 	  else if(std::string(argv[idx]) == "-trj"){
   		traj_output = std::string(argv[idx+1]);
-		std::cout << "Trajectory written on: " << "output/"+traj_output+".xyz" << std::endl;
+		std::cout << "Trajectory written on: " << traj_output+".xyz" << std::endl;
 	  }
  	  else { 
 		std::cerr << "Usage: -i parm_input -o parm_output -trj trj_output" <<std::endl;
@@ -78,33 +78,33 @@ int main(int argc, char** argv) {
 auto begin = std::chrono::high_resolution_clock::now();
 
   if(!extrusion){
-  Parameters parm("input/"+parm_input, "output/"+parm_output+".out");
+  Parameters parm(parm_input, parm_output+".out");
   Polymer poly_init(parm);
-  print_xyz(poly_init, "output/"+traj_output+".xyz");
+  print_xyz(poly_init, traj_output+".xyz");
   
   Dynamics dyn(poly_init, parm);
  
-  dyn.run(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
+  dyn.run(rouse, soft_core, compute_energy, traj_output+".xyz");
  
   Polymer poly_last = dyn.get_poly();
-  print_xyz(poly_last, "output/"+traj_output+".xyz");
+  print_xyz(poly_last, traj_output+".xyz");
   
   }
   else{
   
-  Parameters parm("input/"+parm_input, "output/"+parm_output+".out", "input/ctcf.in",
+  Parameters parm(parm_input, parm_output+".out", "input/ctcf.in",
                   "input/coupling_probability.in");  
   Polymer poly_init(parm);
-  print_xyz(poly_init, "output/"+traj_output+".xyz");
+  print_xyz(poly_init, traj_output+".xyz");
   
   Extruder extr(parm);
   VectorExtruder v_extr(parm, extr, poly_init);
   Dynamics dyn(poly_init, v_extr, parm);
  
-  dyn.run_extrusion(rouse, soft_core, compute_energy, "output/"+traj_output+".xyz");
+  dyn.run_extrusion(rouse, soft_core, compute_energy, traj_output+".xyz");
   
   Polymer poly_last = dyn.get_poly();
-  print_xyz(poly_last, "output/"+traj_output+".xyz");
+  print_xyz(poly_last, traj_output+".xyz");
   
   }
  auto end = std::chrono::high_resolution_clock::now();
