@@ -29,15 +29,15 @@ void Integrator::markov_chain() {
            transition_prob(mt)) and
           ((*i).get_ctcf()[(*i).get_r()] != 1 or
            (*i).get_rate_fwr() * (*i).get_permeability() *
-	   m_integrator_timestep > transition_prob(mt)) and
-          !(m_vector_extr.overlap_rl(*i)))
+            m_integrator_timestep > transition_prob(mt)) and
+           !(m_vector_extr.overlap_rl(*i)))
         (*i).set_r((*i).get_r() + 1);
     // right side go backward to left
     if (((*i).get_rate_bwr() * m_integrator_timestep > transition_prob(mt)) and
         ((*i).get_ctcf()[(*i).get_r()] != (-1) or
          (*i).get_rate_bwr() * (*i).get_permeability() *
-	  m_integrator_timestep > transition_prob(mt)) and
-        !(m_vector_extr.overlap_rr(*i)))
+          m_integrator_timestep > transition_prob(mt)) and
+         !(m_vector_extr.overlap_rr(*i)))
       (*i).set_r((*i).get_r() - 1);
 
     // left side go forward to left
@@ -46,15 +46,15 @@ void Integrator::markov_chain() {
            transition_prob(mt)) and
           ((*i).get_ctcf()[(*i).get_l()] != (-1) or
            (*i).get_rate_fwl() * (*i).get_permeability() * 
-	    m_integrator_timestep > transition_prob(mt)) and
-          !(m_vector_extr.overlap_lr(*i)))
+           m_integrator_timestep > transition_prob(mt)) and
+           !(m_vector_extr.overlap_lr(*i)))
         (*i).set_l((*i).get_l() - 1);
     // left side go backward to right
     if (((*i).get_rate_bwl() * m_integrator_timestep > transition_prob(mt)) and
         ((*i).get_ctcf()[(*i).get_l()] != 1 or
-         (*i).get_rate_bwl() * (*i).get_permeability() *
-	  m_integrator_timestep > transition_prob(mt)) and
-        !(m_vector_extr.overlap_ll(*i)))
+        (*i).get_rate_bwl() * (*i).get_permeability() *
+         m_integrator_timestep > transition_prob(mt)) and
+         !(m_vector_extr.overlap_ll(*i)))
       (*i).set_l((*i).get_l() + 1);
   }
 }
