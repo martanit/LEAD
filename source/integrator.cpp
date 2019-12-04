@@ -35,7 +35,7 @@ void Integrator::markov_chain() {
     // right side go backward to left
     if (((*i).get_rate_bwr() * m_integrator_timestep > transition_prob(mt)) and
         ((*i).get_ctcf()[(*i).get_r()] != (-1) or
-         ((*i).get_rate_bwr() * (*i).get_permeability() *
+         (*i).get_rate_bwr() * (*i).get_permeability() *
           m_integrator_timestep > transition_prob(mt)) and
          !(m_vector_extr.overlap_rr(*i)))
       (*i).set_r((*i).get_r() - 1);
