@@ -1,5 +1,5 @@
 /*
- * potential.h
+ * polymer.h
  *
  *  Created on: March 6, 2019
  *  	Author: martanit

@@ -67,6 +67,9 @@ public:
   const float &get_kon() const { return m_k_on; }
   const float &get_koff() const { return m_k_off; }
   const int &get_max_extr() const { return m_n_max_extr; }
+  
+  const float &get_k_diff() const { return m_k_diff; };
+  const float &get_field_step() const { return m_field_step; };
 
 protected:
   // dynamic parameters
@@ -104,6 +107,11 @@ protected:
   float m_k_on = 0.5;
   float m_k_off = 0.001;
   int m_n_max_extr = 10;
+
+  // cohesin parameters
+  float m_k_diff = 1E3;
+  float m_field_step = 10;
+
 };
 
 #endif /* PARAMETERS_H_ */

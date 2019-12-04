@@ -104,7 +104,6 @@ void Polymer::set_cm() {
 		sum_y += get_y(i);
 		sum_z += get_z(i);
 	}
-	
 	x_cm = sum_x/m_poly_sphere;
 	y_cm = sum_y/m_poly_sphere;
 	z_cm = sum_z/m_poly_sphere;

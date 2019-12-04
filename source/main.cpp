@@ -12,6 +12,8 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
+#include "cohesin_field.h"
+
 #include<chrono>
 #include<iostream>
 #include<cstring>
@@ -80,6 +82,7 @@ auto begin = std::chrono::high_resolution_clock::now();
   if(!extrusion){
   Parameters parm(parm_input, parm_output+".out");
   Polymer poly_init(parm);
+  poly_init.center();
   print_xyz(poly_init, traj_output+".xyz");
   
   Dynamics dyn(poly_init, parm);
@@ -95,6 +98,7 @@ auto begin = std::chrono::high_resolution_clock::now();
   Parameters parm(parm_input, parm_output+".out", "input/ctcf.in",
                   "input/coupling_probability.in");  
   Polymer poly_init(parm);
+  poly_init.center();
   print_xyz(poly_init, traj_output+".xyz");
   
   Extruder extr(parm);

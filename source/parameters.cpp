@@ -74,6 +74,10 @@ bool Parameters::read_parm(std::string file_name) {
           set_parm(m_n_max_extr, std::stoi(par));
         else if (name == "permeability_ctcf")
           set_parm(m_perm_ctcf, std::stof(par));
+        else if (name == "k_diff")
+          set_parm(m_k_diff, std::stof(par));
+        else if (name == "field_step")
+          set_parm(m_field_step, std::stof(par));
       }
     }
   }

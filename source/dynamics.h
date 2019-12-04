@@ -14,6 +14,7 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
+#include "cohesin_field.h"
 
 class Dynamics : public Integrator, public Potential {
 public:

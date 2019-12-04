@@ -3,7 +3,6 @@
 void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string output)
 {
     for(unsigned long int i=0; i<m_dynamics_nstep; ++i){  
-	(*m_poly).center();
 	if(compute_energy) m_poly_old = *m_poly;
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
@@ -28,8 +27,9 @@ void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string 
         this->langevin_overdamped();
 
         m_poly = std::make_unique<Polymer>(Integrator::get_poly());
-
-        if(i%m_dynamics_print == 0) {
+	(*m_poly).center();
+        
+	if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, output);
           if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
         }
@@ -38,7 +38,6 @@ void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string 
 
 void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy, std::string output) {
   for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
-    (*m_poly).center();
     if(compute_energy) m_poly_old = *m_poly;
    // if (i % m_dynamics_print == 0)
       m_vector_extr.update(*m_poly);
@@ -71,8 +70,9 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy, st
     this->langevin_overdamped();
 
     m_poly = std::make_unique<Polymer>(Integrator::get_poly());
+    (*m_poly).center();
     m_vector_extr = Integrator::get_extr();
-
+    
     if (i % m_dynamics_print == 0) {
       print_xyz(*m_poly, output);
     if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
