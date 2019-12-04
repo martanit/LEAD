@@ -84,6 +84,32 @@ double Polymer::dist(const int &i, const int &j) {
   return (d < 10E-9) ? 10E-9 : d;
 }
 
+void Polymer::center() {
+	this->set_cm();
+	std::for_each(m_poly_x.begin(), m_poly_x.end(), [this]
+			(auto& x) { x -= x_cm; });
+	std::for_each(m_poly_y.begin(), m_poly_y.end(), [this]
+			(auto& y) { y -= y_cm; });
+	std::for_each(m_poly_z.begin(), m_poly_z.end(), [this]
+			(auto& z) { z -= z_cm; });
+}
+
+void Polymer::set_cm() {
+	sum_x = 0;
+	sum_y = 0;
+	sum_z = 0;
+
+	for(unsigned int i=0; i<m_poly_sphere; ++i){
+		sum_x += get_x(i);
+		sum_y += get_y(i);
+		sum_z += get_z(i);
+	}
+	
+	x_cm = sum_x/m_poly_sphere;
+	y_cm = sum_y/m_poly_sphere;
+	z_cm = sum_z/m_poly_sphere;
+}
+
 void Polymer::reset_force() {
   std::fill(m_poly_fx.begin(), m_poly_fx.end(), 0.);
   std::fill(m_poly_fy.begin(), m_poly_fy.end(), 0.);
