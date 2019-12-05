@@ -8,6 +8,11 @@
 # object folder
 obj
 LEAD
+LEAD_tmp
+LEAD_parallel
+LEAD_field
+#input folder
+input
 # output folder
 output
 # data folder
