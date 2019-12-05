@@ -8,6 +8,9 @@
 # object folder
 obj
 LEAD
+LEAD_tmp
+# input folder
+input
 # output folder
 output
 # data folder

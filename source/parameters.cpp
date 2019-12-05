@@ -44,12 +44,10 @@ bool Parameters::read_parm(std::string file_name) {
           set_parm(m_init, par);
         else if (name == "nsphere")
           set_parm(m_psphere, std::stoi(par));
-        else if (name == "distance")
-          set_parm(m_distance, std::stof(par));
+        else if (name == "diameter")
+          set_parm(m_diameter, std::stof(par));
         else if (name == "spring_k")
           set_parm(m_spring, std::stof(par));
-        else if (name == "rinit")
-          set_parm(m_rinit, std::stof(par));
         else if (name == "epsilon")
           set_parm(m_epsilon, std::stof(par));
         else if (name == "rmin")
@@ -163,9 +161,8 @@ bool Parameters::print_param(std::string parm_output){
   set_parameters << "Temperature: " << m_temp << std::endl<< std::endl;
   set_parameters << "POLYMER PARAMETERS" << std::endl;
   set_parameters << "Number of sphere: " << m_psphere << std::endl;
-  set_parameters << "Lenght of bond: " << m_distance << std::endl;
+  set_parameters << "Sphere diameter [a]: " << m_diameter << std::endl;
   set_parameters << "Spring constant: " << m_spring << std::endl;
-  set_parameters << "Hard core radius of: " << m_rinit << std::endl;
   set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
   set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
   set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;

@@ -5,8 +5,8 @@ bool read_xyz(Polymer &, std::string);
 
 Polymer::Polymer(Parameters parm)
     : m_poly_sphere(parm.get_psphere()),
-      m_poly_dist(parm.get_distance()), m_poly_spring(parm.get_spring()),
-      m_poly_rinit(parm.get_rinit()), uniform01(0., 1.){
+      m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
+      uniform01(0., 1.){
   this->set_size();
   this->reset_force();
   this->poly_configuration();
@@ -14,8 +14,8 @@ Polymer::Polymer(Parameters parm)
 
 Polymer::Polymer(Parameters parm, std::string poly_xyz)
     : m_poly_sphere(parm.get_psphere()),
-      m_poly_dist(parm.get_distance()), m_poly_spring(parm.get_spring()),
-      m_poly_rinit(parm.get_rinit()), uniform01(0., 1.) {
+      m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
+      uniform01(0., 1.) {
   this->set_size();
   this->reset_force();
   read_xyz((*this), poly_xyz);
@@ -41,7 +41,7 @@ void Polymer::first_sphere() {
 
 void Polymer::poly_configuration() {
   unsigned int stuck;
-  double d = m_poly_dist;
+  double d = m_poly_d;
   this->first_sphere();
   for (unsigned int i = 1; i < m_poly_sphere; i++) {
     stuck = 0;
@@ -67,7 +67,7 @@ void Polymer::poly_configuration() {
 bool Polymer::is_overlap(int lenght) {
   bool is_overlap = false;
   for (unsigned int j = 0; j < lenght; j++) {
-    if (this->dist(j, lenght) < (2 * m_poly_rinit)) {
+    if (this->dist(j, lenght) < m_poly_d) {
       is_overlap = true;
       break;
     } else
