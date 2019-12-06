@@ -40,11 +40,11 @@ int main(int argc, char** argv) {
 	  }
 	  else if(std::string(argv[idx]) == "-o"){
 	  	parm_output = std::string(argv[idx+1]);
-		std::cerr << "Parameters used written on: " << parm_output << std::endl;
+		std::cerr << "Parameters used written on: " << parm_output << ".out" << std::endl;
 	  }
 	  else if(std::string(argv[idx]) == "-trj"){
   		traj_output = std::string(argv[idx+1]);
-		std::cerr << "Trajectory written on: " << traj_output << std::endl;
+		std::cerr << "Trajectory written on: " << traj_output << ".xyz" << std::endl;
 	  }
  	  else { 
 		std::cerr << "Usage: -i parm_input -o parm_output -trj trj_output" <<std::endl;
