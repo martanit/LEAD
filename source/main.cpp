@@ -88,14 +88,14 @@ auto begin = std::chrono::high_resolution_clock::now();
   if(!extrusion){
   Parameters parm(parm_input, parm_output+".out");
   Polymer poly_init(parm);
-  print_xyz(poly_init, traj_output+".xyz");
+  //print_xyz(poly_init, traj_output+".xyz");
   
   Dynamics dyn(poly_init, parm);
  
   dyn.run(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
  
-  Polymer poly_last = dyn.get_poly();
-  print_xyz(poly_last, traj_output+".xyz");
+  //Polymer poly_last = dyn.get_poly();
+  //print_xyz(poly_last, traj_output+".xyz");
   
   }
   else{
@@ -103,7 +103,7 @@ auto begin = std::chrono::high_resolution_clock::now();
   Parameters parm(parm_input, parm_output+".out", "input/ctcf.in",
                   "input/coupling_probability.in");  
   Polymer poly_init(parm);
-  print_xyz(poly_init, traj_output+".xyz");
+  //print_xyz(poly_init, traj_output+".xyz");
   
   Extruder extr(parm);
   VectorExtruder v_extr(parm, extr, poly_init);
@@ -111,8 +111,8 @@ auto begin = std::chrono::high_resolution_clock::now();
  
   dyn.run_extrusion(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
   
-  Polymer poly_last = dyn.get_poly();
-  print_xyz(poly_last, traj_output+".xyz");
+  //Polymer poly_last = dyn.get_poly();
+  //print_xyz(poly_last, traj_output+".xyz");
   
   }
  auto end = std::chrono::high_resolution_clock::now();
