@@ -65,7 +65,7 @@ public:
 
   const float &get_kon() const { return m_k_on; }
   const float &get_koff() const { return m_k_off; }
-  const int &get_max_extr() const { return m_n_max_extr; }
+  const float &get_max_extr() const { return m_n_max_extr; }
 
 protected:
   // dynamic parameters
@@ -101,7 +101,7 @@ protected:
   // dynamics extruder parm
   float m_k_on = 0.5;
   float m_k_off = 0.001;
-  int m_n_max_extr = 10;
+  float m_n_max_extr = 10;
 };
 
 #endif /* PARAMETERS_H_ */

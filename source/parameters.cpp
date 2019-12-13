@@ -69,7 +69,7 @@ bool Parameters::read_parm(std::string file_name) {
         else if (name == "rate_bwr")
           set_parm(m_rate_bwr, std::stof(par));
         else if (name == "n_max_extr")
-          set_parm(m_n_max_extr, std::stoi(par));
+          set_parm(m_n_max_extr, std::stof(par));
         else if (name == "permeability_ctcf")
           set_parm(m_perm_ctcf, std::stof(par));
       }

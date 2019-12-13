@@ -19,7 +19,6 @@ void Potential::lennard_jones_f(int step,
       }
     }
   }
-  std::cout << "here" << std::endl;
   for (unsigned int i = 0; i < m_poly.get_poly_sphere(); ++i) {
     for (auto &&k : sphere[i]) {
 
