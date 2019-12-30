@@ -53,7 +53,7 @@ protected:
 
   double k = m_poly.get_spring();
   double k_extr = m_poly.get_spring() * 5.;
-  double extr_lenght = m_poly.get_poly_dist()/2.;
+  double extr_lenght = m_poly.get_poly_d()/2.;
 
   bool attractive = true;
   double dr;

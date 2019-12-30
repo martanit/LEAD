@@ -43,8 +43,8 @@ public:
   const Polymer &get_poly() const { return *m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
 
-  void run(bool, bool, bool, std::string);
-  void run_extrusion(bool, bool, bool, std::string);
+  void run(bool, bool, bool, bool, std::string);
+  void run_extrusion(bool, bool, bool, bool, std::string);
   double delta_h();
  
 

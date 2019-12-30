@@ -45,9 +45,8 @@ public:
   float get_temp() { return m_temp; }
 
   int get_psphere() { return m_psphere; }
-  float get_distance() { return m_distance; }
+  float get_diameter() { return m_diameter; }
   float get_spring() { return m_spring; }
-  float get_rinit() { return m_rinit; }
 
   float get_epsilon() { return m_epsilon; }
   float get_rmin() { return m_rmin; }
@@ -66,10 +65,9 @@ public:
 
   const float &get_kon() const { return m_k_on; }
   const float &get_koff() const { return m_k_off; }
-  const int &get_max_extr() const { return m_n_max_extr; }
-  
   const float &get_k_diff() const { return m_k_diff; };
   const float &get_field_step() const { return m_field_step; };
+  const float &get_max_extr() const { return m_n_max_extr; }
 
 protected:
   // dynamic parameters
@@ -82,19 +80,18 @@ protected:
   float m_temp = 2.; // system temperature [K]
 
   // polymer parameters
-  int m_psphere = 10;    // number of interacting sphere
-  float m_distance = 1.; // length of spring [50*nm]
-  float m_spring = 15.;  // spring constant of harmonic oscillator (spring)
-  float m_rinit = 5.;    // hard core radius of sphere
+  int m_psphere = 100;    // number of interacting sphere
+  float m_diameter = 0.89; // diameter of sphere [50*nm]
+  float m_spring = 500.;  // spring constant of harmonic oscillator (spring)
   std::string m_init = "init.dat"; // first configuration
 
   // potential parameters
   float m_epsilon = 1.; // parameter for LJ potential
   float m_rmin = 1.;    // parameter for LJ potential
-  float m_rcut = 5.;    // parameter for LJ potential action
+  float m_rcut = 2.5;    // parameter for LJ potential action
 
   // extruder parameters
-  float m_perm_ctcf = 0.9;
+  float m_perm_ctcf = 0.1;
   std::vector<int> m_ctcf;
   std::vector<double> m_coupling_prob;
 
@@ -106,12 +103,11 @@ protected:
   // dynamics extruder parm
   float m_k_on = 0.5;
   float m_k_off = 0.001;
-  int m_n_max_extr = 10;
 
   // cohesin parameters
   float m_k_diff = 1E3;
   float m_field_step = 10;
-
+  float m_n_max_extr = 10;
 };
 
 #endif /* PARAMETERS_H_ */

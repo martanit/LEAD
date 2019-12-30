@@ -65,7 +65,7 @@ public:
 
   // function to access polymer parameters
   const int &get_poly_sphere() const { return m_poly_sphere; };
-  const float &get_poly_dist() const { return m_poly_dist; };
+  const float &get_poly_d() const { return m_poly_d; };
   const float &get_spring() const { return m_poly_spring; };
 
   friend bool print_xyz(Polymer &, std::string);
@@ -79,9 +79,8 @@ private:
 
   // polymer parameters
   int m_poly_sphere = 100;   // number of interacting sphere
-  float m_poly_dist = 1.;    // length of spring [50*nm]
+  float m_poly_d = 0.89;    // diameter of sphere [50*nm]
   float m_poly_spring = 100.; // spring constant of harmonic oscillator (spring)
-  float m_poly_rinit = 0.5;  // hard core radius of sphere
   std::string m_poly_init = "init.dat";
 
   std::vector<double> m_poly_x, m_poly_y, m_poly_z;

@@ -1,6 +1,6 @@
 #include "dynamics.h"
 
-void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string output)
+void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output)
 {
     for(unsigned long int i=0; i<m_dynamics_nstep; ++i){  
 	if(compute_energy) m_poly_old = *m_poly;
@@ -11,11 +11,11 @@ void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string 
         
 	if(rouse)
 	  this->harmonic_spring_f(compute_energy);
-    	if(soft_core){
+	else if(soft_core){
 	  this->harmonic_spring_f(compute_energy);
       	  this->soft_core_f(i, compute_energy);
 	}
-	else{
+	else if(lennard_jones){
           this->harmonic_spring_f(compute_energy);
           this->lennard_jones_f(i, compute_energy);
 	}
@@ -36,7 +36,7 @@ void Dynamics::run(bool rouse, bool soft_core, bool compute_energy, std::string 
     }
 }
 
-void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy, std::string output) {
+void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
   for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
     if(compute_energy) m_poly_old = *m_poly;
    // if (i % m_dynamics_print == 0)
@@ -51,11 +51,11 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool compute_energy, st
     this->extruder_spring_f(compute_energy);
     if(rouse)
       this->harmonic_spring_f(compute_energy);
-    if(soft_core){
+    else if(soft_core){
       this->harmonic_spring_f(compute_energy);
       this->soft_core_f(i, compute_energy);
     }
-    else{
+    else if(lennard_jones){
       this->harmonic_spring_f(compute_energy);
       this->lennard_jones_f(i, compute_energy);
     }

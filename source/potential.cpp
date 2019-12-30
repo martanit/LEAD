@@ -2,7 +2,7 @@
 
 void Potential::lennard_jones_f(int step, 
                                 bool compute_energy) {
-  if (step % 100 == 0 or step == 0) {
+  if (step % 10000 == 0 or step == 0) {
     for (unsigned int i = 0; i < m_poly.get_poly_sphere(); ++i) {
       sphere[i].clear();
       for (unsigned int j = i + 1; j < m_poly.get_poly_sphere(); ++j) {
@@ -19,7 +19,6 @@ void Potential::lennard_jones_f(int step,
       }
     }
   }
-
   for (unsigned int i = 0; i < m_poly.get_poly_sphere(); ++i) {
     for (auto &&k : sphere[i]) {
 
@@ -53,7 +52,7 @@ void Potential::lennard_jones_f(int step,
 
 void Potential::soft_core_f(int step, 
                                 bool compute_energy) {
-  if (step % 100 == 0 or step == 0) {
+  if (step % 10000 == 0 or step == 0) {
     for (unsigned int i = 0; i < m_poly.get_poly_sphere(); ++i) {
       sphere[i].clear();
       for (unsigned int j = i + 1; j < m_poly.get_poly_sphere(); ++j) {

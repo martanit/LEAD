@@ -44,12 +44,10 @@ bool Parameters::read_parm(std::string file_name) {
           set_parm(m_init, par);
         else if (name == "nsphere")
           set_parm(m_psphere, std::stoi(par));
-        else if (name == "distance")
-          set_parm(m_distance, std::stof(par));
+        else if (name == "diameter")
+          set_parm(m_diameter, std::stof(par));
         else if (name == "spring_k")
           set_parm(m_spring, std::stof(par));
-        else if (name == "rinit")
-          set_parm(m_rinit, std::stof(par));
         else if (name == "epsilon")
           set_parm(m_epsilon, std::stof(par));
         else if (name == "rmin")
@@ -71,7 +69,7 @@ bool Parameters::read_parm(std::string file_name) {
         else if (name == "rate_bwr")
           set_parm(m_rate_bwr, std::stof(par));
         else if (name == "n_max_extr")
-          set_parm(m_n_max_extr, std::stoi(par));
+          set_parm(m_n_max_extr, std::stof(par));
         else if (name == "permeability_ctcf")
           set_parm(m_perm_ctcf, std::stof(par));
         else if (name == "k_diff")
@@ -167,9 +165,8 @@ bool Parameters::print_param(std::string parm_output){
   set_parameters << "Temperature: " << m_temp << std::endl<< std::endl;
   set_parameters << "POLYMER PARAMETERS" << std::endl;
   set_parameters << "Number of sphere: " << m_psphere << std::endl;
-  set_parameters << "Lenght of bond: " << m_distance << std::endl;
+  set_parameters << "Sphere diameter [a]: " << m_diameter << std::endl;
   set_parameters << "Spring constant: " << m_spring << std::endl;
-  set_parameters << "Hard core radius of: " << m_rinit << std::endl;
   set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
   set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
   set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;

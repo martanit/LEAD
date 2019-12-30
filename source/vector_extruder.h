@@ -62,7 +62,7 @@ private:
   std::vector<std::unique_ptr<Extruder>> m_vector_extr;
 
   // maximum number of extruder
-  int m_n_max_extr = 3;
+  float m_n_max_extr = 3;
   double m_kon = 0.9;
   double m_koff = 0.001;
   double integrator_timestep = 0;
