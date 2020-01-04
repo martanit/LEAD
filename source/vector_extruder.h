@@ -11,7 +11,7 @@
 #include <random>
 #include <vector>
 
-#include "cohesin_polymer.h"
+#include "field.h"
 #include "extruder.h"
 #include "parameters.h"
 #include "polymer.h"
@@ -28,7 +28,7 @@ public:
     this->first_fill(poly);
   };
   
-  VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly, CohesinPolymer cohes_poly_int)
+  VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly, FieldAction cohes_poly_int)
       : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
         m_n_max_extr(parm.get_max_extr()),
         integrator_timestep(parm.get_timestep()), dist(0., 1.) {
@@ -47,8 +47,8 @@ public:
   ~VectorExtruder(){};
   void first_fill(Polymer &);
   void update(Polymer &);
-  void first_fill_field(Polymer &, CohesinPolymer);
-  void update_field(Polymer &, CohesinPolymer);
+  void first_fill_field(Polymer &, FieldAction);
+  void update_field(Polymer &, FieldAction);
 
   friend bool extr_overlap(Extruder &extr);
   bool overlap_lr(Extruder &);

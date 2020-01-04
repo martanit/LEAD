@@ -1,6 +1,27 @@
-#include "cohesin_polymer.h"
+#include "field.h"
 
-void CohesinPolymer::poly_field_interaction() {
+Field::Field(Parameters parm)
+      :m_field_step(parm.get_field_step()),
+      m_k_diff(parm.get_k_diff()),
+      uniform01(0., 1.),
+      uniform05(0, 5),
+      m_extruder_c(m_field_length, std::vector<std::vector<double>>(m_field_length, std::vector<double>(m_field_length))){
+	this->first_extruders_field();
+}
+
+// assuming uniform distribution for extruder concentration
+void Field::first_extruders_field() {
+    for(auto &i : m_extruder_c)
+        for(auto &j : i)
+            for(auto &k : j)
+                k = uniform01(mt);
+}
+
+void Field::add_delta_c(int i, int j, int k) {
+	m_extruder_c[i][j][k] += m_delta_c;
+}
+
+void FieldAction::interaction() {
 		bool is_poly_in_cell = false;
 		Cell a;
 		m_contact_cell.clear();
@@ -15,14 +36,14 @@ void CohesinPolymer::poly_field_interaction() {
 						}	
 }
 
-//void CohesinPolymer::update_poly_field_int(){
+//void FieldAction::update_poly_field_int(){
 // Assumo che il poly si muova poco e
 // controllo solo i primi vicini, più efficente :D!
 // da IMPLEMENTARE!!
 
 //}
 
-bool CohesinPolymer::poly_in_cell(Cell a){
+bool FieldAction::poly_in_cell(Cell a){
 		for(int l=0; l<m_poly.get_poly_nmonomers(); ++l)
 				if((x(a.i) < m_poly.get_x(l) and 
 						m_poly.get_x(l) < x(a.i)+scale_length) and
@@ -35,7 +56,7 @@ bool CohesinPolymer::poly_in_cell(Cell a){
 		else return false;
 }
 
-std::vector<int> CohesinPolymer::subchain_in_cell(Cell a){
+std::vector<int> FieldAction::subchain_in_cell(Cell a){
 		std::vector<int> poly_subchain;
 	  for(int l = 0; l<m_poly.get_poly_nmonomers(); ++l)
 				if((x(a.i) < m_poly.get_x(l) and m_poly.get_x(l) < x(a.i)+scale_length) and
@@ -45,11 +66,11 @@ std::vector<int> CohesinPolymer::subchain_in_cell(Cell a){
   return poly_subchain;
 }
 
-const int &CohesinPolymer::monomer_min(const Cell a)  {
+const int &FieldAction::monomer_min(const Cell a)  {
 	return *std::min_element(this->subchain_in_cell(a).begin(), this->subchain_in_cell(a).end());
 } 
 
-const int &CohesinPolymer::monomer_max(const Cell a)  {
+const int &FieldAction::monomer_max(const Cell a)  {
 	return *std::max_element(this->subchain_in_cell(a).begin(), this->subchain_in_cell(a).end());
 }
 

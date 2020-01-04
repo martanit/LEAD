@@ -12,7 +12,7 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
-#include "cohesin_polymer.h"
+#include "field.h"
 #include <cmath>
 #include <memory>
 #include <random>
@@ -42,10 +42,10 @@ public:
   };
 
   Integrator(Polymer &poly, VectorExtruder &vector_extr,
-	     CohesinPolymer & cohesin_field, Parameters integrator_parm)
+	     FieldAction &field, Parameters integrator_parm)
       : m_vector_extr(vector_extr),
-	m_cohesin_field(cohesin_field),
-	new_cohesin_field(cohesin_field),
+	m_field(field),
+	new_field(field),
         m_integrator_timestep(integrator_parm.get_timestep()),
         m_integrator_gamma(integrator_parm.get_gamma()),
         m_integrator_temp(integrator_parm.get_temp()), gauss_term(0, 1),
@@ -64,13 +64,13 @@ public:
   void set_new_extruder(VectorExtruder &new_vector_extr) {
     m_vector_extr = new_vector_extr;
   }
-  void set_new_field(CohesinPolymer &new_cohesin_field){
-    m_cohesin_field = new_cohesin_field;
+  void set_new_field(FieldAction &new_field){
+    m_field = new_field;
   }
 
   const Polymer &get_poly() const { return *m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
-  const CohesinPolymer &get_field() const { return m_cohesin_field; }
+  const FieldAction &get_field() const { return m_field; }
 
   // polymer integrators
   void langevin_overdamped();
@@ -90,7 +90,7 @@ private:
 
   std::unique_ptr<Polymer> m_poly;
   VectorExtruder m_vector_extr;
-  CohesinPolymer m_cohesin_field, new_cohesin_field;
+  FieldAction m_field, new_field;
 
   unsigned int direction;
   

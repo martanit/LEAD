@@ -12,7 +12,7 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
-#include "cohesin_polymer.h"
+#include "field.h"
 
 #include<chrono>
 #include<iostream>
@@ -127,7 +127,7 @@ auto begin = std::chrono::high_resolution_clock::now();
   
   Extruder extr(parm);
   VectorExtruder v_extr(parm, extr, poly_init);
-  CohesinPolymer cp_interaction(parm, poly_init); 
+  FieldAction cp_interaction(parm, poly_init); 
   Dynamics dyn(poly_init, v_extr, cp_interaction, parm);
  
   dyn.run_extrusion_field(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");

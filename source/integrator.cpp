@@ -61,39 +61,39 @@ void Integrator::markov_chain() {
 
 void Integrator::extruders_diffusion() {
     bool move;
-    for(int i = 0; i< m_cohesin_field.get_field_length(); ++i)
-        for(int j = 0; j < m_cohesin_field.get_field_length(); ++j)
-            for (int k = 0; k < m_cohesin_field.get_field_length(); ++k) {
-                if(m_cohesin_field.get_c(i,j,k)*m_cohesin_field.get_k_diff()*m_integrator_timestep/m_cohesin_field.get_field_step() > transition_prob(mt)) {
+    for(int i = 0; i< m_field.get_field_length(); ++i)
+        for(int j = 0; j < m_field.get_field_length(); ++j)
+            for (int k = 0; k < m_field.get_field_length(); ++k) {
+                if(m_field.get_c(i,j,k)*m_field.get_k_diff()*m_integrator_timestep/m_field.get_field_step() > transition_prob(mt)) {
                     move = false;
                     while(move != true) {
                         direction = uniform05(mt);
                         if(direction == 0 and i != 0) {
                             move = true;
-                            new_cohesin_field.add_delta_c(i-1,j,k);
+                            new_field.add_delta_c(i-1,j,k);
                         }
                         if(direction == 1 and i != (*m_poly).get_poly_nmonomers()) {
                             move = true;
-                            new_cohesin_field.add_delta_c(i+1,j,k);
+                            new_field.add_delta_c(i+1,j,k);
                         }
                         if(direction == 2 and j != 0) {
                             move = true;
-                            new_cohesin_field.add_delta_c(i,j-1,k);
+                            new_field.add_delta_c(i,j-1,k);
                         }
                         if(direction == 3 and j != (*m_poly).get_poly_nmonomers()) {
                             move = true;
-                            new_cohesin_field.add_delta_c(i,j+1,k);
+                            new_field.add_delta_c(i,j+1,k);
                         }
                         if(direction == 4 and k != 0) {
                             move = true;
-                            new_cohesin_field.add_delta_c(i,j,k-1);
+                            new_field.add_delta_c(i,j,k-1);
                         }
                         if(direction == 5 and k != (*m_poly).get_poly_nmonomers()) {
                             move = true;
-                            new_cohesin_field.add_delta_c(i,j,k+1);
+                            new_field.add_delta_c(i,j,k+1);
                         }
                     }
                 }
             }
-    m_cohesin_field = new_cohesin_field;
+    m_field = new_field;
 }

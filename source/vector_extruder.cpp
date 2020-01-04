@@ -54,12 +54,12 @@ void VectorExtruder::update(Polymer &poly) {
     m_vector_extr.push_back(std::make_unique<Extruder>(i));
 }
 
-void VectorExtruder::first_fill_field(Polymer &poly, CohesinPolymer cohes_field_int) {
+void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int) {
   bool is_overl = false;
   std::vector<Extruder> tmp_extruder;
   
   std::vector<int> subchain_cell;
-  cohes_field_int.poly_field_interaction();
+  cohes_field_int.interaction();
   	
   for(auto &a : cohes_field_int.get_contact_cell()){
   // Quanti estrusori si possono attaccare in un solo step in una singola cella?
@@ -83,7 +83,7 @@ void VectorExtruder::first_fill_field(Polymer &poly, CohesinPolymer cohes_field_
     m_vector_extr.push_back(std::make_unique<Extruder>(i));
 }
 
-void VectorExtruder::update_field(Polymer &poly, CohesinPolymer cohes_field_int) {
+void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
   bool is_overl = false;
   std::vector<Extruder> tmp_extruder;
   for (const auto &i : m_vector_extr)
@@ -93,7 +93,7 @@ void VectorExtruder::update_field(Polymer &poly, CohesinPolymer cohes_field_int)
       tmp_extruder.push_back(*i);
   
   std::vector<int> subchain_cell;
-  cohes_field_int.poly_field_interaction();
+  cohes_field_int.interaction();
   	
   for(auto &a : cohes_field_int.get_contact_cell()){
   // Quanti estrusori si possono attaccare in un solo step in una singola cella?
