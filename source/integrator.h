@@ -12,7 +12,7 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
-#include "cohesin_field.h"
+#include "cohesin_polymer.h"
 #include <cmath>
 #include <memory>
 #include <random>
@@ -42,7 +42,7 @@ public:
   };
 
   Integrator(Polymer &poly, VectorExtruder &vector_extr,
-	     CohesinField & cohesin_field, Parameters integrator_parm)
+	     CohesinPolymer & cohesin_field, Parameters integrator_parm)
       : m_vector_extr(vector_extr),
 	m_cohesin_field(cohesin_field),
 	new_cohesin_field(cohesin_field),
@@ -57,20 +57,20 @@ public:
 
   ~Integrator(){};
 
-  // Function to set and get polymer, vector extruder and cohesin field
+  // Function to set and get polymer, vector extruder and field of extruders
   void set_new_polymer(Polymer &poly) {
     m_poly = std::make_unique<Polymer>(poly);
   }
   void set_new_extruder(VectorExtruder &new_vector_extr) {
     m_vector_extr = new_vector_extr;
   }
-  void set_new_field(CohesinField &new_cohesin_field){
+  void set_new_field(CohesinPolymer &new_cohesin_field){
     m_cohesin_field = new_cohesin_field;
   }
 
   const Polymer &get_poly() const { return *m_poly; }
   const VectorExtruder &get_extr() const { return m_vector_extr; }
-  const CohesinField &get_field() const { return m_cohesin_field; }
+  const CohesinPolymer &get_field() const { return m_cohesin_field; }
 
   // polymer integrators
   void langevin_overdamped();
@@ -79,7 +79,7 @@ public:
   void markov_chain();
 
   // field moves
-  void cohesin_diffusion();
+  void extruders_diffusion();
 
 private:
   // Random stuff
@@ -90,7 +90,7 @@ private:
 
   std::unique_ptr<Polymer> m_poly;
   VectorExtruder m_vector_extr;
-  CohesinField m_cohesin_field, new_cohesin_field;
+  CohesinPolymer m_cohesin_field, new_cohesin_field;
 
   unsigned int direction;
   

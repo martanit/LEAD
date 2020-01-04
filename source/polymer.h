@@ -29,17 +29,17 @@ public:
   ~Polymer();
 
   void set_size();
-  // place first sphere of polymer
-  void first_sphere();
-  // place randomly other sphere
+  // place first monomer of polymer
+  void first_monomer();
+  // place randomly other monomers
   void poly_configuration();
-  // check if spheres overlap (self avoiding polymer)
+  // check if monomerss overlap (self avoiding polymer)
   bool is_overlap(int);
 
-  // calculate distance between atoms
+  // calculate distance between monomers
   double dist(const int &, const int &);
 
-  // fuction to access sphere coordinates, velocities and forces
+  // fuction to access monomers coordinates, velocities and forces
   const double &get_x(int i) const { return m_poly_x[i]; };
   const double &get_y(int i) const { return m_poly_y[i]; };
   const double &get_z(int i) const { return m_poly_z[i]; };
@@ -53,7 +53,7 @@ public:
   void set_x(double x, int i) { m_poly_x[i] = x; };
   void set_y(double y, int i) { m_poly_y[i] = y; };
   void set_z(double z, int i) { m_poly_z[i] = z; };
-  
+
   void center();
   void set_cm();
 
@@ -64,7 +64,7 @@ public:
   void add_energy(const double &);
 
   // function to access polymer parameters
-  const int &get_poly_sphere() const { return m_poly_sphere; };
+  const int &get_poly_nmonomers() const { return m_poly_nmonomers; };
   const float &get_poly_d() const { return m_poly_d; };
   const float &get_spring() const { return m_poly_spring; };
 
@@ -78,8 +78,8 @@ private:
   double x_cm, y_cm, z_cm;
 
   // polymer parameters
-  int m_poly_sphere = 100;   // number of interacting sphere
-  float m_poly_d = 0.89;    // diameter of sphere [50*nm]
+  int m_poly_nmonomers = 100;   // number of interacting monomers
+  float m_poly_d = 0.89;    // diameter of monomers [50*nm]
   float m_poly_spring = 100.; // spring constant of harmonic oscillator (spring)
   std::string m_poly_init = "init.dat";
 

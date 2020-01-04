@@ -3,7 +3,7 @@
 // integrator
 
 void Integrator::langevin_overdamped() {
-  for (unsigned int i = 0; i < (*m_poly).get_poly_sphere(); ++i) {
+  for (unsigned int i = 0; i < (*m_poly).get_poly_nmonomers(); ++i) {
     (*m_poly).set_x((*m_poly).get_x(i) +
                         ((*m_poly).get_fx(i) + stoch_term * gauss_term(mt)) *
                             m_integrator_timestep / m_integrator_gamma,
@@ -24,7 +24,7 @@ void Integrator::langevin_overdamped() {
 void Integrator::markov_chain() {
   for (auto &&i : m_vector_extr) {
     // right side go foward to right
-    if ((*i).get_r() != ((*m_poly).get_poly_sphere() - 1))
+    if ((*i).get_r() != ((*m_poly).get_poly_nmonomers() - 1))
       if (((*i).get_rate_fwr() * m_integrator_timestep >
            transition_prob(mt)) and
           ((*i).get_ctcf()[(*i).get_r()] != 1 or
@@ -59,38 +59,38 @@ void Integrator::markov_chain() {
   }
 }
 
-void Integrator::cohesin_diffusion() {
+void Integrator::extruders_diffusion() {
     bool move;
-    for(int i = 0; i< (*m_poly).get_poly_sphere(); ++i)
-        for(int j = 0; j < (*m_poly).get_poly_sphere(); ++j)
-            for (int k = 0; k < (*m_poly).get_poly_sphere(); ++k) {
-                if(m_cohesin_field[i][j][k]*m_cohesin_field.get_k_diff()*m_integrator_timestep/m_cohesin_field.get_field_step() > transition_prob(mt)) {
+    for(int i = 0; i< m_cohesin_field.get_field_length(); ++i)
+        for(int j = 0; j < m_cohesin_field.get_field_length(); ++j)
+            for (int k = 0; k < m_cohesin_field.get_field_length(); ++k) {
+                if(m_cohesin_field.get_c(i,j,k)*m_cohesin_field.get_k_diff()*m_integrator_timestep/m_cohesin_field.get_field_step() > transition_prob(mt)) {
                     move = false;
                     while(move != true) {
                         direction = uniform05(mt);
                         if(direction == 0 and i != 0) {
                             move = true;
-                            new_cohesin_field[i-1][j][k] += m_cohesin_field.get_c();
+                            new_cohesin_field.add_delta_c(i-1,j,k);
                         }
-                        if(direction == 1 and i != (*m_poly).get_poly_sphere()) {
+                        if(direction == 1 and i != (*m_poly).get_poly_nmonomers()) {
                             move = true;
-                            new_cohesin_field[i+1][j][k] += m_cohesin_field.get_c();
+                            new_cohesin_field.add_delta_c(i+1,j,k);
                         }
                         if(direction == 2 and j != 0) {
                             move = true;
-                            new_cohesin_field[i][j-1][k] += m_cohesin_field.get_c();
+                            new_cohesin_field.add_delta_c(i,j-1,k);
                         }
-                        if(direction == 3 and j != (*m_poly).get_poly_sphere()) {
+                        if(direction == 3 and j != (*m_poly).get_poly_nmonomers()) {
                             move = true;
-                            new_cohesin_field[i][j+1][k] += m_cohesin_field.get_c();
+                            new_cohesin_field.add_delta_c(i,j+1,k);
                         }
                         if(direction == 4 and k != 0) {
                             move = true;
-                            new_cohesin_field[i][j][k-1] += m_cohesin_field.get_c();
+                            new_cohesin_field.add_delta_c(i,j,k-1);
                         }
-                        if(direction == 5 and k != (*m_poly).get_poly_sphere()) {
+                        if(direction == 5 and k != (*m_poly).get_poly_nmonomers()) {
                             move = true;
-                            new_cohesin_field[i][j][k+1] += m_cohesin_field.get_c();
+                            new_cohesin_field.add_delta_c(i,j,k+1);
                         }
                     }
                 }

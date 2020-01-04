@@ -44,7 +44,7 @@ public:
 
   float get_temp() { return m_temp; }
 
-  int get_psphere() { return m_psphere; }
+  int get_nmonomers() { return m_nmonomers; }
   float get_diameter() { return m_diameter; }
   float get_spring() { return m_spring; }
 
@@ -80,8 +80,8 @@ protected:
   float m_temp = 2.; // system temperature [K]
 
   // polymer parameters
-  int m_psphere = 100;    // number of interacting sphere
-  float m_diameter = 0.89; // diameter of sphere [50*nm]
+  int m_nmonomers = 100;    // number of interacting monomers
+  float m_diameter = 0.89; // diameter of monomers [50*nm]
   float m_spring = 500.;  // spring constant of harmonic oscillator (spring)
   std::string m_init = "init.dat"; // first configuration
 
@@ -104,7 +104,7 @@ protected:
   float m_k_on = 0.5;
   float m_k_off = 0.001;
 
-  // cohesin parameters
+  // field of extruders parameters
   float m_k_diff = 1E3;
   float m_field_step = 10;
   float m_n_max_extr = 10;
