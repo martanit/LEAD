@@ -10,6 +10,7 @@
 
 #include "parameters.h"
 
+#include <tuple>
 #include <cmath>
 #include <fstream>
 #include <random>
@@ -56,6 +57,10 @@ public:
 
   void center();
   void set_cm();
+
+  const double &get_xcm() const { return x_cm; };
+  const double &get_ycm() const { return y_cm; };
+  const double &get_zcm() const { return z_cm; };
 
   void reset_force();
   void add_force(const int &, const double &, const double &, const double &);

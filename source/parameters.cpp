@@ -76,6 +76,8 @@ bool Parameters::read_parm(std::string file_name) {
           set_parm(m_k_diff, std::stof(par));
         else if (name == "field_step")
           set_parm(m_field_step, std::stof(par));
+        else if (name == "field_length")
+          set_parm(m_field_length, std::stof(par));
       }
     }
   }

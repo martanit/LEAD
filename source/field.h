@@ -51,6 +51,7 @@ class Field
     void first_extruders_field();
     // add a packet of extruders, aka a quantity of cohesin
     void add_delta_c(int, int, int);
+    void sub_delta_c(int, int, int);
 
     //access funciton
     const double &get_delta_c() const
@@ -75,10 +76,11 @@ class Field
       return m_k_diff;
     }
 
+ 
   private:
     // extruder field parameters
-    double m_field_length = 1000;
-    double m_field_step;
+    double m_field_length = 10;
+    double m_field_step=1;
     // extruders quantity that diffuse
     double m_delta_c = 0.1;
     // extruder diffusion rate
@@ -100,11 +102,12 @@ class FieldAction : public Field
     FieldAction(Parameters parm, Polymer poly) : Field(parm),
       m_poly(poly),
       scale_length(get_field_step()),
-      box_length(get_field_length()),
-      shift_x(1),
-      shift_y(1),
-      shift_z(1)
+      box_length(get_field_length())
     {
+      m_poly.set_cm();
+      shift_x=m_poly.get_xcm();
+      shift_y=m_poly.get_ycm();
+      shift_z=m_poly.get_zcm();
       this->interaction();
     };
     ~FieldAction() {};
@@ -130,20 +133,24 @@ class FieldAction : public Field
     };
 
     // Conversion field to space coordinates
-    double scale_length, shift_x = 1, shift_y = 1, shift_z = 1;
+    double scale_length;
+    double shift_x, shift_y, shift_z;
     double box_length;
+
     const double x(const int i) const
     {
-      return i * scale_length + shift_x;
+      return scale_length*i-get_field_length()/2.*scale_length+shift_x;
     };
     const double y(const int i) const
     {
-      return i * scale_length + shift_y;
+      return scale_length*i-get_field_length()/2.*scale_length+shift_y;
     };
     const double z(const int i) const
     {
-      return i * scale_length + shift_z;
+      return scale_length*i-get_field_length()/2.*scale_length+shift_z;
     };
+
+   friend void print_field(FieldAction, std::string);
 
   private:
     Polymer m_poly;

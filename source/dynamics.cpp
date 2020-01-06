@@ -85,6 +85,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
 }
 
 void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
+  print_field(m_interaction, "output/field.xyz");
   for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
     if(compute_energy) m_poly_old = *m_poly;
     if (i % m_dynamics_print == 0)
@@ -110,7 +111,7 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
 
     m_poly = std::make_unique<Polymer>(Potential::get_poly());
     m_vector_extr = Potential::get_extr();
-
+    
     Integrator::set_new_polymer(*m_poly);
     Integrator::set_new_extruder(m_vector_extr);
     Integrator::set_new_field(m_interaction); 
@@ -132,6 +133,7 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
                  output + std::to_string(num_extr) + ".le");
         ++num_extr;
       }
+  	print_field(m_interaction, "output/field.xyz");
     }
   }
 }

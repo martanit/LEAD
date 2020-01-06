@@ -67,6 +67,7 @@ public:
   const float &get_koff() const { return m_k_off; }
   const float &get_k_diff() const { return m_k_diff; };
   const float &get_field_step() const { return m_field_step; };
+  const float &get_field_length() const { return m_field_length; };
   const float &get_max_extr() const { return m_n_max_extr; }
 
 protected:
@@ -106,6 +107,7 @@ protected:
 
   // field of extruders parameters
   float m_k_diff = 1E3;
+  float m_field_length = 10;
   float m_field_step = 10;
   float m_n_max_extr = 10;
 };

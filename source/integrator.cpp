@@ -71,26 +71,33 @@ void Integrator::extruders_diffusion() {
                         if(direction == 0 and i != 0) {
                             move = true;
                             new_field.add_delta_c(i-1,j,k);
+                            new_field.sub_delta_c(i,j,k);
                         }
-                        if(direction == 1 and i != (*m_poly).get_poly_nmonomers()) {
+			else if(direction == 1 and i != m_field.get_field_length()-1) {
                             move = true;
                             new_field.add_delta_c(i+1,j,k);
+                            new_field.sub_delta_c(i,j,k);
                         }
-                        if(direction == 2 and j != 0) {
+			
+			else if(direction == 2 and j != 0) {
                             move = true;
                             new_field.add_delta_c(i,j-1,k);
+                            new_field.sub_delta_c(i,j,k);
                         }
-                        if(direction == 3 and j != (*m_poly).get_poly_nmonomers()) {
+			else if(direction == 3 and j != m_field.get_field_length()-1) {
                             move = true;
                             new_field.add_delta_c(i,j+1,k);
+                            new_field.sub_delta_c(i,j,k);
                         }
-                        if(direction == 4 and k != 0) {
+			else if(direction == 4 and k != 0) {
                             move = true;
                             new_field.add_delta_c(i,j,k-1);
+                            new_field.sub_delta_c(i,j,k);
                         }
-                        if(direction == 5 and k != (*m_poly).get_poly_nmonomers()) {
+			else if(direction == 5 and k != m_field.get_field_length()-1) {
                             move = true;
                             new_field.add_delta_c(i,j,k+1);
+                            new_field.sub_delta_c(i,j,k);
                         }
                     }
                 }

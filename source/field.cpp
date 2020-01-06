@@ -2,6 +2,7 @@
 
 Field::Field(Parameters parm)
       :m_field_step(parm.get_field_step()),
+	m_field_length(parm.get_field_length()),
       m_k_diff(parm.get_k_diff()),
       uniform01(0., 1.),
       uniform05(0, 5),
@@ -19,6 +20,10 @@ void Field::first_extruders_field() {
 
 void Field::add_delta_c(int i, int j, int k) {
 	m_extruder_c[i][j][k] += m_delta_c;
+}
+
+void Field::sub_delta_c(int i, int j, int k) {
+	m_extruder_c[i][j][k] -= m_delta_c;
 }
 
 void FieldAction::interaction() {
@@ -73,4 +78,30 @@ const int &FieldAction::monomer_min(const Cell a)  {
 const int &FieldAction::monomer_max(const Cell a)  {
 	return *std::max_element(this->subchain_in_cell(a).begin(), this->subchain_in_cell(a).end());
 }
+
+void print_field(FieldAction field, std::string out_field){
+  	std::ofstream output;
+  	output.open(out_field, std::fstream::app);
+
+  	// return error if read file fail
+  	if (output.fail()) {
+    	throw "ERROR: Impossible to write field xyz file " + out_field;
+  	}
+	
+	output << std::pow(field.get_field_length(),3) << std::endl<<std::endl;
+	for(int i=0; i<field.get_field_length(); ++i)
+    	    	for(int j=0; j<field.get_field_length(); ++j)
+    	    		for(int k=0; k<field.get_field_length(); ++k)
+			if(field.get_c(i,j,k)>=0.1)
+		 	   output << "\tAu" << "\t\t\t"
+		      			<< field.x(i) << "\t\t\t" 
+		       			<< field.y(j) << "\t\t\t"
+		       			<< field.z(k) << std::endl;
+			else    		
+		 	   output << "\tNan" << "\t\t\t"
+		      			<< field.x(i) << "\t\t\t" 
+		       			<< field.y(j) << "\t\t\t"
+		       			<< field.z(k) << std::endl;
+  	output.close();
+    }
 
