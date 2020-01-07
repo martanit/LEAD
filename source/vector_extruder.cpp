@@ -6,7 +6,6 @@ void VectorExtruder::first_fill(Polymer &poly) {
   std::vector<Extruder> tmp_extruder;
   for (int i = 0; i < m_n_max_extr; ++i) {
     m_extr.place_extruder(poly);
-    
     if( tmp_extruder.size() != 0){
       for (auto &j : tmp_extruder)
         if (j.extr_overlap(m_extr)) {

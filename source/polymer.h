@@ -1,5 +1,5 @@
 /*
- * potential.h
+ * polymer.h
  *
  *  Created on: March 6, 2019
  *  	Author: martanit
@@ -36,7 +36,7 @@ public:
   // check if monomers overlap (self avoiding polymer)
   bool is_overlap(int);
 
-  // calculate distance between atoms
+  // calculate distance between monomers
   double dist(const int &, const int &);
 
   // fuction to access monomers coordinates, velocities and forces
@@ -53,7 +53,7 @@ public:
   void set_x(double x, int i) { m_poly_x[i] = x; };
   void set_y(double y, int i) { m_poly_y[i] = y; };
   void set_z(double z, int i) { m_poly_z[i] = z; };
-  
+
   void center();
   void set_cm();
 
