@@ -18,12 +18,12 @@ public:
   Potential(Polymer &poly, Parameters parm)
       : m_poly(poly),
         m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
-        m_pot_rcut(parm.get_rcut()), monomers(poly.get_poly_nmonomers()){};
+        m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()){};
 
   Potential(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
       : m_poly(poly), m_vector_extr(vector_extr),
         m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
-        m_pot_rcut(parm.get_rcut()), monomers(poly.get_poly_nmonomers()){};
+        m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()){};
 
   ~Potential(){};
 
@@ -58,7 +58,7 @@ protected:
   bool attractive = true;
   double dr;
   double x, y, z;
-  std::vector<std::vector<int>> monomers;
+  std::vector<std::vector<int>> sphere;
 
   double f_x = 0., f_y = 0., f_z = 0.;
 

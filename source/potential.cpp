@@ -4,7 +4,7 @@ void Potential::lennard_jones_f(int step,
                                 bool compute_energy) {
   if (step % 10000 == 0 or step == 0) {
     for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
-      monomers[i].clear();
+      sphere[i].clear();
       for (unsigned int j = i + 1; j < m_poly.get_poly_nmonomers(); ++j) {
         x = (m_poly.get_x(i) - m_poly.get_x(j));
         y = (m_poly.get_y(i) - m_poly.get_y(j));
@@ -14,13 +14,13 @@ void Potential::lennard_jones_f(int step,
 
         // calculate points that are into m_pot_rcut^2
         if (dr < m_pot_rcut * m_pot_rcut) {
-          monomers[i].push_back(j);
+          sphere[i].push_back(j);
         }
       }
     }
   }
   for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
-    for (auto &&k : monomers[i]) {
+    for (auto &&k : sphere[i]) {
 
       x = (m_poly.get_x(i) - m_poly.get_x(k));
       y = (m_poly.get_y(i) - m_poly.get_y(k));
@@ -54,7 +54,7 @@ void Potential::soft_core_f(int step,
                                 bool compute_energy) {
   if (step % 10000 == 0 or step == 0) {
     for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
-      monomers[i].clear();
+      sphere[i].clear();
       for (unsigned int j = i + 1; j < m_poly.get_poly_nmonomers(); ++j) {
         x = (m_poly.get_x(i) - m_poly.get_x(j));
         y = (m_poly.get_y(i) - m_poly.get_y(j));
@@ -64,14 +64,14 @@ void Potential::soft_core_f(int step,
 
         // calculate points that are into m_pot_rcut^2
         if (dr < m_pot_rcut * m_pot_rcut) {
-          monomers[i].push_back(j);
+          sphere[i].push_back(j);
         }
       }
     }
   }
 
   for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
-    for (auto &&k : monomers[i]) {
+    for (auto &&k : sphere[i]) {
 
       x = (m_poly.get_x(i) - m_poly.get_x(k));
       y = (m_poly.get_y(i) - m_poly.get_y(k));
