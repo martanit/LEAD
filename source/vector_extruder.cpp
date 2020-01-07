@@ -94,8 +94,8 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
   
   std::vector<int> subchain_cell;
   cohes_field_int.interaction();
-  	
-  for(auto &a : cohes_field_int.get_contact_cell()){
+  
+   for(auto &a : cohes_field_int.get_contact_cell()){
   // Quanti estrusori si possono attaccare in un solo step in una singola cella?
       int extr_per_step=10;
       //sistemare: ipoteticamente posso attaccare infiniti estrusori in uno step

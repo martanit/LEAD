@@ -33,12 +33,14 @@ void FieldAction::interaction() {
 		for(int i = 0; i< box_length; ++i)
 				for(int j = 0; j< box_length; ++j)
 					for(int k = 0; k< box_length; ++k){
-						a = {i,j,k};
-						is_poly_in_cell = poly_in_cell({i,j,k});
+					  a = {i,j,k};
+					  is_poly_in_cell = poly_in_cell(a);
+					  if(is_poly_in_cell) break;
 					}		
-						if(is_poly_in_cell){
-								m_contact_cell.push_back(a);
-						}	
+					if(is_poly_in_cell)
+						m_contact_cell.push_back(a);
+					
+				//std::cout << m_contact_cell.size() << std::endl;
 }
 
 //void FieldAction::update_poly_field_int(){

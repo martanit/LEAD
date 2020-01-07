@@ -64,8 +64,11 @@ void Integrator::extruders_diffusion() {
     for(int i = 0; i< m_field.get_field_length(); ++i)
         for(int j = 0; j < m_field.get_field_length(); ++j)
             for (int k = 0; k < m_field.get_field_length(); ++k) {
-                if(m_field.get_c(i,j,k)*m_field.get_k_diff()*m_integrator_timestep/m_field.get_field_step() > transition_prob(mt)) {
-                    move = false;
+                if(m_field.get_c(i,j,k)*m_field.get_k_diff()*
+		   m_integrator_timestep/m_field.get_field_step() > transition_prob(mt) 
+		   and m_field.get_c(i,j,k)>=m_field.get_delta_c()) {
+                   
+		    move = false;
                     while(move != true) {
                         direction = uniform05(mt);
                         if(direction == 0 and i != 0) {
