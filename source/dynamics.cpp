@@ -28,7 +28,7 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
 
         m_poly = std::make_unique<Polymer>(Integrator::get_poly());
         
-	if(i%m_dynamics_print == 0) {
+         if(i%m_dynamics_print == 0) {
             print_xyz(*m_poly, output);
           if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
         }

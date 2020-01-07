@@ -10,7 +10,6 @@
 
 #include "parameters.h"
 
-#include <tuple>
 #include <cmath>
 #include <fstream>
 #include <random>
@@ -34,7 +33,7 @@ public:
   void first_monomer();
   // place randomly other monomers
   void poly_configuration();
-  // check if monomerss overlap (self avoiding polymer)
+  // check if monomers overlap (self avoiding polymer)
   bool is_overlap(int);
 
   // calculate distance between monomers

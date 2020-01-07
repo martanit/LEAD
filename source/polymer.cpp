@@ -49,7 +49,7 @@ void Polymer::poly_configuration() {
     while (is_overlap) {
       stuck++;
       double t = 2 * M_PI * uniform01(mt);
-      // uniform distribution on monomers
+      // uniform distribution on sphere
       double p = acos(1 - 2 * uniform01(mt));
 
       m_poly_x[i] = (m_poly_x[i - 1] + d * std::sin(p) * std::cos(t));
@@ -104,6 +104,7 @@ void Polymer::set_cm() {
 		sum_y += get_y(i);
 		sum_z += get_z(i);
 	}
+	
 	x_cm = sum_x/m_poly_nmonomers;
 	y_cm = sum_y/m_poly_nmonomers;
 	z_cm = sum_z/m_poly_nmonomers;
