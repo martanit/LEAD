@@ -6,30 +6,30 @@ void VectorExtruder::first_fill(Polymer &poly) {
   std::vector<Extruder> tmp_extruder;
   for (int i = 0; i < m_n_max_extr; ++i) {
     m_extr.place_extruder(poly);
-    // Fill m_vector extr with almost one extruder
-    // CORRETTO?
-    if (i == 0)
-      tmp_extruder.push_back(m_extr);
-    else {
+    if( tmp_extruder.size() != 0){
       for (auto &j : tmp_extruder)
         if (j.extr_overlap(m_extr)) {
           is_overl = true;
           break;
         }
-      if ((m_n_max_extr * m_kon * integrator_timestep /
-           poly.get_poly_nmonomers()) > dist(mt) and
+    }
+      if ((m_kon * integrator_timestep /
+           poly.get_poly_d()) > dist(mt) and
           !(is_overl))
         tmp_extruder.push_back(m_extr);
     }
-  }
+  
   m_vector_extr.clear();
   for (const auto &i : tmp_extruder)
     m_vector_extr.push_back(std::make_unique<Extruder>(i));
 }
 
 void VectorExtruder::update(Polymer &poly) {
+ 
+  if(m_vector_extr.size() == 0) this->first_fill(poly);
+  
+  else{
   bool is_overl = false;
-
   std::vector<Extruder> tmp_extruder;
   for (const auto &i : m_vector_extr)
     // fill tmp_extruder only with extruder
@@ -44,7 +44,7 @@ void VectorExtruder::update(Polymer &poly) {
         is_overl = true;
         break;
       }
-    if ((m_n_max_extr * m_kon * integrator_timestep / poly.get_poly_nmonomers()) >
+    if ((m_kon * integrator_timestep / poly.get_poly_d()) >
             dist(mt) and
         !(is_overl))
       tmp_extruder.push_back(m_extr);
@@ -52,6 +52,7 @@ void VectorExtruder::update(Polymer &poly) {
   m_vector_extr.clear();
   for (const auto &i : tmp_extruder)
     m_vector_extr.push_back(std::make_unique<Extruder>(i));
+  }
 }
 
 void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int) {
