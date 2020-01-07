@@ -123,8 +123,8 @@ class FieldAction : public Field
     bool poly_in_cell(Cell);
     std::vector<int> subchain_in_cell(Cell);
 
-    const int &monomer_min(const Cell);
-    const int &monomer_max(const Cell);
+    int monomer_min(Cell);
+    int monomer_max(Cell);
 
     // Access function
     const std::vector<Cell> &get_contact_cell() const
@@ -155,6 +155,7 @@ class FieldAction : public Field
   private:
     Polymer m_poly;
     std::vector<Cell> m_contact_cell;
+    std::vector<int> m_poly_subchain;
 
 };
 

@@ -88,7 +88,7 @@ int main(int argc, char** argv) {
   
 auto begin = std::chrono::high_resolution_clock::now();
 
-  if(!extrusion and !extruders_field, extrusion){
+  if(!extrusion and !extruders_field){
   Parameters parm(parm_input, parm_output+".out", extrusion);
   Polymer poly_init(parm);
   //print_xyz(poly_init, traj_output+".xyz");

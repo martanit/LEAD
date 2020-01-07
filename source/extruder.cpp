@@ -32,11 +32,12 @@ void Extruder::place_extruder(Polymer poly) {
 // that is in a specific cell. The only information I need is the index
 // of the monomers in the cell
 void Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_max) {
-  set = 0.;
+  set = false;
   while (!set) {
     try_extr_pos_cell = std::uniform_int_distribution<>(monomer_min, monomer_max);
     tmp_extr_pos = try_extr_pos_cell(mt);
     tmp_coupling_try = coupling_try(mt);
+
     if ((m_ctcf[tmp_extr_pos] == 0 and
          (m_ctcf[tmp_extr_pos - 1] == 0 or m_ctcf[tmp_extr_pos + 1] == 0)) and
         m_coupling_prob[tmp_extr_pos] > tmp_coupling_try) {
@@ -45,7 +46,7 @@ void Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_ma
           m_coupling_prob[tmp_extr_pos - 1] > tmp_coupling_try) {
         m_extruder_r = tmp_extr_pos;
         m_extruder_l = tmp_extr_pos - 1;
-        set = 1;
+        set = true;
       }
 
       else if (tmp_extr_pos != monomer_max and
@@ -53,7 +54,7 @@ void Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_ma
                m_coupling_prob[tmp_extr_pos + 1] > tmp_coupling_try) {
         m_extruder_l = tmp_extr_pos;
         m_extruder_r = tmp_extr_pos + 1;
-        set = 1;
+        set = true;
       }
     }
   }

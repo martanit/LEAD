@@ -27,20 +27,15 @@ void Field::sub_delta_c(int i, int j, int k) {
 }
 
 void FieldAction::interaction() {
-		bool is_poly_in_cell = false;
 		Cell a;
 		m_contact_cell.clear();
 		for(int i = 0; i< box_length; ++i)
 				for(int j = 0; j< box_length; ++j)
 					for(int k = 0; k< box_length; ++k){
 					  a = {i,j,k};
-					  is_poly_in_cell = poly_in_cell(a);
-					  if(is_poly_in_cell) break;
-					}		
-					if(is_poly_in_cell)
+					  if(poly_in_cell(a))
 						m_contact_cell.push_back(a);
-					
-				//std::cout << m_contact_cell.size() << std::endl;
+					}	
 }
 
 //void FieldAction::update_poly_field_int(){
@@ -51,35 +46,43 @@ void FieldAction::interaction() {
 //}
 
 bool FieldAction::poly_in_cell(Cell a){
-		for(int l=0; l<m_poly.get_poly_nmonomers(); ++l)
+	bool in_cell=false;
+		for(int l=0; l<m_poly.get_poly_nmonomers(); ++l){
 				if((x(a.i) < m_poly.get_x(l) and 
-						m_poly.get_x(l) < x(a.i)+scale_length) and
+						m_poly.get_x(l) < (x(a.i)+scale_length)) and
 				   (y(a.j) < m_poly.get_y(l) and 
-						m_poly.get_y(l) < y(a.j)+scale_length) and
+						m_poly.get_y(l) < (y(a.j)+scale_length)) and
 				   (z(a.k) < m_poly.get_z(l) and 
-						m_poly.get_z(l) < z(a.k)+scale_length)){
-						return true;
+						m_poly.get_z(l) < (z(a.k)+scale_length))){
+						in_cell = true;
+						break;
 				}
-		else return false;
+		}
+		return in_cell;
+}
+
+int FieldAction::monomer_min(Cell a)  {
+	std::vector<int> tmp=this->subchain_in_cell(a);
+	if(this->subchain_in_cell(a).size() == 1) return this->subchain_in_cell(a).at(0);
+ 	else return *std::min_element(std::begin(tmp), std::end(tmp));
+} 
+
+int FieldAction::monomer_max(Cell a)  {
+	std::vector<int> tmp=this->subchain_in_cell(a);
+	if(this->subchain_in_cell(a).size() == 1) return this->subchain_in_cell(a).at(0); 
+ 	else return *std::max_element(std::begin(tmp), std::end(tmp));
 }
 
 std::vector<int> FieldAction::subchain_in_cell(Cell a){
-		std::vector<int> poly_subchain;
-	  for(int l = 0; l<m_poly.get_poly_nmonomers(); ++l)
+	std::vector<int> poly_subchain;  
+	for(int l = 0; l<m_poly.get_poly_nmonomers(); ++l)
 				if((x(a.i) < m_poly.get_x(l) and m_poly.get_x(l) < x(a.i)+scale_length) and
-				  (y(a.j) < m_poly.get_y(l) and m_poly.get_y(l) < y(a.j)+scale_length) and
-  		    (z(a.k) < m_poly.get_z(l) and m_poly.get_z(l) < z(a.k)+scale_length))
+				   (y(a.j) < m_poly.get_y(l) and m_poly.get_y(l) < y(a.j)+scale_length) and
+  		    		   (z(a.k) < m_poly.get_z(l) and m_poly.get_z(l) < z(a.k)+scale_length))
 						poly_subchain.push_back(l);
-  return poly_subchain;
+return poly_subchain;
 }
 
-const int &FieldAction::monomer_min(const Cell a)  {
-	return *std::min_element(this->subchain_in_cell(a).begin(), this->subchain_in_cell(a).end());
-} 
-
-const int &FieldAction::monomer_max(const Cell a)  {
-	return *std::max_element(this->subchain_in_cell(a).begin(), this->subchain_in_cell(a).end());
-}
 
 void print_field(FieldAction field, std::string out_field){
   	std::ofstream output;

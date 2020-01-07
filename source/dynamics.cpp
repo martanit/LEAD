@@ -119,6 +119,7 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
     this->markov_chain();
     this->langevin_overdamped();
     this->extruders_diffusion();
+   
 
     m_poly = std::make_unique<Polymer>(Integrator::get_poly());
     m_vector_extr = Integrator::get_extr();
