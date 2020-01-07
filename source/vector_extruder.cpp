@@ -15,7 +15,7 @@ void VectorExtruder::first_fill(Polymer &poly) {
         }
     }
       if ((m_kon * integrator_timestep /
-           poly.get_poly_sphere()) > dist(mt) and
+           poly.get_poly_nmonomers()) > dist(mt) and
           !(is_overl))
         tmp_extruder.push_back(m_extr);
     }
@@ -45,7 +45,7 @@ void VectorExtruder::update(Polymer &poly) {
         is_overl = true;
         break;
       }
-    if ((m_kon * integrator_timestep / poly.get_poly_sphere()) >
+    if ((m_kon * integrator_timestep / poly.get_poly_nmonomers()) >
             dist(mt) and
         !(is_overl))
       tmp_extruder.push_back(m_extr);

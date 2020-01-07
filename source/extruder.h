@@ -26,7 +26,7 @@ public:
         m_rate_bwr(parm.get_rate_bwr()),
         m_coupling_prob(parm.get_coupling_prob()), m_ctcf(parm.get_ctcf()),
         m_perm_ctcf(parm.get_permeability()),
-        try_extruder_pos(1, parm.get_psphere() - 2), coupling_try(0, 1){};
+        try_extruder_pos(1, parm.get_nmonomers() - 2), coupling_try(0, 1){};
 
   ~Extruder(){};
   bool operator==(const Extruder &lhs) {

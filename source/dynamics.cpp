@@ -90,7 +90,7 @@ double Dynamics::delta_h(){
     double second_term=0;
     double delta_energy;
 
-    for (unsigned int j=0; j< m_parm.get_psphere(); ++j){
+    for (unsigned int j=0; j< m_parm.get_nmonomers(); ++j){
       first_term+=m_parm.get_timestep()/(4.*m_parm.get_gamma())*
       ((std::pow((*m_poly).get_fx(j),2)+
        std::pow((*m_poly).get_fy(j),2)+

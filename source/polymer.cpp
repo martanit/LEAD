@@ -4,7 +4,7 @@ bool print_xyz(Polymer &, std::string);
 bool read_xyz(Polymer &, std::string);
 
 Polymer::Polymer(Parameters parm)
-    : m_poly_sphere(parm.get_psphere()),
+    : m_poly_nmonomers(parm.get_nmonomers()),
       m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
       uniform01(0., 1.){
   this->set_size();
@@ -13,7 +13,7 @@ Polymer::Polymer(Parameters parm)
 }
 
 Polymer::Polymer(Parameters parm, std::string poly_xyz)
-    : m_poly_sphere(parm.get_psphere()),
+    : m_poly_nmonomers(parm.get_nmonomers()),
       m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
       uniform01(0., 1.) {
   this->set_size();
@@ -25,15 +25,15 @@ Polymer::Polymer(Parameters parm, std::string poly_xyz)
 Polymer::~Polymer() {}
 
 void Polymer::set_size() {
-  m_poly_x.resize(m_poly_sphere);
-  m_poly_y.resize(m_poly_sphere);
-  m_poly_z.resize(m_poly_sphere);
-  m_poly_fx.resize(m_poly_sphere);
-  m_poly_fy.resize(m_poly_sphere);
-  m_poly_fz.resize(m_poly_sphere);
+  m_poly_x.resize(m_poly_nmonomers);
+  m_poly_y.resize(m_poly_nmonomers);
+  m_poly_z.resize(m_poly_nmonomers);
+  m_poly_fx.resize(m_poly_nmonomers);
+  m_poly_fy.resize(m_poly_nmonomers);
+  m_poly_fz.resize(m_poly_nmonomers);
 }
 
-void Polymer::first_sphere() {
+void Polymer::first_monomer() {
   m_poly_x[0] = (uniform01(mt)); // x
   m_poly_y[0] = (uniform01(mt)); // y
   m_poly_z[0] = (uniform01(mt)); // z
@@ -42,8 +42,8 @@ void Polymer::first_sphere() {
 void Polymer::poly_configuration() {
   unsigned int stuck;
   double d = m_poly_d;
-  this->first_sphere();
-  for (unsigned int i = 1; i < m_poly_sphere; i++) {
+  this->first_monomer();
+  for (unsigned int i = 1; i < m_poly_nmonomers; i++) {
     stuck = 0;
     bool is_overlap = true;
     while (is_overlap) {
@@ -99,15 +99,15 @@ void Polymer::set_cm() {
 	sum_y = 0;
 	sum_z = 0;
 
-	for(unsigned int i=0; i<m_poly_sphere; ++i){
+	for(unsigned int i=0; i<m_poly_nmonomers; ++i){
 		sum_x += get_x(i);
 		sum_y += get_y(i);
 		sum_z += get_z(i);
 	}
 	
-	x_cm = sum_x/m_poly_sphere;
-	y_cm = sum_y/m_poly_sphere;
-	z_cm = sum_z/m_poly_sphere;
+	x_cm = sum_x/m_poly_nmonomers;
+	y_cm = sum_y/m_poly_nmonomers;
+	z_cm = sum_z/m_poly_nmonomers;
 }
 
 void Polymer::reset_force() {
@@ -139,8 +139,8 @@ bool print_xyz(Polymer &poly, std::string out_xyz) {
     return 1;
   }
 
-  output << poly.m_poly_sphere << std::endl << std::endl;
-  for (int i = 0; i < poly.m_poly_sphere; i++) {
+  output << poly.m_poly_nmonomers << std::endl << std::endl;
+  for (int i = 0; i < poly.m_poly_nmonomers; i++) {
     output << "\tAu" << "\t\t\t" 
            << poly.m_poly_x[i] << "\t\t\t"
            << poly.m_poly_y[i] << "\t\t\t" 

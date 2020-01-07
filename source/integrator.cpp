@@ -3,7 +3,7 @@
 // integrator
 
 void Integrator::langevin_overdamped() {
-  for (unsigned int i = 0; i < (*m_poly).get_poly_sphere(); ++i) {
+  for (unsigned int i = 0; i < (*m_poly).get_poly_nmonomers(); ++i) {
     (*m_poly).set_x((*m_poly).get_x(i) +
                         ((*m_poly).get_fx(i) + stoch_term * gauss_term(mt)) *
                             m_integrator_timestep / m_integrator_gamma,
@@ -24,7 +24,7 @@ void Integrator::langevin_overdamped() {
 void Integrator::markov_chain() {
   for (auto &&i : m_vector_extr) {
     // right side go foward to right
-    if ((*i).get_r() != ((*m_poly).get_poly_sphere() - 1))
+    if ((*i).get_r() != ((*m_poly).get_poly_nmonomers() - 1))
       if (((*i).get_rate_fwr() * m_integrator_timestep >
            transition_prob(mt)) and
           ((*i).get_ctcf()[(*i).get_r()] != 1 or

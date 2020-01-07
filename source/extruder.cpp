@@ -16,7 +16,7 @@ void Extruder::place_extruder(Polymer poly) {
         set = 1;
       }
 
-      else if (tmp_extr_pos != poly.get_poly_sphere() and
+      else if (tmp_extr_pos != poly.get_poly_nmonomers() and
                m_ctcf[tmp_extr_pos + 1] == 0 and
                m_coupling_prob[tmp_extr_pos + 1] > tmp_coupling_try) {
         m_extruder_l = tmp_extr_pos;
@@ -28,7 +28,7 @@ void Extruder::place_extruder(Polymer poly) {
 }
 
 bool Extruder::extr_overlap(Extruder &extr) {
-  // two extruder cannot bind to sphere
+  // two extruder cannot bind to monomer
   // that is already taken from another extr
   if ((this->m_extruder_l == extr.m_extruder_l) and
       (this->m_extruder_r == extr.m_extruder_r))
