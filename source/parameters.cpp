@@ -1,15 +1,12 @@
 #include "parameters.h"
-Parameters::Parameters(std::string file_name,std::string parm_output) {
-  this->read_parm(file_name);
-  this->print_param(parm_output);
-}
 
-Parameters::Parameters(std::string file_name,std::string parm_output, std::string ctcf,
-                       std::string prob) {
-  this->read_parm(file_name);
-  this->read_ctcf(ctcf);
-  this->read_coupling_prob(prob);
-  this->print_param(parm_output);
+Parameters::Parameters(std::string parm_input, std::string parm_output, bool le) {
+  this->read_parm(parm_input);
+  if(le){
+  	this->read_ctcf();
+  	this->read_coupling_prob();
+  }
+  this->print_param(parm_output, le);
 }
 
 Parameters::~Parameters() {}
@@ -78,6 +75,10 @@ bool Parameters::read_parm(std::string file_name) {
           set_parm(m_field_step, std::stof(par));
         else if (name == "field_length")
           set_parm(m_field_length, std::stof(par));
+        else if (name == "ctcf")
+          set_parm(m_ctcf_in, par);
+        else if (name == "probability")
+          set_parm(m_coupling_prob_in, par);
       }
     }
   }
@@ -85,16 +86,16 @@ bool Parameters::read_parm(std::string file_name) {
   return 0;
 }
 
-bool Parameters::read_ctcf(std::string file_name) {
+bool Parameters::read_ctcf() {
   int x;
 
   // read file
   std::ifstream ctcf_file;
-  ctcf_file.open(file_name, std::fstream::in);
+  ctcf_file.open(m_ctcf_in, std::fstream::in);
 
   // return error if read file fail
   if (ctcf_file.fail()) {
-    throw "ERROR: Impossible to open parameters file " + file_name;
+    throw "ERROR: Impossible to open parameters file " + m_ctcf_in;
     return 1;
   }
 
@@ -126,16 +127,16 @@ bool Parameters::print_ctcf(std::string ctcf_output){
   return 0;
 }
 
-bool Parameters::read_coupling_prob(std::string file_name) {
+bool Parameters::read_coupling_prob() {
   double p;
 
   // read file
   std::ifstream coupling_prob_file;
-  coupling_prob_file.open(file_name, std::fstream::in);
+  coupling_prob_file.open(m_coupling_prob_in, std::fstream::in);
 
   // return error if read file fail
   if (coupling_prob_file.fail()) {
-    throw "ERROR: Impossible to open parameters file " + file_name;
+    throw "ERROR: Impossible to open parameters file " + m_coupling_prob_in;
     return 1;
   }
 
@@ -149,7 +150,7 @@ bool Parameters::read_coupling_prob(std::string file_name) {
   return 0;
 }
 
-bool Parameters::print_param(std::string parm_output){
+bool Parameters::print_param(std::string parm_output, bool le){
   
   std::ofstream set_parameters;
   set_parameters.open(parm_output, std::ofstream::out);
@@ -172,6 +173,7 @@ bool Parameters::print_param(std::string parm_output){
   set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
   set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
   set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;
+  if(le){
   set_parameters << "EXTRUDER PARAMETERS" << std::endl;
   set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
   set_parameters << "Extruder rate fw right: " << m_rate_fwr << std::endl;
@@ -179,9 +181,15 @@ bool Parameters::print_param(std::string parm_output){
   set_parameters << "Extruder rate bw right: " << m_rate_bwr << std::endl;
   set_parameters << "Ctcf permeability: " << m_perm_ctcf << std::endl;
   set_parameters << "Extruder couplng probability: " << m_k_on << std::endl;
-  set_parameters << "Extruder decoupling probability: " << m_k_off << std::endl;
-  set_parameters << "Maximum number of extruder: " << m_n_max_extr << std::endl;
-  
+  set_parameters << "Extruder decoupling probability: " << m_k_off 
+	  						<< std::endl;
+  set_parameters << "Maximum number of extruder: " << m_n_max_extr 
+	  					   << std::endl << std::endl;
+  set_parameters << "I/O FILE" << std::endl;
+  set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
+  set_parameters << "Coupling probability file: " << m_coupling_prob_in 
+   					  << std::endl;
+  }
   set_parameters.close();
   return 0;
 }

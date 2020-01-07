@@ -18,18 +18,16 @@ public:
   // default constructor
   Parameters(void){};
   // constructor
-  Parameters(std::string, std::string);
-  // constructor
-  Parameters(std::string, std::string, std::string, std::string);
+  Parameters(std::string, std::string, bool);
   ~Parameters();
 
   // function that read parameters, ctcf and
   // coupling probability (for extruder) from file
   bool read_parm(std::string);
-  bool read_ctcf(std::string);
+  bool read_ctcf();
   bool print_ctcf(std::string);
-  bool read_coupling_prob(std::string);
-  bool print_param(std::string);
+  bool read_coupling_prob();
+  bool print_param(std::string, bool);
 
   // function that store different type parameters
   template <typename myType> void set_parm(myType &m_parm, myType parm) {
@@ -85,6 +83,10 @@ protected:
   float m_diameter = 0.89; // diameter of monomers [50*nm]
   float m_spring = 500.;  // spring constant of harmonic oscillator (spring)
   std::string m_init = "init.dat"; // first configuration
+
+  // file parameters
+  std::string m_ctcf_in = "m_ctcf.in";	// ctcf position file
+  std::string m_coupling_prob_in = "coupling_probabilty.in"; // prob file
 
   // potential parameters
   float m_epsilon = 1.; // parameter for LJ potential
