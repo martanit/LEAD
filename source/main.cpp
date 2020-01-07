@@ -86,7 +86,7 @@ int main(int argc, char** argv) {
 auto begin = std::chrono::high_resolution_clock::now();
 
   if(!extrusion){
-  Parameters parm(parm_input, parm_output+".out");
+  Parameters parm(parm_input, parm_output+".out", extrusion);
   Polymer poly_init(parm);
   //print_xyz(poly_init, traj_output+".xyz");
   
@@ -100,8 +100,7 @@ auto begin = std::chrono::high_resolution_clock::now();
   }
   else{
   
-  Parameters parm(parm_input, parm_output+".out", "input/ctcf.in",
-                  "input/coupling_probability.in");  
+  Parameters parm(parm_input, parm_output+".out", extrusion);  
   Polymer poly_init(parm);
   //print_xyz(poly_init, traj_output+".xyz");
   
