@@ -85,15 +85,12 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
 }
 
 void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
-  print_field(m_interaction, "output/field.xyz");
   for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
     if(compute_energy) m_poly_old = *m_poly;
     if (i % m_dynamics_print == 0)
       m_vector_extr.update_field(*m_poly, m_interaction);
-
     (*m_poly).reset_force();
     if(compute_energy) (*m_poly).reset_energy();
-
     Potential::set_new_polymer(*m_poly);
     Potential::set_new_extruder(m_vector_extr);
 

@@ -15,7 +15,7 @@ void Field::first_extruders_field() {
     for(auto &i : m_extruder_c)
         for(auto &j : i)
             for(auto &k : j)
-                k = uniform01(mt);
+                k = m_init_c;
 }
 
 void Field::add_delta_c(int i, int j, int k) {
@@ -24,6 +24,22 @@ void Field::add_delta_c(int i, int j, int k) {
 
 void Field::sub_delta_c(int i, int j, int k) {
 	m_extruder_c[i][j][k] -= m_delta_c;
+}
+
+bool FieldAction::poly_in_cell(Cell a){
+	bool in_cell=false;
+		for(int l=0; l<m_poly.get_poly_nmonomers(); ++l){
+				if((x(a.i) < m_poly.get_x(l) and 
+						m_poly.get_x(l) < (x(a.i)+scale_length)) and
+				   (y(a.j) < m_poly.get_y(l) and 
+						m_poly.get_y(l) < (y(a.j)+scale_length)) and
+				   (z(a.k) < m_poly.get_z(l) and 
+						m_poly.get_z(l) < (z(a.k)+scale_length))){
+						in_cell = true;
+						break;
+				}
+		}
+		return in_cell;
 }
 
 void FieldAction::interaction() {
@@ -45,44 +61,27 @@ void FieldAction::interaction() {
 
 //}
 
-bool FieldAction::poly_in_cell(Cell a){
-	bool in_cell=false;
-		for(int l=0; l<m_poly.get_poly_nmonomers(); ++l){
-				if((x(a.i) < m_poly.get_x(l) and 
-						m_poly.get_x(l) < (x(a.i)+scale_length)) and
-				   (y(a.j) < m_poly.get_y(l) and 
-						m_poly.get_y(l) < (y(a.j)+scale_length)) and
-				   (z(a.k) < m_poly.get_z(l) and 
-						m_poly.get_z(l) < (z(a.k)+scale_length))){
-						in_cell = true;
-						break;
-				}
-		}
-		return in_cell;
-}
-
-int FieldAction::monomer_min(Cell a)  {
-	std::vector<int> tmp=this->subchain_in_cell(a);
-	if(this->subchain_in_cell(a).size() == 1) return this->subchain_in_cell(a).at(0);
- 	else return *std::min_element(std::begin(tmp), std::end(tmp));
-} 
-
-int FieldAction::monomer_max(Cell a)  {
-	std::vector<int> tmp=this->subchain_in_cell(a);
-	if(this->subchain_in_cell(a).size() == 1) return this->subchain_in_cell(a).at(0); 
- 	else return *std::max_element(std::begin(tmp), std::end(tmp));
-}
-
-std::vector<int> FieldAction::subchain_in_cell(Cell a){
-	std::vector<int> poly_subchain;  
+void FieldAction::subchain_in_cell(Cell a){
+	m_poly_subchain.clear();	
 	for(int l = 0; l<m_poly.get_poly_nmonomers(); ++l)
 				if((x(a.i) < m_poly.get_x(l) and m_poly.get_x(l) < x(a.i)+scale_length) and
 				   (y(a.j) < m_poly.get_y(l) and m_poly.get_y(l) < y(a.j)+scale_length) and
   		    		   (z(a.k) < m_poly.get_z(l) and m_poly.get_z(l) < z(a.k)+scale_length))
-						poly_subchain.push_back(l);
-return poly_subchain;
+						m_poly_subchain.push_back(l);
 }
 
+
+int FieldAction::monomer_min(Cell a)  {
+	this->subchain_in_cell(a);
+	if(m_poly_subchain.size() == 1) return m_poly_subchain.at(0);
+ 	else return *std::min_element(std::begin(m_poly_subchain), std::end(m_poly_subchain));
+} 
+
+int FieldAction::monomer_max(Cell a)  {
+	this->subchain_in_cell(a);
+	if(m_poly_subchain.size() == 1) return m_poly_subchain.at(0); 
+ 	else return *std::max_element(std::begin(m_poly_subchain), std::end(m_poly_subchain));
+}
 
 void print_field(FieldAction field, std::string out_field){
   	std::ofstream output;
@@ -97,16 +96,15 @@ void print_field(FieldAction field, std::string out_field){
 	for(int i=0; i<field.get_field_length(); ++i)
     	    	for(int j=0; j<field.get_field_length(); ++j)
     	    		for(int k=0; k<field.get_field_length(); ++k)
-			if(field.get_c(i,j,k)>=0.1)
-		 	   output << "\tAu" << "\t\t\t"
+			if(field.get_c(i,j,k)>=46)
+		 	   output << "\tNan" << "\t\t\t"
 		      			<< field.x(i) << "\t\t\t" 
 		       			<< field.y(j) << "\t\t\t"
 		       			<< field.z(k) << std::endl;
 			else    		
-		 	   output << "\tNan" << "\t\t\t"
+		 	   output << "\tAu" << "\t\t\t"
 		      			<< field.x(i) << "\t\t\t" 
 		       			<< field.y(j) << "\t\t\t"
 		       			<< field.z(k) << std::endl;
   	output.close();
     }
-

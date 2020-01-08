@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
   bool rouse=false;
   bool soft_core=false;
   bool lennard_jones=false;
-  bool extruders_field=true;
+  bool extruders_field=false;
 
   std::string parm_input;
   std::string parm_output;
@@ -63,6 +63,11 @@ int main(int argc, char** argv) {
 	  	extrusion=true;
 		std::cerr << "Loop extrusion activated" << std::endl;
 	  }
+	  else if(std::string(argv[idx])== "--fe"){
+		extrusion=true;	  
+		extruders_field=true;
+      		std::cerr << "Loop extrusion with field activated" << std::endl;
+	  }		
   	  else if(std::string(argv[idx])== "--rouse"){
 	  	rouse=true;
 		std::cerr << "Using Rouse polymer" << std::endl;
@@ -80,8 +85,8 @@ int main(int argc, char** argv) {
 		  return 1;
   	}
   }
-  if((rouse==true and soft_core==true) or (rouse==true and lennard_jones==true) or (soft_core==true and lennard_jones==true)){
-	std::cerr << "ERROR: you have to use only one potential" << std::endl;
+  if((rouse==true and soft_core==true) or (rouse==true and lennard_jones==true) or (soft_core==true and lennard_jones==true) or (rouse==false and lennard_jones==false and soft_core==false)){
+	std::cerr << "ERROR: you have to use one potential" << std::endl;
 	return 1;
   }
   
@@ -118,14 +123,13 @@ auto begin = std::chrono::high_resolution_clock::now();
   
   }
   else{
-
   Parameters parm(parm_input, parm_output+".out", extrusion);  
   Polymer poly_init(parm);
   //print_xyz(poly_init, traj_output+".xyz");
   
   Extruder extr(parm);
-  VectorExtruder v_extr(parm, extr, poly_init);
   FieldAction cp_interaction(parm, poly_init); 
+  VectorExtruder v_extr(parm, extr, poly_init, cp_interaction);
   Dynamics dyn(poly_init, v_extr, cp_interaction, parm);
  
   dyn.run_extrusion_field(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");

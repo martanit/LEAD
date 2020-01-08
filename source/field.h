@@ -54,6 +54,10 @@ class Field
     void sub_delta_c(int, int, int);
 
     //access funciton
+    const double &get_init_c() const
+    {
+      return m_init_c;
+    }
     const double &get_delta_c() const
     {
       return m_delta_c;
@@ -79,12 +83,14 @@ class Field
  
   private:
     // extruder field parameters
-    double m_field_length = 10;
-    double m_field_step=1;
+    double m_field_length = 10.;
+    double m_field_step = 1.;
+    // initial extruders per cell
+    double m_init_c = 46.;
     // extruders quantity that diffuse
-    double m_delta_c = 0.1;
+    double m_delta_c = 1.;
     // extruder diffusion rate
-    double m_k_diff;
+    double m_k_diff = 1E-10;
 
     // Lattice of extruders
     std::vector<std::vector<std::vector<double>>> m_extruder_c;
@@ -119,9 +125,9 @@ class FieldAction : public Field
       m_poly = rhs.m_poly;
     }
 
-    void interaction();
     bool poly_in_cell(Cell);
-    std::vector<int> subchain_in_cell(Cell);
+    void interaction();
+    void subchain_in_cell(Cell);
 
     int monomer_min(Cell);
     int monomer_max(Cell);
@@ -133,8 +139,8 @@ class FieldAction : public Field
     };
 
     // Conversion field to space coordinates
-    double scale_length;
     double shift_x, shift_y, shift_z;
+    double scale_length;
     double box_length;
 
     const double x(const int i) const

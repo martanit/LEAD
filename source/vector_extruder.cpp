@@ -57,17 +57,17 @@ void VectorExtruder::update(Polymer &poly) {
 
 void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int) {
   bool is_overl = false;
-  
-  std::vector<int> subchain_cell;
-  cohes_field_int.interaction();
+  int extr_per_cell;
   std::vector<Extruder> tmp_extruder;
+  cohes_field_int.interaction();
+  std::vector<Extruder> tmp_extruder_cell;
 
   for(auto &a : cohes_field_int.get_contact_cell()){	  
     if(cohes_field_int.monomer_min(a) !=  cohes_field_int.monomer_max(a)){      
-     std::vector<Extruder> tmp_extruder_cell;
+     tmp_extruder_cell.clear();
   // Quanti estrusori si possono attaccare in un solo step in una singola cella?
-      int extr_per_step=10;
-      for( int i = 0; i< extr_per_step; ++i){	  
+      extr_per_cell=10;
+      for( int i = 0; i< extr_per_cell; ++i){	  
         m_extr.place_extruder_cell(poly, cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a));
 	if(tmp_extruder_cell.size()!=0)
   		for (auto &j : tmp_extruder_cell)
@@ -75,7 +75,7 @@ void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int
          		 	is_overl = true;
           			break;
         		}
-  	if (( cohes_field_int.get_c(a.i, a.j, a.k)
+  	if (( cohes_field_int.get_c(a.i, a.j, a.k)/cohes_field_int.get_init_c()
 	     *m_kon*integrator_timestep/poly.get_poly_nmonomers() ) > dist(mt) and
           !(is_overl))
         	tmp_extruder_cell.push_back(m_extr);
@@ -92,26 +92,27 @@ void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int
 }
 
 void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
-  bool is_overl = false;
-  std::vector<Extruder> tmp_extruder;
   
   if(m_vector_extr.size() == 0) this->first_fill_field(poly, cohes_field_int);
   else{
+  bool is_overl = false;
+  int extr_per_cell;
+  std::vector<Extruder> tmp_extruder;
+  std::vector<Extruder> tmp_extruder_cell;
   for (const auto &i : m_vector_extr)
     // fill tmp_extruder only with extruder
     // that are not undbind
     if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
       tmp_extruder.push_back(*i);
   
-  std::vector<int> subchain_cell;
   cohes_field_int.interaction();
   
    for(auto &a : cohes_field_int.get_contact_cell()){
     if(cohes_field_int.monomer_min(a) !=  cohes_field_int.monomer_max(a)){      
-     std::vector<Extruder> tmp_extruder_cell;
+      tmp_extruder_cell.clear();
     // Quanti estrusori si possono attaccare in un solo step in una singola cella?
-      int extr_per_step=10;
-      for( int i = 0; i< extr_per_step - tmp_extruder_cell.size(); ++i){	  
+      extr_per_cell=10;
+      for( int i = 0; i< extr_per_cell - tmp_extruder_cell.size(); ++i){	  
         m_extr.place_extruder_cell(poly, cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a));
        if(tmp_extruder_cell.size()!=0)
   	for (auto &j : tmp_extruder_cell)
@@ -119,7 +120,7 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
          	 	is_overl = true;
           		break;
         	}
-  	if (( cohes_field_int.get_c(a.i, a.j, a.k)
+  	if (( cohes_field_int.get_c(a.i, a.j, a.k)/cohes_field_int.get_init_c()
 	     *m_kon*integrator_timestep/poly.get_poly_nmonomers() ) > dist(mt) and
           !(is_overl))
         	tmp_extruder_cell.push_back(m_extr);
