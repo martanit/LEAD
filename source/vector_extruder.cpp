@@ -63,7 +63,8 @@ void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int
   std::vector<Extruder> tmp_extruder_cell;
 
   for(auto &a : cohes_field_int.get_contact_cell()){	  
-    if(cohes_field_int.monomer_min(a) !=  cohes_field_int.monomer_max(a)){      
+
+    if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a))){      
      tmp_extruder_cell.clear();
   // Quanti estrusori si possono attaccare in un solo step in una singola cella?
       extr_per_cell=10;
@@ -108,7 +109,7 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
   cohes_field_int.interaction();
   
    for(auto &a : cohes_field_int.get_contact_cell()){
-    if(cohes_field_int.monomer_min(a) !=  cohes_field_int.monomer_max(a)){      
+    if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a))){      
       tmp_extruder_cell.clear();
     // Quanti estrusori si possono attaccare in un solo step in una singola cella?
       extr_per_cell=10;

@@ -37,7 +37,8 @@ public:
   }
 
   void place_extruder(Polymer poly);
-  bool place_extruder_cell(Polymer poly, int, int);
+  void place_extruder_cell(Polymer poly, int, int);
+  bool can_place_extr(Polymer poly, int, int);
 
   const Extruder &get_extr() const { return *this; };
   const int &get_r() const { return m_extruder_r; };

@@ -31,11 +31,7 @@ void Extruder::place_extruder(Polymer poly) {
 // Try to place extruder randomly on the polymer segment
 // that is in a specific cell. The only information I need is the index
 // of the monomers in the cell
-bool Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_max) {
-  if(monomer_min == monomer_max) {
-	  std::cout << "Error" << std::endl;
-	  return 1;
-  }
+void Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_max) {
   set = false;
   int p=0;
   while (!set) {
@@ -63,13 +59,19 @@ bool Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_ma
         set = true;
       }
     }
-    else if(m_ctcf[tmp_extr_pos] != 0 
-          and (m_ctcf[tmp_extr_pos - 1] != 0 or tmp_extr_pos == monomer_min) 
-	  and (m_ctcf[tmp_extr_pos + 1] != 0 or tmp_extr_pos == monomer_max)){
-	  return 1;
-    }
   }
-  return 0;
+}
+bool Extruder::can_place_extr(Polymer poly, int monomer_min, int monomer_max){
+  if(monomer_min == monomer_max)
+	  return false;
+  else {
+	bool free=false;
+  	for(int i=(monomer_min+1); i<monomer_max; ++i)
+		  if(m_ctcf[i] == 0 and (m_ctcf[i+1]==0 or m_ctcf[i-1]==0)) free=true;
+  	
+	if(free==false) return false;
+	else return true;
+	}
 }
 
 
