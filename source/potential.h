@@ -13,56 +13,63 @@
 #include <memory>
 
 class Potential {
+
 public:
-  // construct potential from Polymer and set of parameters
-  Potential(Polymer &poly, Parameters parm)
-      : m_poly(poly),
-        m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
-        m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()){};
 
-  Potential(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
-      : m_poly(poly), m_vector_extr(vector_extr),
-        m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
-        m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()){};
+    // construct potential from Polymer and set of parameters
+    Potential(Polymer &poly, Parameters parm)
+        : m_poly(poly),
+          m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
+          m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()) {};
 
-  ~Potential(){};
+    Potential(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
+        : m_poly(poly), m_vector_extr(vector_extr),
+          m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
+          m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()) {};
 
-  void set_new_polymer(Polymer &new_poly) { m_poly = new_poly; }
-  void set_new_extruder(VectorExtruder &new_vector_extr) {
-    m_vector_extr = new_vector_extr;
-  }
+    ~Potential() {};
 
-  const Polymer &get_poly() const { return m_poly; }
-  const VectorExtruder &get_extr() const { return m_vector_extr; }
+    void set_new_polymer(Polymer &new_poly) {
+        m_poly = new_poly;
+    }
+    void set_new_extruder(VectorExtruder &new_vector_extr) {
+        m_vector_extr = new_vector_extr;
+    }
 
-  void lennard_jones_f(int, bool);
-  void soft_core_f(int, bool);
-  void harmonic_spring_f(bool);
-  void extruder_spring_f(bool);
+    const Polymer &get_poly() const {
+        return m_poly;
+    }
+    const VectorExtruder &get_extr() const {
+        return m_vector_extr;
+    }
+
+    void lennard_jones_f(int, bool);
+    void soft_core_f(int, bool);
+    void harmonic_spring_f(bool);
+    void extruder_spring_f(bool);
 
 protected:
-  Polymer m_poly;
-  VectorExtruder m_vector_extr;
+    Polymer m_poly;
+    VectorExtruder m_vector_extr;
 
-  // potential parameters
-  double m_pot_epsilon = 1.;
-  double m_pot_rmin = 1.;
-  double m_pot_rmin_12 = std::pow(m_pot_rmin, 12);
-  double m_pot_rmin_6 = std::pow(m_pot_rmin, 6);
-  double m_pot_rcut = 5.;
+    // potential parameters
+    double m_pot_epsilon = 1.;
+    double m_pot_rmin = 1.;
+    double m_pot_rmin_12 = std::pow(m_pot_rmin, 12);
+    double m_pot_rmin_6 = std::pow(m_pot_rmin, 6);
+    double m_pot_rcut = 5.;
 
-  double k = m_poly.get_spring();
-  double k_extr = m_poly.get_spring() * 5.;
-  double extr_lenght = m_poly.get_poly_d()/2.;
+    double k = m_poly.get_spring();
+    double k_extr = m_poly.get_spring() * 5.;
+    double extr_lenght = m_poly.get_poly_d()/2.;
 
-  bool attractive = true;
-  double dr;
-  double x, y, z;
-  std::vector<std::vector<int>> sphere;
+    bool attractive = true;
+    std::vector<std::vector<int>> sphere;
 
-  double f_x = 0., f_y = 0., f_z = 0.;
-
-  double spring_x = 0., spring_y = 0., spring_z = 0.;
+    double dr;
+    double x, y, z;
+    double f_x = 0., f_y = 0., f_z = 0.;
+    double spring_x = 0., spring_y = 0., spring_z = 0.;
 };
 
 #endif /* POTENTIAL_H_ */
