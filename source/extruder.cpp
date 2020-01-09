@@ -1,5 +1,6 @@
 #include "extruder.h"
 
+// Try to place extruder randomly on the polymer
 void Extruder::place_extruder(Polymer poly) {
     set = 0.;
     while (!set) {

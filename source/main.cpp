@@ -82,41 +82,26 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-
     auto begin = std::chrono::high_resolution_clock::now();
 
     if(!extrusion) {
         Parameters parm(parm_input, parm_output+".out", extrusion);
         Polymer poly_init(parm);
-        //print_xyz(poly_init, traj_output+".xyz");
-
         Dynamics dyn(poly_init, parm);
 
         dyn.run(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
-
-        //Polymer poly_last = dyn.get_poly();
-        //print_xyz(poly_last, traj_output+".xyz");
-
     }
     else {
-
         Parameters parm(parm_input, parm_output+".out", extrusion);
         Polymer poly_init(parm);
-        //print_xyz(poly_init, traj_output+".xyz");
-
         Extruder extr(parm);
         VectorExtruder v_extr(parm, extr, poly_init);
         Dynamics dyn(poly_init, v_extr, parm);
 
         dyn.run_extrusion(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
-
-        //Polymer poly_last = dyn.get_poly();
-        //print_xyz(poly_last, traj_output+".xyz");
-
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count()/1e6 << "ms\n";
-
 
     return 0;
 }

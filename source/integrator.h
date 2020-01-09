@@ -18,7 +18,8 @@
 
 class Integrator {
 public:
-    Integrator(Polymer &poly, Parameters integrator_parm)
+
+   Integrator(Polymer &poly, Parameters integrator_parm)
         : m_integrator_timestep(integrator_parm.get_timestep()),
           m_integrator_gamma(integrator_parm.get_gamma()),
           m_integrator_temp(integrator_parm.get_temp()), gauss_term(0, 1),
@@ -63,6 +64,7 @@ public:
     void markov_chain();
 
 private:
+   
     // Random stuff
     std::mt19937 mt{std::random_device{}()};
     std::normal_distribution<double> gauss_term;
@@ -77,4 +79,5 @@ private:
     double m_integrator_gamma = 1.;
     double m_integrator_temp = 1.;
 };
+
 #endif /* INTEGRATOR_H_ */

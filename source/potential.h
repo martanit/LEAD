@@ -62,12 +62,11 @@ protected:
     double extr_lenght = m_poly.get_poly_d()/2.;
 
     bool attractive = true;
-    double dr;
-    double x, y, z;
     std::vector<std::vector<int>> sphere;
 
+    double dr;
+    double x, y, z;
     double f_x = 0., f_y = 0., f_z = 0.;
-
     double spring_x = 0., spring_y = 0., spring_z = 0.;
 };
 
