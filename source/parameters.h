@@ -19,10 +19,10 @@ public:
 
     // default constructor
     Parameters(void) {};
-    
+
     // constructor
     Parameters(std::string, std::string, bool);
-    
+
     ~Parameters();
 
     // function that read parameters, ctcf and
@@ -109,7 +109,7 @@ public:
     }
 
 protected:
-    
+
     // dynamic parameters
     float m_nstep = 100;     // number of step
     int m_print = 100;     // verbosity

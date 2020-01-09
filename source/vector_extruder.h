@@ -21,7 +21,7 @@ class VectorExtruder {
 public:
 
     VectorExtruder() {};
-    
+
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
           m_n_max_extr(parm.get_max_extr()),
@@ -39,12 +39,12 @@ public:
     };
 
     ~VectorExtruder() {};
-    
+
     void first_fill(Polymer &);
     void update(Polymer &);
 
     friend bool extr_overlap(Extruder &extr);
-    
+
     bool overlap_lr(Extruder &);
     bool overlap_rl(Extruder &);
     bool overlap_ll(Extruder &);
@@ -70,7 +70,7 @@ public:
     }
 
 private:
-    
+
     Extruder m_extr;
     std::vector<std::unique_ptr<Extruder>> m_vector_extr;
 

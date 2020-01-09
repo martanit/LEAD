@@ -28,7 +28,7 @@ public:
           m_coupling_prob(parm.get_coupling_prob()), m_ctcf(parm.get_ctcf()),
           m_perm_ctcf(parm.get_permeability()),
           try_extruder_pos(1, parm.get_nmonomers() - 2),
-	  coupling_try(0, 1) {};
+          coupling_try(0, 1) {};
 
     ~Extruder() {};
 
