@@ -28,7 +28,7 @@ public:
         m_parm = parm;
         m_poly = std::make_unique<Polymer>(poly);
     };
-    
+
     Dynamics(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
         : Integrator(poly, vector_extr, parm), Potential(poly, vector_extr, parm),
           m_vector_extr(vector_extr), m_dynamics_print(parm.get_print()),
@@ -37,7 +37,7 @@ public:
         m_parm = parm;
         m_poly = std::make_unique<Polymer>(poly);
     };
-    
+
     Dynamics(Polymer &poly, VectorExtruder &vector_extr, FieldAction &interaction, Parameters parm)
         : Integrator(poly, vector_extr, interaction, parm), Potential(poly, vector_extr, parm),
           m_vector_extr(vector_extr), m_interaction(interaction), m_dynamics_print(parm.get_print()),
@@ -46,7 +46,7 @@ public:
         m_parm = parm;
         m_poly = std::make_unique<Polymer>(poly);
     };
-    
+
     ~Dynamics() {};
 
     // Function to get polymer and extruder
@@ -63,7 +63,7 @@ public:
     double delta_h();
 
 private:
-    
+
     Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     VectorExtruder m_vector_extr;

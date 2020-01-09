@@ -90,7 +90,7 @@ public:
     void extruders_diffusion();
 
 private:
-    
+
     // Random stuff
     std::mt19937 mt{std::random_device{}()};
     std::normal_distribution<double> gauss_term;

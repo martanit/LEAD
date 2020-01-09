@@ -35,10 +35,10 @@ public:
 
     // default constructor
     Field() {};
-    
+
     // assign passed parameters and construct the field
     Field(Parameters);
-    
+
     ~Field() {};
 
     void operator=(const Field &rhs)
@@ -52,7 +52,7 @@ public:
 
     // place randomly first extruders configuration in filed
     void first_extruders_field();
-    
+
     // add a packet of extruders, aka a quantity of cohesin
     void add_delta_c(int, int, int);
     void sub_delta_c(int, int, int);
@@ -103,7 +103,7 @@ class FieldAction : public Field {
 public:
 
     FieldAction() {};
-    
+
     FieldAction(Parameters parm, Polymer poly) : Field(parm),
         m_poly(poly),
         scale_length(get_field_step()),
@@ -115,7 +115,7 @@ public:
         shift_z=m_poly.get_zcm();
         this->interaction();
     };
-    
+
     ~FieldAction() {};
 
     void operator=(const FieldAction &rhs)
@@ -155,7 +155,7 @@ public:
     friend void print_field(FieldAction, std::string);
 
 private:
-    
+
     Polymer m_poly;
     std::vector<Cell> m_contact_cell;
     std::vector<int> m_poly_subchain;

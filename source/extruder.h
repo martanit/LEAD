@@ -84,7 +84,7 @@ public:
     friend bool print_r(Polymer &, Extruder &, std::string);
 
 protected:
-    
+
     int m_extruder_r, m_extruder_l;
     double m_rate_fwl = 0.0001;
     double m_rate_fwr = 0.0001;
@@ -96,7 +96,7 @@ protected:
     std::vector<double> m_coupling_prob;
 
 private:
-    
+
     std::mt19937 mt{std::random_device{}()};
     std::uniform_int_distribution<> try_extruder_pos;
     std::uniform_int_distribution<> try_extr_pos_cell;

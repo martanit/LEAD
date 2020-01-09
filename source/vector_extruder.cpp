@@ -100,8 +100,8 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
         int extr_per_cell;
         std::vector<Extruder> tmp_extruder;
         std::vector<Extruder> tmp_extruder_cell;
-    
-    	for (const auto &i : m_vector_extr)
+
+        for (const auto &i : m_vector_extr)
             // fill tmp_extruder only with extruder
             // that are not undbind
             if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
