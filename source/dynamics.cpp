@@ -37,8 +37,8 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
 void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
     for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
         if(compute_energy) m_poly_old = *m_poly;
-        // if (i % m_dynamics_print == 0)
-        m_vector_extr.update(*m_poly);
+        if (i % m_dynamics_print == 0)
+            m_vector_extr.update(*m_poly);
 
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
