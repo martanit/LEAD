@@ -22,7 +22,7 @@ public:
     Parameters(void) {};
 
     // constructor
-    Parameters(std::string, std::string, bool);
+    Parameters(std::string, std::string, bool, bool, bool);
 
     ~Parameters();
 
@@ -32,7 +32,7 @@ public:
     bool read_ctcf();
     bool print_ctcf(std::string);
     bool read_coupling_prob();
-    bool print_param(std::string, bool);
+    bool print_param(std::string, bool, bool, bool);
 
     // function that store different type parameters
     template <typename myType> void set_parm(myType &m_parm, myType parm) {
@@ -56,6 +56,12 @@ public:
     float get_temp() {
         return m_temp;
     }
+    float get_box_length(){
+	return m_box_length;
+    }
+    float get_kside(){
+	return m_kside;
+    }
     int get_nmonomers() {
         return m_nmonomers;
     }
@@ -65,7 +71,6 @@ public:
     float get_spring() {
         return m_spring;
     }
-
     float get_epsilon() {
         return m_epsilon;
     }
@@ -75,13 +80,6 @@ public:
     float get_rcut() {
         return m_rcut;
     }
-    float get_length(){
-	return m_length;
-    }
-    float get_kside(){
-	return m_kside;
-    }
-
     float get_permeability() {
         return m_perm_ctcf;
     }
@@ -91,7 +89,6 @@ public:
     const std::vector<double> &get_coupling_prob() const {
         return m_coupling_prob;
     };
-
     const float &get_rate_fwl() const {
         return m_rate_fwl;
     };
@@ -104,7 +101,6 @@ public:
     const float &get_rate_bwr() const {
         return m_rate_bwr;
     };
-
     const float &get_kon() const {
         return m_k_on;
     }
@@ -114,6 +110,15 @@ public:
     const float &get_max_extr() const {
         return m_n_max_extr;
     }
+    const float &get_Dextr_free() const {
+        return m_Dextr_free;
+    };
+    const float &get_field_length() const {
+        return m_field_length;
+    };
+    const float &get_field_step() const {
+        return m_field_step;
+    };
 
 protected:
 
@@ -125,7 +130,8 @@ protected:
 
     // system parameters
     float m_temp = 2.; // system temperature [K]
-    float m_length = 10.; // length of box
+    float m_box_length = 10.; // length of box
+    float m_kside = 10.;  // parameter for potential box
 
     // polymer parameters
     int m_nmonomers = 100;    // number of interacting monomers
@@ -141,13 +147,11 @@ protected:
     float m_epsilon = 1.; // parameter for LJ potential
     float m_rmin = 1.;    // parameter for LJ potential
     float m_rcut = 2.5;    // parameter for LJ potential action
-    float m_kside = 10.;  // parameter for potential box
 
     // extruder parameters
     float m_perm_ctcf = 0.1;
     std::vector<int> m_ctcf;
     std::vector<double> m_coupling_prob;
-
     float m_rate_fwl;
     float m_rate_fwr;
     float m_rate_bwl;
@@ -157,6 +161,11 @@ protected:
     float m_k_on = 0.5;
     float m_k_off = 0.001;
     float m_n_max_extr = 10;
+
+    // field of extruders parameters
+    float m_Dextr_free = 1E-9;
+    float m_field_length = 10;
+    float m_field_step = 10;
 
 };
 

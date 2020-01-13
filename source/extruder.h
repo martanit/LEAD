@@ -32,6 +32,7 @@ public:
           m_coupling_prob(parm.get_coupling_prob()), m_ctcf(parm.get_ctcf()),
           m_perm_ctcf(parm.get_permeability()),
           try_extruder_pos(1, parm.get_nmonomers() - 2),
+          try_extr_pos_cell(1, parm.get_nmonomers() -2),
           coupling_try(0, 1) {};
 
     ~Extruder() {};
@@ -41,10 +42,13 @@ public:
                lhs.m_extruder_l == this->m_extruder_l;
     }
 
+    // Extruders move functions
     void place_extruder(Polymer poly);
+    void place_extruder_cell(Polymer poly, int, int);
+    bool can_place_extr(Polymer poly, int, int);
     bool extr_overlap(Extruder &extr);
-    Position xyz_position(Polymer poly);
 
+    // Access function
     const Extruder &get_extr() const {
         return *this;
     };
@@ -73,6 +77,9 @@ public:
         return m_perm_ctcf;
     };
 
+    Position xyz_position(Polymer );
+
+    // Set functions
     void set_r(double r) {
         m_extruder_r = r;
     }
@@ -98,6 +105,7 @@ private:
 
     std::mt19937 mt{std::random_device{}()};
     std::uniform_int_distribution<> try_extruder_pos;
+    std::uniform_int_distribution<> try_extr_pos_cell;
     std::uniform_real_distribution<double> coupling_try;
 
     Parameters m_parm;

@@ -6,7 +6,7 @@ bool read_xyz(Polymer &, std::string);
 Polymer::Polymer(Parameters parm)
     : m_poly_nmonomers(parm.get_nmonomers()),
       m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
-      uniform01(0., 1.) {
+      uniform01(0., 1.), genome_nmonomers(1E6), V_nucl(2.8E6) {
     this->set_size();
     this->reset_force();
     this->poly_configuration();
@@ -15,7 +15,7 @@ Polymer::Polymer(Parameters parm)
 Polymer::Polymer(Parameters parm, std::string poly_xyz)
     : m_poly_nmonomers(parm.get_nmonomers()),
       m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
-      uniform01(0., 1.) {
+      uniform01(0., 1.), genome_nmonomers(1E6), V_nucl(2.8E6) {
     this->set_size();
     this->reset_force();
     read_xyz((*this), poly_xyz);

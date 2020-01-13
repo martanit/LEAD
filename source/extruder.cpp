@@ -37,6 +37,50 @@ Position Extruder::xyz_position(Polymer poly) {
        	          poly.get_z(get_l()))/2. };
 }
 
+// Try to place extruder randomly on the polymer segment
+// that is in a specific cell. The only information I need is the index
+// of the monomers in the cell
+void Extruder::place_extruder_cell(Polymer poly, int monomer_min, int monomer_max) {
+    set = false;
+    while (!set) {
+        try_extr_pos_cell = std::uniform_int_distribution<>(monomer_min, monomer_max);
+        tmp_extr_pos = try_extr_pos_cell(mt);
+        tmp_coupling_try = coupling_try(mt);
+
+        if ((m_ctcf[tmp_extr_pos] == 0 and
+                (m_ctcf[tmp_extr_pos - 1] == 0 or m_ctcf[tmp_extr_pos + 1] == 0)) and
+                m_coupling_prob[tmp_extr_pos] > tmp_coupling_try) {
+
+            if (tmp_extr_pos != monomer_min and m_ctcf[tmp_extr_pos - 1] == 0 and
+                    m_coupling_prob[tmp_extr_pos - 1] > tmp_coupling_try) {
+                m_extruder_r = tmp_extr_pos;
+                m_extruder_l = tmp_extr_pos - 1;
+                set = true;
+            }
+
+            else if (tmp_extr_pos != monomer_max and
+                     m_ctcf[tmp_extr_pos + 1] == 0 and
+                     m_coupling_prob[tmp_extr_pos + 1] > tmp_coupling_try) {
+                m_extruder_l = tmp_extr_pos;
+                m_extruder_r = tmp_extr_pos + 1;
+                set = true;
+            }
+        }
+    }
+}
+
+bool Extruder::can_place_extr(Polymer poly, int monomer_min, int monomer_max) {
+    if(monomer_min == monomer_max)
+        return false;
+    else {
+        bool free=false;
+        for(int i=(monomer_min+1); i<monomer_max; ++i)
+            if(m_ctcf[i] == 0 and (m_ctcf[i+1]==0 or m_ctcf[i-1]==0)) free=true;
+        if(free==false) return false;
+        else return true;
+    }
+}
+
 bool Extruder::extr_overlap(Extruder &extr) {
     // two extruder cannot bind to monomer
     // that is already taken from another extr

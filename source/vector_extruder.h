@@ -11,6 +11,7 @@
 #include <random>
 #include <vector>
 
+#include "field.h"
 #include "extruder.h"
 #include "parameters.h"
 #include "polymer.h"
@@ -30,8 +31,17 @@ public:
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
           m_n_max_extr(parm.get_max_extr()),
+	  m_box_length(parm.get_box_length()),
           integrator_timestep(parm.get_timestep()), dist(0., 1.) {
         this->first_fill(poly);
+    };
+
+    VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly, FieldAction cohes_poly_int)
+        : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
+          m_n_max_extr(parm.get_max_extr()),
+	  m_box_length(parm.get_box_length()),
+          integrator_timestep(parm.get_timestep()), dist(0., 1.) {
+        this->first_fill_field(poly, cohes_poly_int);
     };
 
     // copy constructor
@@ -40,14 +50,17 @@ public:
         m_kon = vector_extr.m_kon;
         m_koff = vector_extr.m_koff;
         m_n_max_extr = vector_extr.m_n_max_extr;
+	m_box_length = vector_extr.m_box_length;
         integrator_timestep = vector_extr.integrator_timestep;
     };
 
     ~VectorExtruder() {};
 
     void first_fill(Polymer &);
+    void first_fill_field(Polymer &, FieldAction);
     void update(Polymer &);
     void update_diff_density(Polymer &, unsigned long int);
+    void update_field(Polymer &, FieldAction);
     double density(Position, unsigned long int, Polymer &);
 
     friend bool extr_overlap(Extruder &extr);
@@ -85,15 +98,24 @@ private:
 
     // maximum number of extruder
     float m_n_max_extr = 3;
-    double m_kon = 0.9;
-    double m_koff = 0.001;
-    double integrator_timestep = 0;
+    double m_kon = 2.58E-15;
+    double m_koff = 1.58E-15;
 
-    double Nu;
-    double N0 = 2.5E5;
-    double V = 10;
-    double D = 0.1;
-    double m_norm = 0.1;
+    double integrator_timestep = 1E6;
+    double m_box_length = 10;
+
+    // density of extruder in nucleus
+    const double rho0_tot = 8.9E-2;
+    
+    double Nb_eq = 1E2;
+    
+    // diffusion of unloaded cohesin from stokes law
+    // if cohesin diameter is 0.89a
+    const double D = 2.57E-9;
+    // normalization for different density
+    double m_kon_norm = 5.;
+    // move unloaded extruders from local to background
+    // every dt step
     int dt = 10000;
 
     std::mt19937 mt{std::random_device{}()};

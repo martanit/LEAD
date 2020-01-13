@@ -12,6 +12,8 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
+#include "field.h"
+
 #include<chrono>
 #include<iostream>
 #include<cstring>
@@ -24,6 +26,7 @@ int main(int argc, char** argv) {
     bool soft_core=false;
     bool lennard_jones=false;
     bool homogeneus_density=true;
+    bool extruders_field=false;
 
     std::string parm_input;
     std::string parm_output;
@@ -66,6 +69,11 @@ int main(int argc, char** argv) {
 	    homogeneus_density=false;
             std::cerr << "Loop extrusion activated with inhomogeneus density" << std::endl;
         }
+        else if(std::string(argv[idx])== "--fe") {
+            extrusion=true;
+            extruders_field=true;
+            std::cerr << "Loop extrusion with field activated" << std::endl;
+        }
         else if(std::string(argv[idx])== "--rouse") {
             rouse=true;
             std::cerr << "Using Rouse polymer" << std::endl;
@@ -79,7 +87,7 @@ int main(int argc, char** argv) {
             std::cerr << "Using Rouse polymer with Lennard Jones interaction" << std::endl;
         }
         else {
-            std::cerr << "Unknown flag, options are: --energy, --le, --rouse, --soft-core, --lennard-jones" << std::endl;
+            std::cerr << "Unknown flag, options are: --energy, --le, --le_id, -- fe, --rouse, --soft-core, --lennard-jones" << std::endl;
             return 1;
         }
     }
@@ -89,16 +97,16 @@ int main(int argc, char** argv) {
     }
 
     auto begin = std::chrono::high_resolution_clock::now();
-
-    if(!extrusion) {
-        Parameters parm(parm_input, parm_output+".out", extrusion);
+    
+    if(!extrusion and !extruders_field) {
+        Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
         Polymer poly_init(parm);
         Dynamics dyn(poly_init, parm);
 
         dyn.run(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
     }
-    else {
-        Parameters parm(parm_input, parm_output+".out", extrusion);
+    else if(!extruders_field) {
+        Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
         Polymer poly_init(parm);
         Extruder extr(parm);
         VectorExtruder v_extr(parm, extr, poly_init);
@@ -106,6 +114,18 @@ int main(int argc, char** argv) {
 
         dyn.run_extrusion(rouse, soft_core, lennard_jones, compute_energy, homogeneus_density, traj_output+".xyz");
     }
+    else {
+        Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
+        Polymer poly_init(parm);
+        Extruder extr(parm);
+        FieldAction cp_interaction(parm, poly_init);
+        VectorExtruder v_extr(parm, extr, poly_init, cp_interaction);
+        Dynamics dyn(poly_init, v_extr, cp_interaction, parm);
+
+        dyn.run_extrusion_field(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
+    }
+
+
     auto end = std::chrono::high_resolution_clock::now();
     std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count()/1e6 << "ms\n";
 

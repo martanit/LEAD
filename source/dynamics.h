@@ -14,6 +14,7 @@
 #include "polymer.h"
 #include "potential.h"
 #include "vector_extruder.h"
+#include "field.h"
 
 class Dynamics : public Integrator, public Potential {
 
@@ -37,6 +38,15 @@ public:
         m_poly = std::make_unique<Polymer>(poly);
     };
 
+    Dynamics(Polymer &poly, VectorExtruder &vector_extr, FieldAction &interaction, Parameters parm)
+        : Integrator(poly, vector_extr, interaction, parm), Potential(poly, vector_extr, parm),
+          m_vector_extr(vector_extr), m_interaction(interaction), m_dynamics_print(parm.get_print()),
+          m_dynamics_nstep(parm.get_nstep())
+    {
+        m_parm = parm;
+        m_poly = std::make_unique<Polymer>(poly);
+    };
+
     ~Dynamics() {};
 
     // Function to get polymer and extruder
@@ -49,6 +59,7 @@ public:
 
     void run(bool, bool, bool, bool, std::string);
     void run_extrusion(bool, bool, bool, bool, bool, std::string);
+    void run_extrusion_field(bool, bool, bool, bool, std::string);
     double delta_h();
 
 private:
@@ -56,6 +67,7 @@ private:
     Parameters m_parm;
     std::unique_ptr<Polymer> m_poly;
     VectorExtruder m_vector_extr;
+    FieldAction m_interaction;
     Polymer m_poly_old;
     double deltaH, A,B,C;
 

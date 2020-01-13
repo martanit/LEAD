@@ -80,6 +80,20 @@ public:
     void center();
     void set_cm();
 
+    const double &get_xcm() const {
+        return x_cm;
+    };
+    const double &get_ycm() const {
+        return y_cm;
+    };
+    const double &get_zcm() const {
+        return z_cm;
+    };
+
+    double get_Veq() {
+	    return m_poly_nmonomers/genome_nmonomers*V_nucl;
+    };
+
     void reset_force();
     void add_force(const int &, const double &, const double &, const double &);
 
@@ -111,6 +125,10 @@ private:
     float m_poly_d = 0.89;    // diameter of monomers [50*nm]
     float m_poly_spring = 100.; // spring constant of harmonic oscillator (spring)
     std::string m_poly_init = "init.dat";
+
+    // Exp parm
+    double genome_nmonomers = 1E6;
+    double V_nucl = 2.8E6;
 
     std::vector<double> m_poly_x, m_poly_y, m_poly_z;
     std::vector<double> m_poly_fx, m_poly_fy, m_poly_fz;

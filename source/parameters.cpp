@@ -1,12 +1,12 @@
 #include "parameters.h"
 
-Parameters::Parameters(std::string parm_input, std::string parm_output, bool le) {
+Parameters::Parameters(std::string parm_input, std::string parm_output, bool le, bool le_id, bool fe) {
     this->read_parm(parm_input);
     if(le) {
         this->read_ctcf();
         this->read_coupling_prob();
     }
-    this->print_param(parm_output, le);
+    this->print_param(parm_output, le, le_id, fe);
 }
 
 Parameters::~Parameters() {}
@@ -35,28 +35,34 @@ bool Parameters::read_parm(std::string file_name) {
                     set_parm(m_print, std::stoi(par));
                 else if (name == "timestep")
                     set_parm(m_timestep, std::stof(par));
+                else if (name == "gamma")
+                    set_parm(m_gamma, std::stof(par));
                 else if (name == "temp")
                     set_parm(m_temp, std::stof(par));
-                else if (name == "init")
-                    set_parm(m_init, par);
+                else if (name == "box_length")
+                    set_parm(m_box_length, std::stof(par));
+                else if (name == "kside")
+                    set_parm(m_kside, std::stof(par));
                 else if (name == "nmonomers")
                     set_parm(m_nmonomers, std::stoi(par));
                 else if (name == "diameter")
                     set_parm(m_diameter, std::stof(par));
                 else if (name == "spring_k")
                     set_parm(m_spring, std::stof(par));
+                else if (name == "init")
+                    set_parm(m_init, par);
+                else if (name == "ctcf")
+                    set_parm(m_ctcf_in, par);
+                else if (name == "probability")
+                    set_parm(m_coupling_prob_in, par);
                 else if (name == "epsilon")
                     set_parm(m_epsilon, std::stof(par));
                 else if (name == "rmin")
                     set_parm(m_rmin, std::stof(par));
                 else if (name == "rcut")
                     set_parm(m_rcut, std::stof(par));
-                else if (name == "gamma")
-                    set_parm(m_gamma, std::stof(par));
-                else if (name == "k_on")
-                    set_parm(m_k_on, std::stof(par));
-                else if (name == "k_off")
-                    set_parm(m_k_off, std::stof(par));
+                else if (name == "permeability_ctcf")
+                    set_parm(m_perm_ctcf, std::stof(par));
                 else if (name == "rate_fwl")
                     set_parm(m_rate_fwl, std::stof(par));
                 else if (name == "rate_fwr")
@@ -65,18 +71,18 @@ bool Parameters::read_parm(std::string file_name) {
                     set_parm(m_rate_bwl, std::stof(par));
                 else if (name == "rate_bwr")
                     set_parm(m_rate_bwr, std::stof(par));
+                else if (name == "k_on")
+                    set_parm(m_k_on, std::stof(par));
+                else if (name == "k_off")
+                    set_parm(m_k_off, std::stof(par));
                 else if (name == "n_max_extr")
                     set_parm(m_n_max_extr, std::stof(par));
-                else if (name == "permeability_ctcf")
-                    set_parm(m_perm_ctcf, std::stof(par));
-                else if (name == "ctcf")
-                    set_parm(m_ctcf_in, par);
-                else if (name == "probability")
-                    set_parm(m_coupling_prob_in, par);
-                else if (name == "length")
-                    set_parm(m_length, std::stof(par));
-                else if (name == "kside")
-                    set_parm(m_kside, std::stof(par));
+                else if (name == "Dextr")
+                    set_parm(m_Dextr_free, std::stof(par));
+                else if (name == "field_length")
+                    set_parm(m_field_length, std::stof(par));
+                else if (name == "field_step")
+                    set_parm(m_field_step, std::stof(par));
             }
         }
     }
@@ -148,7 +154,7 @@ bool Parameters::read_coupling_prob() {
     return 0;
 }
 
-bool Parameters::print_param(std::string parm_output, bool le) {
+bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool fe) {
 
     std::ofstream set_parameters;
     set_parameters.open(parm_output, std::ofstream::out);
@@ -171,7 +177,7 @@ bool Parameters::print_param(std::string parm_output, bool le) {
     set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
     set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
     set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;
-    set_parameters << "Box length: " << m_length << std::endl;
+    set_parameters << "Box length: " << m_box_length << std::endl;
     set_parameters << "Box hardness: " << m_kside << std::endl<<std::endl;
     if(le) {
         set_parameters << "EXTRUDER PARAMETERS" << std::endl;
@@ -189,7 +195,33 @@ bool Parameters::print_param(std::string parm_output, bool le) {
         set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
         set_parameters << "Coupling probability file: " << m_coupling_prob_in
                        << std::endl;
+	if(le_id){
+        	set_parameters << ": " << m_k_on << std::endl;
+        	set_parameters << ": " << m_k_off << std::endl << std::endl;
+    	}
     }
+    if(fe) {
+        set_parameters << "EXTRUDER PARAMETERS" << std::endl;
+        set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
+        set_parameters << "Extruder rate fw right: " << m_rate_fwr << std::endl;
+        set_parameters << "Extruder rate bw left: " << m_rate_bwl << std::endl;
+        set_parameters << "Extruder rate bw right: " << m_rate_bwr << std::endl;
+        set_parameters << "Ctcf permeability: " << m_perm_ctcf << std::endl;
+        set_parameters << "Extruder couplng probability: " << m_k_on << std::endl;
+        set_parameters << "Extruder decoupling probability: " << m_k_off
+                       << std::endl;
+        set_parameters << "Maximum number of extruder: " << m_n_max_extr
+                       << std::endl << std::endl;
+	set_parameters << "FIELD PARAMETERS" << std::endl;
+	set_parameters << "Unloaded cohesin diffusion: " << m_Dextr_free << std::endl;
+	set_parameters << "Field length: " << m_field_length << std::endl;
+	set_parameters << "Field step: " << m_field_step << std::endl << std::endl;
+        set_parameters << "I/O FILE" << std::endl;
+        set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
+        set_parameters << "Coupling probability file: " << m_coupling_prob_in
+                       << std::endl << std::endl;
+    }
+
     set_parameters.close();
     return 0;
 }

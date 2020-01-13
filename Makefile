@@ -24,12 +24,12 @@ OBJPATH=./obj/
 CXX := $(GCC47_BINDIR)$(CXX)
 
 TARGET := LEAD
-OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o vector_extruder.o)
+OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o vector_extruder.o field.o)
 
 DEBUG := -g
 WARNING := -Wall -Wextra
 
-CXXFLAGS := $(CXXFLAGS) -std=c++17 -O3 -ffast-math -funroll-loops
+CXXFLAGS := $(CXXFLAGS) -std=c++17 -O3 -ffast-math -funroll-loops 
 #LDFLAGS := -lpthread -lCGAL -lboost_system -lgmp 
 LDFLAGS := -lpthread
 
