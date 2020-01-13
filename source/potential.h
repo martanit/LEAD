@@ -18,12 +18,14 @@ public:
     Potential(Polymer &poly, Parameters parm)
         : m_poly(poly),
           m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
-          m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()) {};
+          m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()),
+          m_length(parm.get_length()), m_kside(parm.get_kside()) {};
 
     Potential(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
         : m_poly(poly), m_vector_extr(vector_extr),
           m_pot_epsilon(parm.get_epsilon()), m_pot_rmin(parm.get_rmin()),
-          m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()) {};
+          m_pot_rcut(parm.get_rcut()), sphere(poly.get_poly_nmonomers()),
+          m_length(parm.get_length()), m_kside(parm.get_kside()) {};
 
     ~Potential() {};
 
@@ -45,6 +47,7 @@ public:
     void soft_core_f(int, bool);
     void harmonic_spring_f(bool);
     void extruder_spring_f(bool);
+    void box(bool);
 
 protected:
     Polymer m_poly;
@@ -56,6 +59,8 @@ protected:
     double m_pot_rmin_12 = std::pow(m_pot_rmin, 12);
     double m_pot_rmin_6 = std::pow(m_pot_rmin, 6);
     double m_pot_rcut = 5.;
+    double m_length = 10.;
+    double m_kside = 10.;
 
     double k = m_poly.get_spring();
     double k_extr = m_poly.get_spring() * 5.;

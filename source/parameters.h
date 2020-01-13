@@ -9,6 +9,7 @@
 #include <iostream> // std::cerr
 #include <sstream>  // std::istringstream
 #include <vector>
+#include <cmath>
 
 #ifndef PARAMETERS_H_
 #define PARAMETERS_H_
@@ -74,6 +75,12 @@ public:
     float get_rcut() {
         return m_rcut;
     }
+    float get_length(){
+	return m_length;
+    }
+    float get_kside(){
+	return m_kside;
+    }
 
     float get_permeability() {
         return m_perm_ctcf;
@@ -118,6 +125,7 @@ protected:
 
     // system parameters
     float m_temp = 2.; // system temperature [K]
+    float m_length = 10.; // length of box
 
     // polymer parameters
     int m_nmonomers = 100;    // number of interacting monomers
@@ -133,6 +141,7 @@ protected:
     float m_epsilon = 1.; // parameter for LJ potential
     float m_rmin = 1.;    // parameter for LJ potential
     float m_rcut = 2.5;    // parameter for LJ potential action
+    float m_kside = 10.;  // parameter for potential box
 
     // extruder parameters
     float m_perm_ctcf = 0.1;
@@ -148,6 +157,7 @@ protected:
     float m_k_on = 0.5;
     float m_k_off = 0.001;
     float m_n_max_extr = 10;
+
 };
 
 #endif /* PARAMETERS_H_ */

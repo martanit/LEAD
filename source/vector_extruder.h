@@ -16,6 +16,11 @@
 #include "polymer.h"
 #include <memory>
 
+struct IdxTime {
+	Extruder extr;
+	int t;
+};
+
 class VectorExtruder {
 
 public:
@@ -42,6 +47,8 @@ public:
 
     void first_fill(Polymer &);
     void update(Polymer &);
+    void update_diff_density(Polymer &, unsigned long int);
+    double density(Position, unsigned long int, Polymer &);
 
     friend bool extr_overlap(Extruder &extr);
 
@@ -72,13 +79,22 @@ public:
 private:
 
     Extruder m_extr;
+    Position r, ri;
     std::vector<std::unique_ptr<Extruder>> m_vector_extr;
+    std::vector<IdxTime> m_unloaded_extr;
 
     // maximum number of extruder
     float m_n_max_extr = 3;
     double m_kon = 0.9;
     double m_koff = 0.001;
     double integrator_timestep = 0;
+
+    double Nu;
+    double N0 = 2.5E5;
+    double V = 10;
+    double D = 0.1;
+    double m_norm = 0.1;
+    int dt = 10000;
 
     std::mt19937 mt{std::random_device{}()};
     std::uniform_real_distribution<double> dist;

@@ -48,7 +48,7 @@ public:
     }
 
     void run(bool, bool, bool, bool, std::string);
-    void run_extrusion(bool, bool, bool, bool, std::string);
+    void run_extrusion(bool, bool, bool, bool, bool, std::string);
     double delta_h();
 
 private:

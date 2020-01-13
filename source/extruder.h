@@ -15,6 +15,10 @@
 #include "polymer.h"
 #include <memory>
 
+struct Position {
+	double x,y,z;
+};
+
 class Extruder {
 
 public:
@@ -39,6 +43,7 @@ public:
 
     void place_extruder(Polymer poly);
     bool extr_overlap(Extruder &extr);
+    Position xyz_position(Polymer poly);
 
     const Extruder &get_extr() const {
         return *this;
@@ -80,7 +85,6 @@ public:
 protected:
 
     int m_extruder_r, m_extruder_l;
-
     double m_rate_fwl = 0.0001;
     double m_rate_fwr = 0.0001;
     double m_rate_bwl = 0.0001;

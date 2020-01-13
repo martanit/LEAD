@@ -23,6 +23,7 @@ int main(int argc, char** argv) {
     bool rouse=false;
     bool soft_core=false;
     bool lennard_jones=false;
+    bool homogeneus_density=true;
 
     std::string parm_input;
     std::string parm_output;
@@ -59,6 +60,11 @@ int main(int argc, char** argv) {
         else if(std::string(argv[idx])== "--le") {
             extrusion=true;
             std::cerr << "Loop extrusion activated" << std::endl;
+        }
+        else if(std::string(argv[idx])== "--le_id") {
+            extrusion=true;
+	    homogeneus_density=false;
+            std::cerr << "Loop extrusion activated with inhomogeneus density" << std::endl;
         }
         else if(std::string(argv[idx])== "--rouse") {
             rouse=true;
@@ -98,7 +104,7 @@ int main(int argc, char** argv) {
         VectorExtruder v_extr(parm, extr, poly_init);
         Dynamics dyn(poly_init, v_extr, parm);
 
-        dyn.run_extrusion(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
+        dyn.run_extrusion(rouse, soft_core, lennard_jones, compute_energy, homogeneus_density, traj_output+".xyz");
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count()/1e6 << "ms\n";

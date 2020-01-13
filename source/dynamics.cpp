@@ -6,8 +6,9 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
 
-        Potential::set_new_polymer(*m_poly);
+	Potential::set_new_polymer(*m_poly);
 
+	this->box(compute_energy);
         if(rouse)
             this->harmonic_spring_f(compute_energy);
         else if(soft_core) {
@@ -34,11 +35,16 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
     }
 }
 
-void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
+void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, bool homogeneus_density, std::string output) {
     for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
         if(compute_energy) m_poly_old = *m_poly;
-        if (i % m_dynamics_print == 0)
-            m_vector_extr.update(*m_poly);
+        
+	if (i % m_dynamics_print == 0){
+	    if(homogeneus_density)
+            	m_vector_extr.update(*m_poly);
+	    else
+		m_vector_extr.update_diff_density(*m_poly, i);
+	}
 
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
@@ -46,6 +52,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
         Potential::set_new_polymer(*m_poly);
         Potential::set_new_extruder(m_vector_extr);
 
+	this->box(compute_energy);
         this->extruder_spring_f(compute_energy);
         if(rouse)
             this->harmonic_spring_f(compute_energy);

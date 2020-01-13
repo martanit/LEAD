@@ -73,6 +73,10 @@ bool Parameters::read_parm(std::string file_name) {
                     set_parm(m_ctcf_in, par);
                 else if (name == "probability")
                     set_parm(m_coupling_prob_in, par);
+                else if (name == "length")
+                    set_parm(m_length, std::stof(par));
+                else if (name == "kside")
+                    set_parm(m_kside, std::stof(par));
             }
         }
     }
@@ -167,6 +171,8 @@ bool Parameters::print_param(std::string parm_output, bool le) {
     set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
     set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
     set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;
+    set_parameters << "Box length: " << m_length << std::endl;
+    set_parameters << "Box hardness: " << m_kside << std::endl<<std::endl;
     if(le) {
         set_parameters << "EXTRUDER PARAMETERS" << std::endl;
         set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
