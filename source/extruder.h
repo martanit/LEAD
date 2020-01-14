@@ -16,7 +16,7 @@
 #include <memory>
 
 struct Position {
-	double x,y,z;
+    double x,y,z;
 };
 
 class Extruder {

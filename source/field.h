@@ -140,7 +140,7 @@ public:
 
     std::vector<int> get_poly_subchain(Cell a) {
         subchain_in_cell(a);
-	return m_poly_subchain;
+        return m_poly_subchain;
     };
 
     // Conversion field to space coordinates

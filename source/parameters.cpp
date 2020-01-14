@@ -158,7 +158,6 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
 
     std::ofstream set_parameters;
     set_parameters.open(parm_output, std::ofstream::out);
-
     // return error if read file fail
     if (set_parameters.fail()) {
         throw "ERROR: Impossible to write parameters file "+parm_output;
@@ -195,10 +194,10 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
         set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
         set_parameters << "Coupling probability file: " << m_coupling_prob_in
                        << std::endl;
-	if(le_id){
-        	set_parameters << ": " << m_k_on << std::endl;
-        	set_parameters << ": " << m_k_off << std::endl << std::endl;
-    	}
+        if(le_id) {
+            set_parameters << ": " << m_k_on << std::endl;
+            set_parameters << ": " << m_k_off << std::endl << std::endl;
+        }
     }
     if(fe) {
         set_parameters << "EXTRUDER PARAMETERS" << std::endl;
@@ -212,10 +211,10 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
                        << std::endl;
         set_parameters << "Maximum number of extruder: " << m_n_max_extr
                        << std::endl << std::endl;
-	set_parameters << "FIELD PARAMETERS" << std::endl;
-	set_parameters << "Unloaded cohesin diffusion: " << m_Dextr_free << std::endl;
-	set_parameters << "Field length: " << m_field_length << std::endl;
-	set_parameters << "Field step: " << m_field_step << std::endl << std::endl;
+        set_parameters << "FIELD PARAMETERS" << std::endl;
+        set_parameters << "Unloaded cohesin diffusion: " << m_Dextr_free << std::endl;
+        set_parameters << "Field length: " << m_field_length << std::endl;
+        set_parameters << "Field step: " << m_field_step << std::endl << std::endl;
         set_parameters << "I/O FILE" << std::endl;
         set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
         set_parameters << "Coupling probability file: " << m_coupling_prob_in

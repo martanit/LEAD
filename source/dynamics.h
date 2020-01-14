@@ -61,6 +61,7 @@ public:
     void run_extrusion(bool, bool, bool, bool, bool, std::string);
     void run_extrusion_field(bool, bool, bool, bool, std::string);
     double delta_h();
+    bool print_sys(std::string);
 
 private:
 

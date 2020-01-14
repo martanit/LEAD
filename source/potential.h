@@ -15,7 +15,7 @@
 class Potential {
 
 public:
-    
+
     // construct potential from Polymer and set of parameters
     Potential(Polymer &poly, Parameters parm)
         : m_poly(poly),

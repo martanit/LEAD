@@ -56,11 +56,11 @@ public:
     float get_temp() {
         return m_temp;
     }
-    float get_box_length(){
-	return m_box_length;
+    float get_box_length() {
+        return m_box_length;
     }
-    float get_kside(){
-	return m_kside;
+    float get_kside() {
+        return m_kside;
     }
     int get_nmonomers() {
         return m_nmonomers;
@@ -137,11 +137,11 @@ protected:
     int m_nmonomers = 100;    // number of interacting monomers
     float m_diameter = 0.89; // diameter of monomers [50*nm]
     float m_spring = 500.;  // spring constant of harmonic oscillator (spring)
-    std::string m_init = "init.dat"; // first configuration
 
     // file parameters
-    std::string m_ctcf_in = "m_ctcf.in";	// ctcf position file
-    std::string m_coupling_prob_in = "coupling_probabilty.in"; // prob file
+    std::string m_init = "input/initial_chain.xyz"; // first configuration
+    std::string m_ctcf_in = "input/ctcf.in";	// ctcf position file
+    std::string m_coupling_prob_in = "input/coupling_probabilty.in"; // prob file
 
     // potential parameters
     float m_epsilon = 1.; // parameter for LJ potential

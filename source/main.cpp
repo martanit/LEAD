@@ -66,7 +66,7 @@ int main(int argc, char** argv) {
         }
         else if(std::string(argv[idx])== "--le_id") {
             extrusion=true;
-	    homogeneus_density=false;
+            homogeneus_density=false;
             std::cerr << "Loop extrusion activated with inhomogeneus density" << std::endl;
         }
         else if(std::string(argv[idx])== "--fe") {
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
     }
 
     auto begin = std::chrono::high_resolution_clock::now();
-    
+
     if(!extrusion and !extruders_field) {
         Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
         Polymer poly_init(parm);

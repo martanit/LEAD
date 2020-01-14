@@ -29,12 +29,12 @@ void Extruder::place_extruder(Polymer poly) {
 }
 
 Position Extruder::xyz_position(Polymer poly) {
-	return { (poly.get_x(get_r())+
-       	    	  poly.get_x(get_l()))/2., 
-         	 (poly.get_y(get_r())+
-       	          poly.get_y(get_l()))/2.,
-       	         (poly.get_z(get_r())+
-       	          poly.get_z(get_l()))/2. };
+    return { (poly.get_x(get_r())+
+              poly.get_x(get_l()))/2.,
+             (poly.get_y(get_r())+
+              poly.get_y(get_l()))/2.,
+             (poly.get_z(get_r())+
+              poly.get_z(get_l()))/2. };
 }
 
 // Try to place extruder randomly on the polymer segment

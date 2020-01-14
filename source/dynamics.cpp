@@ -1,4 +1,5 @@
 #include "dynamics.h"
+bool print_sys(Polymer &, VectorExtruder, std::string) ;
 
 void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
     for(unsigned long int i=0; i<m_dynamics_nstep; ++i) {
@@ -6,9 +7,9 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
 
-	Potential::set_new_polymer(*m_poly);
+        Potential::set_new_polymer(*m_poly);
 
-	this->box(compute_energy);
+        this->box(compute_energy);
         if(rouse)
             this->harmonic_spring_f(compute_energy);
         else if(soft_core) {
@@ -38,13 +39,13 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
 void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, bool homogeneus_density, std::string output) {
     for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
         if(compute_energy) m_poly_old = *m_poly;
-        
-	if (i % m_dynamics_print == 0){
-	    if(homogeneus_density)
-            	m_vector_extr.update(*m_poly);
-	    else
-		m_vector_extr.update_diff_density(*m_poly, i);
-	}
+
+        if (i % m_dynamics_print == 0) {
+            if(homogeneus_density)
+                m_vector_extr.update(*m_poly);
+            else
+                m_vector_extr.update_diff_density(*m_poly, i);
+        }
 
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
@@ -52,7 +53,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
         Potential::set_new_polymer(*m_poly);
         Potential::set_new_extruder(m_vector_extr);
 
-	this->box(compute_energy);
+        this->box(compute_energy);
         this->extruder_spring_f(compute_energy);
         if(rouse)
             this->harmonic_spring_f(compute_energy);
@@ -78,7 +79,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
         m_vector_extr = Integrator::get_extr();
 
         if (i % m_dynamics_print == 0) {
-            print_xyz(*m_poly, output);
+            print_sys(output);
             if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
             int num_extr = 0;
             for (auto &i : m_vector_extr) {
@@ -87,6 +88,7 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
                 ++num_extr;
             }
         }
+
     }
 }
 
@@ -100,7 +102,7 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
         Potential::set_new_polymer(*m_poly);
         Potential::set_new_extruder(m_vector_extr);
 
-	this->box(compute_energy);
+        this->box(compute_energy);
         this->extruder_spring_f(compute_energy);
         if(rouse)
             this->harmonic_spring_f(compute_energy);
@@ -169,3 +171,52 @@ double Dynamics::delta_h() {
 
     return first_term+second_term+delta_energy;
 }
+
+bool Dynamics::print_sys(std::string out_xyz) {
+    // open stream to write xyz file
+    std::ofstream output;
+    output.open(out_xyz, std::fstream::app);
+
+    // return error if read file fail
+    if (output.fail()) {
+        throw "ERROR: Impossible to write xyz file " + out_xyz;
+        return 1;
+    }
+
+
+    std::vector<bool> v((*m_poly).get_poly_nmonomers());
+    if(m_vector_extr.vextr_size() !=0) {
+        for (int i = 0; i < (*m_poly).get_poly_nmonomers(); i++) {
+            for(auto &a : m_vector_extr) {
+                if((*a).get_l() == i) {
+                    v[i] = 1;
+                    break;
+                }
+                else if((*a).get_r() == i) {
+                    v[i] = 1;
+                    break;
+                }
+                else v[i] = 0;
+            }
+        }
+    }
+    else std::fill(v.begin(), v.end(), 0);
+
+    output << (*m_poly).get_poly_nmonomers() << std::endl << std::endl;
+    for (int i = 0; i < (*m_poly).get_poly_nmonomers(); i++) {
+        if(v[i] == 1)
+            output << "\tLe" << "\t\t\t"
+                   << (*m_poly).get_x(i) << "\t\t\t"
+                   << (*m_poly).get_y(i) << "\t\t\t"
+                   << (*m_poly).get_z(i) << std::endl;
+
+        else
+            output << "\tAu" << "\t\t\t"
+                   << (*m_poly).get_x(i) << "\t\t\t"
+                   << (*m_poly).get_y(i) << "\t\t\t"
+                   << (*m_poly).get_z(i) << std::endl;
+    }
+    output.close();
+    return 0;
+}
+

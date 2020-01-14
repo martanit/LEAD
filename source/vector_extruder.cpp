@@ -2,7 +2,6 @@
 
 void VectorExtruder::first_fill(Polymer &poly) {
     bool is_overl = false;
-
     std::vector<Extruder> tmp_extruder;
     for (int i = 0; i < m_n_max_extr; ++i) {
         m_extr.place_extruder(poly);
@@ -13,12 +12,10 @@ void VectorExtruder::first_fill(Polymer &poly) {
                     break;
                 }
         }
-        if ((m_kon * integrator_timestep /
-                poly.get_poly_nmonomers()) > dist(mt) and
+        if ((m_kon * integrator_timestep / m_n_max_extr) > dist(mt) and
                 !(is_overl))
             tmp_extruder.push_back(m_extr);
     }
-
     m_vector_extr.clear();
     for (const auto &i : tmp_extruder)
         m_vector_extr.push_back(std::make_unique<Extruder>(i));
@@ -33,12 +30,10 @@ void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int
     cohes_field_int.interaction();
 
     for(auto &a : cohes_field_int.get_contact_cell()) {
-
-        if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a))) {
+        if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a),
+                                 cohes_field_int.monomer_max(a))) {
             tmp_extruder_cell.clear();
-            // Quanti estrusori si possono attaccare in un solo step in una singola cella?
-            extr_per_cell=10;
-            for( int i = 0; i< extr_per_cell; ++i) {
+            for( int i = 0; i< cohes_field_int.get_c(a.i, a.j, a.k); ++i) {
                 m_extr.place_extruder_cell(poly, cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a));
                 if(tmp_extruder_cell.size()!=0)
                     for (auto &j : tmp_extruder_cell)
@@ -46,9 +41,8 @@ void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int
                             is_overl = true;
                             break;
                         }
-                if (( cohes_field_int.get_c(a.i, a.j, a.k)/cohes_field_int.get_init_c()
-                        *m_kon*integrator_timestep/cohes_field_int.get_poly_subchain(a).size() ) > dist(mt) and
-                        !(is_overl))
+                if (( m_kon*integrator_timestep/cohes_field_int.get_init_c()) >
+                        dist(mt) and !(is_overl))
                     tmp_extruder_cell.push_back(m_extr);
             }
             for(auto &e : tmp_extruder_cell)
@@ -81,7 +75,7 @@ void VectorExtruder::update(Polymer &poly) {
                     is_overl = true;
                     break;
                 }
-            if ((m_kon * integrator_timestep / poly.get_poly_nmonomers()) >
+            if (( m_kon * integrator_timestep / (m_n_max_extr-tmp_extruder.size())) >
                     dist(mt) and
                     !(is_overl))
                 tmp_extruder.push_back(m_extr);
@@ -104,26 +98,26 @@ void VectorExtruder::update_diff_density(Polymer &poly, unsigned long int t) {
             // that are not undbind, save unbind extruders
             if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
                 tmp_extruder.push_back(*i);
-	    else 
-		 m_unloaded_extr.push_back({*i, t});
-	}
-	
-	// Move unloaded extruders from unbinding vector to background
-	m_unloaded_extr.erase(std::remove_if(m_unloaded_extr.begin(), m_unloaded_extr.end(),
-		[this,t](IdxTime x) {
-			return x.t < t-dt; 
-			}), m_unloaded_extr.end());
+            else
+                m_unloaded_extr.push_back({*i, t});
+        }
+
+        // Move unloaded extruders from unbinding vector to background
+        m_unloaded_extr.erase(std::remove_if(m_unloaded_extr.begin(), m_unloaded_extr.end(),
+        [this,t](IdxTime x) {
+            return x.t < t-dt;
+        }), m_unloaded_extr.end());
 
         for (int i = 0; i < m_n_max_extr - tmp_extruder.size(); ++i) {
-	    m_extr.place_extruder(poly);
-	    r = m_extr.xyz_position(poly);
+            m_extr.place_extruder(poly);
+            r = m_extr.xyz_position(poly);
 
             for (auto &j : tmp_extruder)
                 if ((j).extr_overlap(m_extr)) {
                     is_overl = true;
                     break;
                 }
-            if ((m_kon/m_kon_norm * this->density(r, t, poly) * integrator_timestep / poly.get_poly_nmonomers()) >
+            if ((m_kon * this->density(r, t, poly)/rho0_tot * integrator_timestep / m_n_max_extr-tmp_extruder.size()) >
                     dist(mt) and
                     !(is_overl))
                 tmp_extruder.push_back(m_extr);
@@ -151,13 +145,10 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
                 tmp_extruder.push_back(*i);
 
         cohes_field_int.interaction();
-
         for(auto &a : cohes_field_int.get_contact_cell()) {
             if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a))) {
                 tmp_extruder_cell.clear();
-                // Quanti estrusori si possono attaccare in un solo step in una singola cella?
-                extr_per_cell=10;
-                for( int i = 0; i< extr_per_cell - tmp_extruder_cell.size(); ++i) {
+                for( int i = 0; i< cohes_field_int.get_c(a.i, a.j, a.k) - tmp_extruder_cell.size(); ++i) {
                     m_extr.place_extruder_cell(poly, cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a));
                     if(tmp_extruder_cell.size()!=0)
                         for (auto &j : tmp_extruder_cell)
@@ -165,9 +156,8 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
                                 is_overl = true;
                                 break;
                             }
-                    if (( cohes_field_int.get_c(a.i, a.j, a.k)/cohes_field_int.get_init_c()
-                            *m_kon*integrator_timestep/cohes_field_int.get_poly_subchain(a).size() ) > dist(mt) and
-                            !(is_overl))
+                    if (( m_kon*integrator_timestep/cohes_field_int.get_init_c()) >
+                            dist(mt) and !(is_overl))
                         tmp_extruder_cell.push_back(m_extr);
                 }
                 for(auto &e : tmp_extruder_cell)
@@ -182,20 +172,20 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
 }
 
 double VectorExtruder::density(Position r, unsigned long int t, Polymer &poly) {
-	double sum=0;
-	// Number of unloaded extruder is total 
-	// extruder minus bounded extrduer
-	Nb_eq = m_vector_extr.size(); 
-	for (auto &i : m_unloaded_extr) {
-	    ri = i.extr.xyz_position(poly);
-	    sum = sum + 1./(poly.get_Veq()*std::sqrt((2*M_PI*D*(t-i.t))))*
-		    		     std::exp(-1*(std::pow((r.x-ri.x),2)+
-				     std::pow((r.y-ri.y),2)+
-				     std::pow((r.z-ri.z),2))/(
-				     2.*(t-i.t)*D));
-	}
-	return rho0_tot-(Nb_eq+m_unloaded_extr.size())
-	       /poly.get_Veq()+sum;
+    double sum=0;
+    // Number of unloaded extruder is total
+    // extruder minus bounded extrduer
+    Nb_eq = m_vector_extr.size();
+    for (auto &i : m_unloaded_extr) {
+        ri = i.extr.xyz_position(poly);
+        sum = sum + 1./(poly.get_Veq()*std::sqrt((2*M_PI*D*(t-i.t))))*
+              std::exp(-1*(std::pow((r.x-ri.x),2)+
+                           std::pow((r.y-ri.y),2)+
+                           std::pow((r.z-ri.z),2))/(
+                           2.*(t-i.t)*D));
+    }
+    return rho0_tot-(Nb_eq+m_unloaded_extr.size())
+           /poly.get_Veq()+sum;
 }
 
 bool VectorExtruder::overlap_lr(Extruder &extr) {

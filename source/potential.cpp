@@ -34,9 +34,9 @@ void Potential::lennard_jones_f(int step,
                 f_x -= x * m_pot_epsilon * 12.0 * m_pot_rmin_6 / std::pow(dr, 4);
                 f_y -= y * m_pot_epsilon * 12.0 * m_pot_rmin_6 / std::pow(dr, 4);
                 f_z -= z * m_pot_epsilon * 12.0 * m_pot_rmin_6 / std::pow(dr, 4);
-            	
-		m_poly.add_force(i, f_x, f_y, f_z);
-            	m_poly.add_force(k, -f_x, -f_y, -f_z);
+
+                m_poly.add_force(i, f_x, f_y, f_z);
+                m_poly.add_force(k, -f_x, -f_y, -f_z);
 
                 if (compute_energy)
                     m_poly.add_energy(-2. * m_pot_epsilon * m_pot_rmin_6 /
@@ -68,22 +68,22 @@ void Potential::soft_core_f(int step,
 
     for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
         for (auto &&k : sphere[i]) {
-	    
-	    x = (m_poly.get_x(i) - m_poly.get_x(k));
+
+            x = (m_poly.get_x(i) - m_poly.get_x(k));
             y = (m_poly.get_y(i) - m_poly.get_y(k));
             z = (m_poly.get_z(i) - m_poly.get_z(k));
 
             dr = x * x + y * y + z * z;
             if (dr < m_pot_rcut * m_pot_rcut) {
-		f_x = x * m_pot_epsilon * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
+                f_x = x * m_pot_epsilon * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
                 f_y = y * m_pot_epsilon * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
                 f_z = z * m_pot_epsilon * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
-            
-		m_poly.add_force(i, f_x, f_y, f_z);
-            	m_poly.add_force(k, -f_x, -f_y, -f_z);
-            	
-		if (compute_energy)
-                	m_poly.add_energy(m_pot_epsilon * m_pot_rmin_12 / std::pow(dr, 6));
+
+                m_poly.add_force(i, f_x, f_y, f_z);
+                m_poly.add_force(k, -f_x, -f_y, -f_z);
+
+                if (compute_energy)
+                    m_poly.add_energy(m_pot_epsilon * m_pot_rmin_12 / std::pow(dr, 6));
             }
         }
     }
@@ -131,33 +131,33 @@ void Potential::extruder_spring_f(bool compute_energy) {
 
 void Potential::box(bool compute_energy) {
     for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
-	if( m_poly.get_x(i) < -m_pot_box_length/2. and 
-	    m_poly.get_y(i) < -m_pot_box_length/2. and 
-	    m_poly.get_z(i) < -m_pot_box_length/2. ) {
-		f_x = -m_pot_kside *(m_poly.get_x(i)+m_pot_box_length/2.);
-		f_y = -m_pot_kside *(m_poly.get_y(i)+m_pot_box_length/2.);
-		f_z = -m_pot_kside *(m_poly.get_z(i)+m_pot_box_length/2.);
-		
-		m_poly.add_force(i, f_x, f_y, f_z);
-		
-		if(compute_energy) m_poly.add_energy(m_pot_kside/2.*
-			(std::pow(m_poly.get_x(i)+m_pot_box_length/2., 2)+
-			 std::pow(m_poly.get_y(i)+m_pot_box_length/2., 2)+
-			 std::pow(m_poly.get_z(i)+m_pot_box_length/2., 2)));
-	}
-	else if( m_poly.get_x(i) > m_pot_box_length/2. and 
-	    	 m_poly.get_y(i) > m_pot_box_length/2. and 
-	    	 m_poly.get_z(i) > m_pot_box_length/2. ) {
-		f_x = -m_pot_kside *(m_poly.get_x(i)-m_pot_box_length/2.);
-		f_y = -m_pot_kside *(m_poly.get_y(i)-m_pot_box_length/2.);
-		f_z = -m_pot_kside *(m_poly.get_z(i)-m_pot_box_length/2.);
-		
-		m_poly.add_force(i, f_x, f_y, f_z);
-		
-		if(compute_energy) m_poly.add_energy(m_pot_kside/2.*
-			(std::pow(m_poly.get_x(i)+m_pot_box_length/2., 2)+
-			 std::pow(m_poly.get_y(i)+m_pot_box_length/2., 2)+
-			 std::pow(m_poly.get_z(i)+m_pot_box_length/2., 2)));
-	}
+        if( m_poly.get_x(i) < -m_pot_box_length/2. and
+                m_poly.get_y(i) < -m_pot_box_length/2. and
+                m_poly.get_z(i) < -m_pot_box_length/2. ) {
+            f_x = -m_pot_kside *(m_poly.get_x(i)+m_pot_box_length/2.);
+            f_y = -m_pot_kside *(m_poly.get_y(i)+m_pot_box_length/2.);
+            f_z = -m_pot_kside *(m_poly.get_z(i)+m_pot_box_length/2.);
+
+            m_poly.add_force(i, f_x, f_y, f_z);
+
+            if(compute_energy) m_poly.add_energy(m_pot_kside/2.*
+                                                     (std::pow(m_poly.get_x(i)+m_pot_box_length/2., 2)+
+                                                      std::pow(m_poly.get_y(i)+m_pot_box_length/2., 2)+
+                                                      std::pow(m_poly.get_z(i)+m_pot_box_length/2., 2)));
+        }
+        else if( m_poly.get_x(i) > m_pot_box_length/2. and
+                 m_poly.get_y(i) > m_pot_box_length/2. and
+                 m_poly.get_z(i) > m_pot_box_length/2. ) {
+            f_x = -m_pot_kside *(m_poly.get_x(i)-m_pot_box_length/2.);
+            f_y = -m_pot_kside *(m_poly.get_y(i)-m_pot_box_length/2.);
+            f_z = -m_pot_kside *(m_poly.get_z(i)-m_pot_box_length/2.);
+
+            m_poly.add_force(i, f_x, f_y, f_z);
+
+            if(compute_energy) m_poly.add_energy(m_pot_kside/2.*
+                                                     (std::pow(m_poly.get_x(i)+m_pot_box_length/2., 2)+
+                                                      std::pow(m_poly.get_y(i)+m_pot_box_length/2., 2)+
+                                                      std::pow(m_poly.get_z(i)+m_pot_box_length/2., 2)));
+        }
     }
 }

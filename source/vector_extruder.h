@@ -18,8 +18,8 @@
 #include <memory>
 
 struct IdxTime {
-	Extruder extr;
-	int t;
+    Extruder extr;
+    unsigned long int t;
 };
 
 class VectorExtruder {
@@ -31,7 +31,7 @@ public:
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
           m_n_max_extr(parm.get_max_extr()),
-	  m_box_length(parm.get_box_length()),
+          m_box_length(parm.get_box_length()),
           integrator_timestep(parm.get_timestep()), dist(0., 1.) {
         this->first_fill(poly);
     };
@@ -39,7 +39,7 @@ public:
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly, FieldAction cohes_poly_int)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
           m_n_max_extr(parm.get_max_extr()),
-	  m_box_length(parm.get_box_length()),
+          m_box_length(parm.get_box_length()),
           integrator_timestep(parm.get_timestep()), dist(0., 1.) {
         this->first_fill_field(poly, cohes_poly_int);
     };
@@ -50,7 +50,7 @@ public:
         m_kon = vector_extr.m_kon;
         m_koff = vector_extr.m_koff;
         m_n_max_extr = vector_extr.m_n_max_extr;
-	m_box_length = vector_extr.m_box_length;
+        m_box_length = vector_extr.m_box_length;
         integrator_timestep = vector_extr.integrator_timestep;
     };
 
@@ -89,6 +89,9 @@ public:
             m_vector_extr.push_back(std::make_unique<Extruder>(*i));
     }
 
+    int vextr_size() {
+        return m_vector_extr.size();
+    }
 private:
 
     Extruder m_extr;
@@ -98,22 +101,20 @@ private:
 
     // maximum number of extruder
     float m_n_max_extr = 3;
-    double m_kon = 2.58E-15;
-    double m_koff = 1.58E-15;
+    double m_kon = 1E-15;
+    double m_koff = 1E-15;
 
     double integrator_timestep = 1E6;
     double m_box_length = 10;
 
     // density of extruder in nucleus
     const double rho0_tot = 8.9E-2;
-    
+
     double Nb_eq = 1E2;
-    
+
     // diffusion of unloaded cohesin from stokes law
     // if cohesin diameter is 0.89a
     const double D = 2.57E-9;
-    // normalization for different density
-    double m_kon_norm = 5.;
     // move unloaded extruders from local to background
     // every dt step
     int dt = 10000;

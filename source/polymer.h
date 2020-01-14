@@ -9,6 +9,7 @@
 #define POLYMER_H_
 
 #include "parameters.h"
+//#include "vector_extruder.h"
 
 #include <cmath>
 #include <fstream>
@@ -91,7 +92,7 @@ public:
     };
 
     double get_Veq() {
-	    return m_poly_nmonomers/genome_nmonomers*V_nucl;
+        return std::pow(m_poly_nmonomers, 3.*nu);
     };
 
     void reset_force();
@@ -127,8 +128,7 @@ private:
     std::string m_poly_init = "init.dat";
 
     // Exp parm
-    double genome_nmonomers = 1E6;
-    double V_nucl = 2.8E6;
+    double nu = 0.22;
 
     std::vector<double> m_poly_x, m_poly_y, m_poly_z;
     std::vector<double> m_poly_fx, m_poly_fy, m_poly_fz;
