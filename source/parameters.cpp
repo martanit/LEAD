@@ -175,7 +175,7 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
     set_parameters << "Spring constant: " << m_spring << std::endl;
     set_parameters << "Epsilon LJ: " << m_epsilon << std::endl;
     set_parameters << "Equilibrius radius: " << m_rmin << std::endl;
-    set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl<<std::endl;
+    set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl;
     set_parameters << "Box length: " << m_box_length << std::endl;
     set_parameters << "Box hardness: " << m_kside << std::endl<<std::endl;
     if(le) {
@@ -194,10 +194,6 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
         set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
         set_parameters << "Coupling probability file: " << m_coupling_prob_in
                        << std::endl;
-        if(le_id) {
-            set_parameters << ": " << m_k_on << std::endl;
-            set_parameters << ": " << m_k_off << std::endl << std::endl;
-        }
     }
     if(fe) {
         set_parameters << "EXTRUDER PARAMETERS" << std::endl;

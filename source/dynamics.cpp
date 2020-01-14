@@ -131,7 +131,7 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
         m_interaction = Integrator::get_field();
 
         if (i % m_dynamics_print == 0) {
-            print_xyz(*m_poly, output);
+            print_sys(output);
             if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
             int num_extr = 0;
             for (auto &i : m_vector_extr) {
@@ -139,7 +139,7 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
                         output + std::to_string(num_extr) + ".le");
                 ++num_extr;
             }
-            print_field(m_interaction, "output/field.xyz");
+            print_field(m_interaction, output + ".field");
         }
     }
 }
