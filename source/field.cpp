@@ -3,7 +3,9 @@
 Field::Field(Parameters parm)
     :m_field_step(parm.get_field_step()),
      m_field_length(parm.get_field_length()),
+     m_delta_c(parm.get_delta_c()),
      m_Dextr_free(parm.get_Dextr_free()),
+     field_rho0_tot(parm.get_rho0_tot()),
      uniform01(0., 1.),
      uniform05(0, 5),
      m_extruder_c(m_field_length, std::vector<std::vector<double>>(m_field_length, std::vector<double>(m_field_length))) {
@@ -30,11 +32,11 @@ bool FieldAction::poly_in_cell(Cell a) {
     bool in_cell=false;
     for(int l=0; l<m_poly.get_poly_nmonomers(); ++l) {
         if((x(a.i) < m_poly.get_x(l) and
-                m_poly.get_x(l) < (x(a.i)+scale_length)) and
+                m_poly.get_x(l) < (x(a.i)+get_field_step())) and
                 (y(a.j) < m_poly.get_y(l) and
-                 m_poly.get_y(l) < (y(a.j)+scale_length)) and
+                 m_poly.get_y(l) < (y(a.j)+get_field_step())) and
                 (z(a.k) < m_poly.get_z(l) and
-                 m_poly.get_z(l) < (z(a.k)+scale_length))) {
+                 m_poly.get_z(l) < (z(a.k)+get_field_step()))) {
             in_cell = true;
             break;
         }
@@ -45,9 +47,9 @@ bool FieldAction::poly_in_cell(Cell a) {
 void FieldAction::interaction() {
     Cell a;
     m_contact_cell.clear();
-    for(int i = 0; i< box_length; ++i)
-        for(int j = 0; j< box_length; ++j)
-            for(int k = 0; k< box_length; ++k) {
+    for(int i = 0; i< get_field_length(); ++i)
+        for(int j = 0; j< get_field_length(); ++j)
+            for(int k = 0; k< get_field_length(); ++k) {
                 a = {i,j,k};
                 if(poly_in_cell(a))
                     m_contact_cell.push_back(a);
@@ -64,9 +66,9 @@ void FieldAction::interaction() {
 void FieldAction::subchain_in_cell(Cell a) {
     m_poly_subchain.clear();
     for(int l = 0; l<m_poly.get_poly_nmonomers(); ++l)
-        if((x(a.i) < m_poly.get_x(l) and m_poly.get_x(l) < x(a.i)+scale_length) and
-                (y(a.j) < m_poly.get_y(l) and m_poly.get_y(l) < y(a.j)+scale_length) and
-                (z(a.k) < m_poly.get_z(l) and m_poly.get_z(l) < z(a.k)+scale_length))
+        if((x(a.i) < m_poly.get_x(l) and m_poly.get_x(l) < x(a.i)+get_field_step()) and
+                (y(a.j) < m_poly.get_y(l) and m_poly.get_y(l) < y(a.j)+get_field_step()) and
+                (z(a.k) < m_poly.get_z(l) and m_poly.get_z(l) < z(a.k)+get_field_step()))
             m_poly_subchain.push_back(l);
 }
 
@@ -96,7 +98,7 @@ void print_field(FieldAction field, std::string out_field) {
     for(int i=0; i<field.get_field_length(); ++i)
         for(int j=0; j<field.get_field_length(); ++j)
             for(int k=0; k<field.get_field_length(); ++k)
-                if(field.get_c(i,j,k)>=46)
+                if(field.get_c(i,j,k)>=field.get_init_c())
                     output << "\tNan" << "\t\t\t"
                            << field.x(i) << "\t\t\t"
                            << field.y(j) << "\t\t\t"

@@ -39,13 +39,12 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
 void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, bool homogeneus_density, std::string output) {
     for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
         if(compute_energy) m_poly_old = *m_poly;
-
-        if (i % m_dynamics_print == 0) {
+      //  if (i % m_dynamics_print == 0) {
             if(homogeneus_density)
                 m_vector_extr.update(*m_poly);
             else
                 m_vector_extr.update_diff_density(*m_poly, i);
-        }
+     //   }
 
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
@@ -82,20 +81,20 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
             print_sys(output);
             if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
             int num_extr = 0;
-            for (auto &i : m_vector_extr) {
+           /* for (auto &i : m_vector_extr) {
                 print_r(*m_poly, *i,
                         output + std::to_string(num_extr) + ".le");
                 ++num_extr;
             }
+           */ 
         }
-
     }
 }
 
 void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, std::string output) {
     for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
         if(compute_energy) m_poly_old = *m_poly;
-        if (i % m_dynamics_print == 0)
+//        if (i % m_dynamics_print == 0)
             m_vector_extr.update_field(*m_poly, m_interaction);
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
@@ -134,11 +133,12 @@ void Dynamics::run_extrusion_field(bool rouse, bool soft_core, bool lennard_jone
             print_sys(output);
             if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
             int num_extr = 0;
-            for (auto &i : m_vector_extr) {
+           /* for (auto &i : m_vector_extr) {
                 print_r(*m_poly, *i,
                         output + std::to_string(num_extr) + ".le");
                 ++num_extr;
             }
+            */
             print_field(m_interaction, output + ".field");
         }
     }

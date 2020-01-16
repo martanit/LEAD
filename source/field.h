@@ -48,6 +48,7 @@ public:
         m_field_step = rhs.m_field_step;
         m_delta_c = rhs.m_delta_c;
         m_k_diff = rhs.m_k_diff;
+        field_rho0_tot = rhs.field_rho0_tot;
     }
 
     // place randomly first extruders configuration in filed
@@ -80,10 +81,16 @@ public:
 private:
 
     // extruder field parameters
+    // linear number of step
     double m_field_length = 10.;
     double m_field_step = 1.;
-    // initial extruders per cell
-    double m_init_c = 46.;
+    // the side of the field is
+    // m_field_length*m_field_step [a]
+
+    double field_rho0_tot=8.9E-2;
+    // initial extruders per cell, where 9E-2 
+    // is the experimental density of cohesin in nucleus
+    double m_init_c = field_rho0_tot*std::pow(m_field_length*m_field_step, 3);
     // extruders quantity that diffuse
     double m_delta_c = 1.;
     // extruder diffusion constant and rate
@@ -106,9 +113,7 @@ public:
     FieldAction() {};
 
     FieldAction(Parameters parm, Polymer poly) : Field(parm),
-        m_poly(poly),
-        scale_length(get_field_step()),
-        box_length(get_field_length())
+        m_poly(poly)
     {
         m_poly.set_cm();
         shift_x=m_poly.get_xcm();
@@ -145,17 +150,15 @@ public:
 
     // Conversion field to space coordinates
     double shift_x, shift_y, shift_z;
-    double scale_length;
-    double box_length;
 
     const double x(const int i) const {
-        return scale_length*i-get_field_length()/2.*scale_length+shift_x;
+        return get_field_step()*i-get_field_length()/2.*get_field_step()+shift_x;
     };
     const double y(const int i) const {
-        return scale_length*i-get_field_length()/2.*scale_length+shift_y;
+        return get_field_step()*i-get_field_length()/2.*get_field_step()+shift_y;
     };
     const double z(const int i) const {
-        return scale_length*i-get_field_length()/2.*scale_length+shift_z;
+        return get_field_step()*i-get_field_length()/2.*get_field_step()+shift_z;
     };
 
     friend void print_field(FieldAction, std::string);

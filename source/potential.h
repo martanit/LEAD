@@ -65,8 +65,9 @@ protected:
     double m_pot_kside = 10.;
 
     double k = m_poly.get_spring();
-    double k_extr = m_poly.get_spring() * 5.;
-    double extr_length = m_poly.get_poly_d()/2.;
+    // set extruder bond as polymer bonds
+    double k_extr = m_poly.get_spring();
+    double extr_length = m_poly.get_poly_d();
 
     bool attractive = true;
     std::vector<std::vector<int>> sphere;

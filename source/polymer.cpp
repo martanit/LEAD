@@ -10,6 +10,7 @@ Polymer::Polymer(Parameters parm)
     this->set_size();
     this->reset_force();
     this->poly_configuration();
+    this->set_cm();
 }
 
 Polymer::Polymer(Parameters parm, std::string poly_xyz)
@@ -18,6 +19,7 @@ Polymer::Polymer(Parameters parm, std::string poly_xyz)
       uniform01(0., 1.) {
     this->set_size();
     this->reset_force();
+    this->set_cm();
     read_xyz((*this), poly_xyz);
     // this->control_poly;
 }

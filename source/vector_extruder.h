@@ -30,16 +30,14 @@ public:
 
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
-          m_n_max_extr(parm.get_max_extr()),
-          m_box_length(parm.get_box_length()),
+          m_n_max_extr(parm.get_max_extr()), rho0_tot(parm.get_rho0_tot()),
           integrator_timestep(parm.get_timestep()), dist(0., 1.) {
         this->first_fill(poly);
     };
 
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly, FieldAction cohes_poly_int)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
-          m_n_max_extr(parm.get_max_extr()),
-          m_box_length(parm.get_box_length()),
+          m_n_max_extr(parm.get_max_extr()), rho0_tot(parm.get_rho0_tot()),
           integrator_timestep(parm.get_timestep()), dist(0., 1.) {
         this->first_fill_field(poly, cohes_poly_int);
     };
@@ -50,7 +48,7 @@ public:
         m_kon = vector_extr.m_kon;
         m_koff = vector_extr.m_koff;
         m_n_max_extr = vector_extr.m_n_max_extr;
-        m_box_length = vector_extr.m_box_length;
+        rho0_tot = vector_extr.rho0_tot;
         integrator_timestep = vector_extr.integrator_timestep;
     };
 
@@ -105,10 +103,9 @@ private:
     double m_koff = 1E-15;
 
     double integrator_timestep = 1E6;
-    double m_box_length = 10;
 
     // density of extruder in nucleus
-    const double rho0_tot = 8.9E-2;
+    double rho0_tot = 8.9E-2;
 
     double Nb_eq = 1E2;
 

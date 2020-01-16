@@ -119,6 +119,12 @@ public:
     const float &get_field_step() const {
         return m_field_step;
     };
+    const float &get_delta_c() const {
+        return m_delta_c;
+    };
+    const float &get_rho0_tot() const {
+        return m_rho0_tot;
+    };
 
 protected:
 
@@ -166,6 +172,9 @@ protected:
     float m_Dextr_free = 1E-9;
     float m_field_length = 10;
     float m_field_step = 10;
+    float m_delta_c = 1.;
+
+    float m_rho0_tot = 8.9E-2;
 
 };
 
