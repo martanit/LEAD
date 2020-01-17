@@ -17,7 +17,8 @@
 #include<chrono>
 #include<iostream>
 #include<cstring>
-
+    
+bool print_box(Polymer, Parameters, std::string);
 int main(int argc, char** argv) {
 
     bool compute_energy=false;
@@ -101,6 +102,7 @@ int main(int argc, char** argv) {
     if(!extrusion and !extruders_field) {
         Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
         Polymer poly_init(parm);
+        print_box(poly_init,parm, parm_output+".box");
         Dynamics dyn(poly_init, parm);
 
         dyn.run(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
@@ -108,6 +110,7 @@ int main(int argc, char** argv) {
     else if(!extruders_field) {
         Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
         Polymer poly_init(parm);
+        print_box(poly_init, parm, parm_output+".box");
         Extruder extr(parm);
         VectorExtruder v_extr(parm, extr, poly_init);
         Dynamics dyn(poly_init, v_extr, parm);
@@ -117,6 +120,7 @@ int main(int argc, char** argv) {
     else {
         Parameters parm(parm_input, parm_output+".out", extrusion, homogeneus_density, extruders_field);
         Polymer poly_init(parm);
+        print_box(poly_init, parm, parm_output+".box");
         Extruder extr(parm);
         FieldAction cp_interaction(parm, poly_init);
         VectorExtruder v_extr(parm, extr, poly_init, cp_interaction);
@@ -129,5 +133,22 @@ int main(int argc, char** argv) {
     auto end = std::chrono::high_resolution_clock::now();
     std::cerr << std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count()/1e6 << "ms\n";
 
+    return 0;
+}
+
+bool print_box(Polymer poly, Parameters parm, std::string string) {
+    
+    std::ofstream set_box;
+    set_box.open(string, std::ofstream::out);
+    // return error if read file fail
+    if (set_box.fail()) {
+        throw "ERROR: Impossible to write box to file "+ string;
+        return 1;
+    }
+
+    set_box << poly.get_xcm()-parm.get_box_length()/2. << " " << poly.get_xcm()+parm.get_box_length()/2. << std::endl;
+    set_box << poly.get_ycm()-parm.get_box_length()/2. << " " << poly.get_ycm()+parm.get_box_length()/2. << std::endl;
+    set_box << poly.get_zcm()-parm.get_box_length()/2. << " " << poly.get_zcm()+parm.get_box_length()/2. << std::endl;
+    
     return 0;
 }

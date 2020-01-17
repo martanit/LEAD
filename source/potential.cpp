@@ -130,15 +130,10 @@ void Potential::extruder_spring_f(bool compute_energy) {
 }
 
 void Potential::box(bool compute_energy) {
-    
-    std::cout << m_poly.get_xcm()-m_pot_box_length/2. << " " << m_poly.get_xcm()+m_pot_box_length/2. << std::endl;
-    std::cout << m_poly.get_ycm()-m_pot_box_length/2. << " " << m_poly.get_ycm()+m_pot_box_length/2. << std::endl;
-    std::cout << m_poly.get_zcm()-m_pot_box_length/2. << " " << m_poly.get_zcm()+m_pot_box_length/2. << std::endl;
-    
     for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
-        if(     m_poly.get_x(i) < m_poly.get_xcm()-m_pot_box_length/2. and
-                m_poly.get_y(i) < m_poly.get_ycm()-m_pot_box_length/2. and
-                m_poly.get_z(i) < m_poly.get_zcm()-m_pot_box_length/2. ) {
+        if(m_poly.get_x(i) < m_poly.get_xcm()-m_pot_box_length/2. and
+           m_poly.get_y(i) < m_poly.get_ycm()-m_pot_box_length/2. and
+           m_poly.get_z(i) < m_poly.get_zcm()-m_pot_box_length/2. ) {
             f_x = -m_pot_kside *(m_poly.get_x(i)-m_poly.get_xcm()+m_pot_box_length/2.);
             f_y = -m_pot_kside *(m_poly.get_y(i)-m_poly.get_ycm()+m_pot_box_length/2.);
             f_z = -m_pot_kside *(m_poly.get_z(i)-m_poly.get_zcm()+m_pot_box_length/2.);
