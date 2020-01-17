@@ -1,14 +1,14 @@
 #! /bin/bash
 
 input=$1
-option=$2
 
-if [ "$option" = "print_ctcf" ]
-then
-awk 'NR==2{init_mon=$2/3000} {if ($1 == "chrX") printf("%0.f\t%.d\n", ($2/3000 - init_mon), $4)}' $input 
-else
+
+awk 'NR==2{init_mon=$2/3000} {if ($1 == "chrX") printf("%0.f\t%.d\n", ($2/3000 - init_mon), $4)}' $input > ctcf_file.dat
+
 p=$(awk 'NR==2{init_mon=$2/3000} {if ($1 == "chrX") printf("%0.f\n", ($2/3000 - init_mon))}' $input )
 v=$(awk 'NR==2{init_mon=$2/3000} {if ($1 == "chrX") printf("%d \n", $4)}' $input )
+
+awk '{a[$1]+=$2}END{for(i in a) print i,a[i]}' ctcf_file.dat
 
 p=($p)
 v=($v)
@@ -33,4 +33,3 @@ do
         echo 0
     fi
 done
-fi
