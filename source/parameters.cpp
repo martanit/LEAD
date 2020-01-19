@@ -87,6 +87,8 @@ bool Parameters::read_parm(std::string file_name) {
                     set_parm(m_delta_c, std::stof(par));
                 else if (name == "rho0")
                     set_parm(m_rho0_tot, std::stof(par));
+                else if (name == "dt")
+                    set_parm(m_dt, std::stoi(par));
             }
         }
     }
@@ -189,8 +191,11 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
         set_parameters << "Extruder rate bw left: " << m_rate_bwl << std::endl;
         set_parameters << "Extruder rate bw right: " << m_rate_bwr << std::endl;
         set_parameters << "Ctcf permeability: " << m_perm_ctcf << std::endl;
-        set_parameters << "Extruder couplng probability: " << m_k_on << std::endl;
+        set_parameters << "Extruder couplng probability: " << m_k_on 
+                       << std::endl;
         set_parameters << "Extruder decoupling probability: " << m_k_off
+                       << std::endl;
+        set_parameters << "Flush explicit unbinded extruders after: " << m_dt
                        << std::endl;
         set_parameters << "Maximum number of extruder: " << m_n_max_extr
                        << std::endl << std::endl;

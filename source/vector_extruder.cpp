@@ -105,7 +105,7 @@ void VectorExtruder::update_diff_density(Polymer &poly, unsigned long int t) {
         // Move unloaded extruders from unbinding vector to background
         m_unloaded_extr.erase(std::remove_if(m_unloaded_extr.begin(), m_unloaded_extr.end(),
         [this,t](IdxTime x) {
-            return x.t < t-dt;
+            return x.t < t-m_dt;
         }), m_unloaded_extr.end());
 
         for (int i = 0; i < m_n_max_extr - tmp_extruder.size(); ++i) {

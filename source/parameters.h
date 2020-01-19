@@ -125,6 +125,9 @@ public:
     const float &get_rho0_tot() const {
         return m_rho0_tot;
     };
+    const int &get_dt() const {
+        return m_dt;
+    };
 
 protected:
 
@@ -167,6 +170,7 @@ protected:
     float m_k_on = 0.5;
     float m_k_off = 0.001;
     float m_n_max_extr = 10;
+    int m_dt=10000;
 
     // field of extruders parameters
     float m_Dextr_free = 1E-9;

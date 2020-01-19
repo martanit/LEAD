@@ -31,14 +31,16 @@ public:
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
           m_n_max_extr(parm.get_max_extr()), rho0_tot(parm.get_rho0_tot()),
-          integrator_timestep(parm.get_timestep()), dist(0., 1.) {
+          m_dt(parm.get_dt()), integrator_timestep(parm.get_timestep()),
+          dist(0., 1.) {
         this->first_fill(poly);
     };
 
     VectorExtruder(Parameters parm, Extruder &extr, Polymer &poly, FieldAction cohes_poly_int)
         : m_extr(extr), m_kon(parm.get_kon()), m_koff(parm.get_koff()),
           m_n_max_extr(parm.get_max_extr()), rho0_tot(parm.get_rho0_tot()),
-          integrator_timestep(parm.get_timestep()), dist(0., 1.) {
+          m_dt(parm.get_dt()), integrator_timestep(parm.get_timestep()), 
+          dist(0., 1.) {
         this->first_fill_field(poly, cohes_poly_int);
     };
 
@@ -49,6 +51,7 @@ public:
         m_koff = vector_extr.m_koff;
         m_n_max_extr = vector_extr.m_n_max_extr;
         rho0_tot = vector_extr.rho0_tot;
+        m_dt = vector_extr.m_dt;
         integrator_timestep = vector_extr.integrator_timestep;
     };
 
@@ -114,7 +117,7 @@ private:
     const double D = 2.57E-9;
     // move unloaded extruders from local to background
     // every dt step
-    int dt = 10000;
+    int m_dt = 10000;
 
     std::mt19937 mt{std::random_device{}()};
     std::uniform_real_distribution<double> dist;

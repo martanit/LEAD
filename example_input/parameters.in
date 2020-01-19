@@ -27,3 +27,4 @@ field_length=6
 field_step=3
 delta_c=0.5
 rho0=8.9E-2
+dt=10000
