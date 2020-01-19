@@ -72,6 +72,12 @@ void FieldAction::subchain_in_cell(Cell a) {
             m_poly_subchain.push_back(l);
 }
 
+Cell FieldAction::monomer_cell(double x, double y, double z) {
+int i = int((x-shift_x+get_field_length()/2.*get_field_step())/get_field_step());
+int j = int((y-shift_y+get_field_length()/2.*get_field_step())/get_field_step());
+int k = int((z-shift_z+get_field_length()/2.*get_field_step())/get_field_step());
+return {i,j,k};
+}
 
 int FieldAction::monomer_min(Cell a)  {
     this->subchain_in_cell(a);

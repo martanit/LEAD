@@ -134,6 +134,7 @@ public:
     bool poly_in_cell(Cell);
     void interaction();
     void subchain_in_cell(Cell);
+    Cell monomer_cell(double, double, double);
 
     int monomer_min(Cell);
     int monomer_max(Cell);

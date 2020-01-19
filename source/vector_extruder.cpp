@@ -42,8 +42,10 @@ void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int
                             break;
                         }
                 if (( m_kon*integrator_timestep/cohes_field_int.get_init_c()) >
-                        dist(mt) and !(is_overl))
+                        dist(mt) and !(is_overl)) {
                     tmp_extruder_cell.push_back(m_extr);
+                    cohes_field_int.sub_delta_c(a.i,a.j,a.k);
+                }
             }
             for(auto &e : tmp_extruder_cell)
                 tmp_extruder.push_back(e);
@@ -138,13 +140,18 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
         std::vector<Extruder> tmp_extruder;
         std::vector<Extruder> tmp_extruder_cell;
 
+        cohes_field_int.interaction();
+        
         for (const auto &i : m_vector_extr)
             // fill tmp_extruder only with extruder
             // that are not undbind
             if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
                 tmp_extruder.push_back(*i);
-
-        cohes_field_int.interaction();
+            else {
+                // Convention, we take the right monomer whose the extruder is bind as reference
+                Cell a = cohes_field_int.monomer_cell(poly.get_x((*i).get_r()), poly.get_y((*i).get_r()), poly.get_z((*i).get_r()));
+                cohes_field_int.add_delta_c(a.i,a.j,a.k);
+            }
         for(auto &a : cohes_field_int.get_contact_cell()) {
             if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a))) {
                 tmp_extruder_cell.clear();
@@ -157,8 +164,10 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
                                 break;
                             }
                     if (( m_kon*integrator_timestep/cohes_field_int.get_init_c()) >
-                            dist(mt) and !(is_overl))
+                            dist(mt) and !(is_overl)){
                         tmp_extruder_cell.push_back(m_extr);
+                        cohes_field_int.sub_delta_c(a.i,a.j,a.k);
+                    }
                 }
                 for(auto &e : tmp_extruder_cell)
                     tmp_extruder.push_back(e);
