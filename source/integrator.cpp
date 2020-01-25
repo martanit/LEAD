@@ -27,7 +27,7 @@ void Integrator::markov_chain() {
         if ((*i).get_r() != ((*m_poly).get_poly_nmonomers() - 1))
             if (((*i).get_rate_fwr() * m_integrator_timestep >
                     transition_prob(mt)) and
-                    ((*i).get_ctcf()[(*i).get_r()] <= 0 or
+                    ((*i).get_ctcf()[(*i).get_r()] >= 0 or
                     (*i).get_rate_fwr() * (*i).get_permeability() /
                     (*i).get_ctcf()[(*i).get_r()] * m_integrator_timestep > 
                     transition_prob(mt)) and
@@ -35,7 +35,7 @@ void Integrator::markov_chain() {
                 (*i).set_r((*i).get_r() + 1);
         // right side go backward to left
         if (((*i).get_rate_bwr() * m_integrator_timestep > transition_prob(mt)) and
-                ((*i).get_ctcf()[(*i).get_r()] >= 0 or
+                ((*i).get_ctcf()[(*i).get_r()] <= 0 or
                  (*i).get_rate_bwr() * (*i).get_permeability() /
                  (*i).get_ctcf()[(*i).get_r()] * m_integrator_timestep > 
                  transition_prob(mt)) and
@@ -46,7 +46,7 @@ void Integrator::markov_chain() {
         if ((*i).get_l() != 0)
             if (((*i).get_rate_fwl() * m_integrator_timestep >
                     transition_prob(mt)) and
-                    ((*i).get_ctcf()[(*i).get_l()] >= 0 or
+                    ((*i).get_ctcf()[(*i).get_l()] <= 0 or
                      (*i).get_rate_fwl() * (*i).get_permeability() /
                      (*i).get_ctcf()[(*i).get_l()] * m_integrator_timestep > 
                      transition_prob(mt)) and
@@ -54,7 +54,7 @@ void Integrator::markov_chain() {
                 (*i).set_l((*i).get_l() - 1);
         // left side go backward to right
         if (((*i).get_rate_bwl() * m_integrator_timestep > transition_prob(mt)) and
-                ((*i).get_ctcf()[(*i).get_l()] <= 0 or
+                ((*i).get_ctcf()[(*i).get_l()] >= 0 or
                  (*i).get_rate_bwl() * (*i).get_permeability() /
                  (*i).get_ctcf()[(*i).get_l()] * m_integrator_timestep > 
                  transition_prob(mt)) and

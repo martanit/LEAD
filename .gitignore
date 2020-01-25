@@ -8,6 +8,7 @@
 # object folder
 obj
 LEAD
+LEAD_new
 LEAD_tmp
 LEAD_parallel
 LEAD_field

@@ -12,7 +12,7 @@ void VectorExtruder::first_fill(Polymer &poly) {
                     break;
                 }
         }
-        if ((m_kon * integrator_timestep / m_n_max_extr) > dist(mt) and
+        if ((m_kon * integrator_timestep) > dist(mt) and
                 !(is_overl))
             tmp_extruder.push_back(m_extr);
     }
@@ -67,17 +67,18 @@ void VectorExtruder::update(Polymer &poly) {
         for (const auto &i : m_vector_extr)
             // fill tmp_extruder only with extruder
             // that are not undbind
-            if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
+            if (( m_koff * integrator_timestep) < dist(mt))
                 tmp_extruder.push_back(*i);
 
-        for (int i = 0; i < m_n_max_extr - tmp_extruder.size(); ++i) {
+        int tmp_size = tmp_extruder.size();
+        for (int i = 0; i < m_n_max_extr - tmp_size; ++i) {
             m_extr.place_extruder(poly);
             for (auto &j : tmp_extruder)
                 if ((j).extr_overlap(m_extr)) {
                     is_overl = true;
                     break;
                 }
-            if (( m_kon * integrator_timestep / (m_n_max_extr-tmp_extruder.size())) >
+            if (( m_kon * integrator_timestep) >
                     dist(mt) and
                     !(is_overl))
                 tmp_extruder.push_back(m_extr);
@@ -98,7 +99,7 @@ void VectorExtruder::update_diff_density(Polymer &poly, unsigned long int t) {
         for (const auto &i : m_vector_extr) {
             // fill tmp_extruder only with extruder
             // that are not undbind, save unbind extruders
-            if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
+            if (( m_koff * integrator_timestep) < dist(mt))
                 tmp_extruder.push_back(*i);
             else
                 m_unloaded_extr.push_back({*i, t});
@@ -110,7 +111,8 @@ void VectorExtruder::update_diff_density(Polymer &poly, unsigned long int t) {
             return x.t < t-m_dt;
         }), m_unloaded_extr.end());
 
-        for (int i = 0; i < m_n_max_extr - tmp_extruder.size(); ++i) {
+        int tmp_size = tmp_extruder.size();
+        for (int i = 0; i < m_n_max_extr - tmp_size; ++i) {
             m_extr.place_extruder(poly);
             r = m_extr.xyz_position(poly);
 
@@ -119,7 +121,7 @@ void VectorExtruder::update_diff_density(Polymer &poly, unsigned long int t) {
                     is_overl = true;
                     break;
                 }
-            if ((m_kon * this->density(r, t, poly)/rho0_tot * integrator_timestep / m_n_max_extr-tmp_extruder.size()) >
+            if ((m_kon * this->density(r, t, poly)/rho0_tot * integrator_timestep / m_n_max_extr-tmp_size) >
                     dist(mt) and
                     !(is_overl))
                 tmp_extruder.push_back(m_extr);
@@ -145,17 +147,18 @@ void VectorExtruder::update_field(Polymer &poly, FieldAction cohes_field_int) {
         for (const auto &i : m_vector_extr)
             // fill tmp_extruder only with extruder
             // that are not undbind
-            if ((m_vector_extr.size() * m_koff * integrator_timestep) < dist(mt))
+            if (( m_koff * integrator_timestep) < dist(mt))
                 tmp_extruder.push_back(*i);
             else {
                 // Convention, we take the right monomer whose the extruder is bind as reference
                 Cell a = cohes_field_int.monomer_cell(poly.get_x((*i).get_r()), poly.get_y((*i).get_r()), poly.get_z((*i).get_r()));
                 cohes_field_int.add_delta_c(a.i,a.j,a.k);
             }
+        
         for(auto &a : cohes_field_int.get_contact_cell()) {
             if(m_extr.can_place_extr(poly,cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a))) {
                 tmp_extruder_cell.clear();
-                for( int i = 0; i< cohes_field_int.get_c(a.i, a.j, a.k) - tmp_extruder_cell.size(); ++i) {
+                for( int i = 0; i< cohes_field_int.get_c(a.i, a.j, a.k); ++i) {
                     m_extr.place_extruder_cell(poly, cohes_field_int.monomer_min(a), cohes_field_int.monomer_max(a));
                     if(tmp_extruder_cell.size()!=0)
                         for (auto &j : tmp_extruder_cell)
