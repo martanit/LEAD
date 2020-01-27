@@ -1,12 +1,15 @@
 #! /bin/bash
 
 input=$1
-
+ctcf_file=$2
 init_mon=$((100378307/3000))
 max_mon=$((100702306/3000))
 
-awk -v x=$init_mon '{if ($1 == "chrX") printf("%0.f\t%.d\n", $2/3000-x, $4)}' $input > ctcf_file.dat
-
+if [$2="$ctcf_file"]
+then
+    awk -v x=$init_mon '{if ($1 == "chrX") printf("%0.f\t%.d\n", $2/3000-x, $4)}' $input > ctcf_file.dat
+else
+    
 p=$(awk '{print $1}' ctcf_file.dat)
 v=$(awk '{print $2}' ctcf_file.dat)
 
@@ -31,3 +34,4 @@ do
         echo 0
     fi
 done
+fi
