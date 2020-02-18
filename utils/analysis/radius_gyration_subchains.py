@@ -31,7 +31,7 @@ def read_xyz(file_name):
     
     with open(file_name) as traj:
         for line in nonblank_lines(traj):
-            if ( line.split()[0] == 'Au' ):
+            if ( line.split()[0] == 'Au' or line.split()[0] == 'Le'):
                 if(frame % save == 0): 
                     name, x_c, y_c, z_c = line.split();
                     x[m][int(frame/save)] = float(x_c)

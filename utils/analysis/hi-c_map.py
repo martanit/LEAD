@@ -59,5 +59,5 @@ for i in range(N):
         for f in range(int(nframe/save)):
             if (dist(x, y ,z ,i, j, f) < d_cutoff): 
                 count=count+1      
-        print(str(i)+ " " +str(j)+ " " +str(count))
+        print(str(i)+ " " +str(j)+ " " +str((count/nframe*save)))
     print()

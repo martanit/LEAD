@@ -37,20 +37,27 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
 }
 
 void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, bool compute_energy, bool homogeneus_density, std::string output) {
+    std::ofstream nextr_out;
+    nextr_out.open(output + ".le", std::fstream::app);
+
+    // return error if read file fail
+    if (nextr_out.fail()) {
+        throw "ERROR: Impossible to write number of extruder to " + output + ".le";
+    }
     for (unsigned long int i = 0; i < m_dynamics_nstep; ++i) {
         if(compute_energy) m_poly_old = *m_poly;
-      //  if (i % m_dynamics_print == 0) {
+        if (i % m_dynamics_print == 0) {
             if(homogeneus_density)
                 m_vector_extr.update(*m_poly);
             else
                 m_vector_extr.update_diff_density(*m_poly, i);
-     //   }
-
+        }
         (*m_poly).reset_force();
         if(compute_energy) (*m_poly).reset_energy();
 
         Potential::set_new_polymer(*m_poly);
-        Potential::set_new_extruder(m_vector_extr);
+        if (i % m_dynamics_print == 0)
+            Potential::set_new_extruder(m_vector_extr);
 
         this->box(compute_energy);
         this->extruder_spring_f(compute_energy);
@@ -66,27 +73,32 @@ void Dynamics::run_extrusion(bool rouse, bool soft_core, bool lennard_jones, boo
         }
 
         m_poly = std::make_unique<Polymer>(Potential::get_poly());
-        m_vector_extr = Potential::get_extr();
+        if (i % m_dynamics_print == 0)
+            m_vector_extr = Potential::get_extr();
 
         Integrator::set_new_polymer(*m_poly);
-        Integrator::set_new_extruder(m_vector_extr);
+        if (i % m_dynamics_print == 0)
+            Integrator::set_new_extruder(m_vector_extr);
 
-        this->markov_chain();
+        if (i % m_dynamics_print == 0)
+            this->markov_chain();
         this->langevin_overdamped();
 
         m_poly = std::make_unique<Polymer>(Integrator::get_poly());
-        m_vector_extr = Integrator::get_extr();
+        if (i % m_dynamics_print == 0)
+            m_vector_extr = Integrator::get_extr();
 
         if (i % m_dynamics_print == 0) {
             print_sys(output);
             if(compute_energy) std::cout << i*m_parm.get_timestep()/1E12 << " " << delta_h() << std::endl;
             int num_extr = 0;
-           /* for (auto &i : m_vector_extr) {
-                print_r(*m_poly, *i,
-                        output + std::to_string(num_extr) + ".le");
+            for (auto &i : m_vector_extr) {
+               // print_r(*i,
+               //         output + std::to_string(num_extr) + ".le");
+                
                 ++num_extr;
             }
-           */ 
+            nextr_out << i << " " << num_extr << std::endl;
         }
     }
 }

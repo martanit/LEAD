@@ -2,23 +2,21 @@
 
 void VectorExtruder::first_fill(Polymer &poly) {
     bool is_overl = false;
-    std::vector<Extruder> tmp_extruder;
-    for (int i = 0; i < m_n_max_extr; ++i) {
-        m_extr.place_extruder(poly);
-        if( tmp_extruder.size() != 0) {
-            for (auto &j : tmp_extruder)
-                if (j.extr_overlap(m_extr)) {
+    bool is_set;
+    is_set = m_extr.place_extruder(poly);
+    if(is_set){
+        if( m_vector_extr.size() != 0) {
+            for (auto &j : m_vector_extr)
+                if ((*j).extr_overlap(m_extr)) {
                     is_overl = true;
                     break;
                 }
         }
-        if ((m_kon * integrator_timestep) > dist(mt) and
-                !(is_overl))
-            tmp_extruder.push_back(m_extr);
+        //tmp 10000
+        if ((10000*poly.get_poly_nmonomers() * m_kon * 0.032 *
+             integrator_timestep) > dist(mt) and !(is_overl))
+            m_vector_extr.push_back(std::make_unique<Extruder>(m_extr));
     }
-    m_vector_extr.clear();
-    for (const auto &i : tmp_extruder)
-        m_vector_extr.push_back(std::make_unique<Extruder>(i));
 }
 
 void VectorExtruder::first_fill_field(Polymer &poly, FieldAction cohes_field_int) {
@@ -63,29 +61,30 @@ void VectorExtruder::update(Polymer &poly) {
 
     else {
         bool is_overl = false;
+        bool is_set;
         std::vector<Extruder> tmp_extruder;
-        for (const auto &i : m_vector_extr)
-            // fill tmp_extruder only with extruder
-            // that are not undbind
-            if (( m_koff * integrator_timestep) < dist(mt))
+        for (const auto &i : m_vector_extr) 
+            //tmp 10000
+            if(10000*m_koff * integrator_timestep < dist(mt))
                 tmp_extruder.push_back(*i);
-
-        int tmp_size = tmp_extruder.size();
-        for (int i = 0; i < m_n_max_extr - tmp_size; ++i) {
-            m_extr.place_extruder(poly);
-            for (auto &j : tmp_extruder)
-                if ((j).extr_overlap(m_extr)) {
-                    is_overl = true;
-                    break;
-                }
-            if (( m_kon * integrator_timestep) >
-                    dist(mt) and
-                    !(is_overl))
-                tmp_extruder.push_back(m_extr);
-        }
+        
         m_vector_extr.clear();
         for (const auto &i : tmp_extruder)
             m_vector_extr.push_back(std::make_unique<Extruder>(i));
+        
+        is_set=m_extr.place_extruder(poly);
+        
+        if(is_set){
+            for (auto &j : m_vector_extr)
+                if ((*j).extr_overlap(m_extr)) {
+                    is_overl = true;
+                    break;
+                }
+            //tmp 10000
+            if ((10000*poly.get_poly_nmonomers() * m_kon * 0.032 *
+                 integrator_timestep) > dist(mt) and !(is_overl))
+                m_vector_extr.push_back(std::make_unique<Extruder>(m_extr));
+        }
     }
 }
 

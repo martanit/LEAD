@@ -26,7 +26,7 @@ public:
     Extruder() {};
 
     Extruder(Parameters parm)
-        : m_parm(parm), m_rate_fwl(parm.get_rate_fwl()),
+        : m_rate_fwl(parm.get_rate_fwl()),
           m_rate_fwr(parm.get_rate_fwr()), m_rate_bwl(parm.get_rate_bwl()),
           m_rate_bwr(parm.get_rate_bwr()),
           m_coupling_prob(parm.get_coupling_prob()), m_ctcf(parm.get_ctcf()),
@@ -43,7 +43,7 @@ public:
     }
 
     // Extruders move functions
-    void place_extruder(Polymer poly);
+    bool place_extruder(Polymer poly);
     void place_extruder_cell(Polymer poly, int, int);
     bool can_place_extr(Polymer poly, int, int);
     bool extr_overlap(Extruder &extr);
@@ -87,7 +87,7 @@ public:
         m_extruder_l = l;
     }
 
-    friend bool print_r(Polymer &, Extruder &, std::string);
+    friend bool print_r(Extruder &, std::string);
 
 protected:
 
@@ -107,8 +107,6 @@ private:
     std::uniform_int_distribution<> try_extruder_pos;
     std::uniform_int_distribution<> try_extr_pos_cell;
     std::uniform_real_distribution<double> coupling_try;
-
-    Parameters m_parm;
 
     bool set = 0;
     int tmp_extr_pos;

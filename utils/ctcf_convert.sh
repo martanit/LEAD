@@ -1,20 +1,19 @@
 #! /bin/bash
 
 input=$1
-ctcf_file=$2
-init_mon=$((100378307/3000))
-max_mon=$((100702306/3000))
+print_file=$2
+output=$3
+init_mon=$((100377600/3200))
+max_mon=$((100704000/3200))
 
-if [$2="$ctcf_file"]
+
+if [ "$print_file" = "-p" ]
 then
-    awk -v x=$init_mon '{if ($1 == "chrX") printf("%0.f\t%.d\n", $2/3000-x, $4)}' $input > ctcf_file.dat
+    awk -v x=$init_mon '{if ($1 == "chrX") printf("%0.f\t%.d\n", $2/3200-x, $4)}' $input > $output
 else
     
-p=$(awk '{print $1}' ctcf_file.dat)
-v=$(awk '{print $2}' ctcf_file.dat)
-
-p=($p)
-v=($v)
+p=( $(awk '{print $1}' $output) )
+v=( $(awk '{print $2}' $output) )
 
 ctcf_num=${#p[@]}
 for i in $(seq 0 $(($max_mon-$init_mon))) 
