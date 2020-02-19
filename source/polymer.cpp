@@ -5,7 +5,8 @@ bool read_xyz(Polymer &, std::string);
 
 Polymer::Polymer(Parameters parm)
     : m_poly_nmonomers(parm.get_nmonomers()),
-      m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
+      m_poly_d(parm.get_diameter()),
+      m_poly_spring(parm.get_spring()),
       uniform01(0., 1.) {
     this->set_size();
     this->reset_force();
@@ -15,13 +16,13 @@ Polymer::Polymer(Parameters parm)
 
 Polymer::Polymer(Parameters parm, std::string poly_xyz)
     : m_poly_nmonomers(parm.get_nmonomers()),
-      m_poly_d(parm.get_diameter()), m_poly_spring(parm.get_spring()),
+      m_poly_d(parm.get_diameter()),
+      m_poly_spring(parm.get_spring()),
       uniform01(0., 1.) {
     this->set_size();
     this->reset_force();
     this->set_cm();
     read_xyz((*this), poly_xyz);
-    // this->control_poly;
 }
 
 Polymer::~Polymer() {}
@@ -43,7 +44,6 @@ void Polymer::first_monomer() {
 
 void Polymer::poly_configuration() {
     unsigned int stuck;
-    double d = m_poly_d;
     this->first_monomer();
     for (unsigned int i = 1; i < m_poly_nmonomers; i++) {
         stuck = 0;
@@ -54,9 +54,9 @@ void Polymer::poly_configuration() {
             // uniform distribution on sphere
             double p = acos(1 - 2 * uniform01(mt));
 
-            m_poly_x[i] = (m_poly_x[i - 1] + d * std::sin(p) * std::cos(t));
-            m_poly_y[i] = (m_poly_y[i - 1] + d * std::sin(p) * std::sin(t));
-            m_poly_z[i] = (m_poly_z[i - 1] + d * std::cos(p));
+            m_poly_x[i] = (m_poly_x[i - 1] + m_poly_d * std::sin(p) * std::cos(t));
+            m_poly_y[i] = (m_poly_y[i - 1] + m_poly_d * std::sin(p) * std::sin(t));
+            m_poly_z[i] = (m_poly_z[i - 1] + m_poly_d * std::cos(p));
             is_overlap = this->is_overlap(i);
             if(stuck > 10000) {
                 std::cout << "I'm not able to construct polymer (due to randomness). Please retry!" << std::endl;
@@ -80,12 +80,13 @@ bool Polymer::is_overlap(int lenght) {
 
 double Polymer::dist(const int &i, const int &j) {
 
-    d = std::sqrt(std::pow(m_poly_x[i] - m_poly_x[j], 2) +
+    dij = std::sqrt(std::pow(m_poly_x[i] - m_poly_x[j], 2) +
                   std::pow(m_poly_y[i] - m_poly_y[j], 2) +
                   std::pow(m_poly_z[i] - m_poly_z[j], 2));
-    return (d < 10E-9) ? 10E-9 : d;
+    return (dij < 10E-9) ? 10E-9 : dij;
 }
 
+/*
 void Polymer::center() {
     this->set_cm();
     std::for_each(m_poly_x.begin(), m_poly_x.end(), [this]
@@ -101,7 +102,7 @@ void Polymer::center() {
         z -= z_cm;
     });
 }
-
+*/
 void Polymer::set_cm() {
     sum_x = 0;
     sum_y = 0;

@@ -91,16 +91,16 @@ void Potential::soft_core_f(int step,
 
 void Potential::harmonic_spring_f(bool compute_energy) {
     for (int i = 0; i < m_poly.get_poly_nmonomers() - 1; ++i) {
-        spring_x = -k * (m_poly.dist(i, i + 1) - m_pot_rmin) *
+        spring_x = -m_pot_spring * (m_poly.dist(i, i + 1) - m_pot_rmin) *
                    (m_poly.get_x(i) - m_poly.get_x(i + 1)) / m_poly.dist(i, i + 1);
-        spring_y = -k * (m_poly.dist(i, i + 1) - m_pot_rmin) *
+        spring_y = -m_pot_spring * (m_poly.dist(i, i + 1) - m_pot_rmin) *
                    (m_poly.get_y(i) - m_poly.get_y(i + 1)) / m_poly.dist(i, i + 1);
-        spring_z = -k * (m_poly.dist(i, i + 1) - m_pot_rmin) *
+        spring_z = -m_pot_spring * (m_poly.dist(i, i + 1) - m_pot_rmin) *
                    (m_poly.get_z(i) - m_poly.get_z(i + 1)) / m_poly.dist(i, i + 1);
 
         m_poly.add_force(i, spring_x, spring_y, spring_z);
         m_poly.add_force(i + 1, -spring_x, -spring_y, -spring_z);
-        if(compute_energy) m_poly.add_energy(k*(m_poly.dist(i,i+1)-m_pot_rmin)*
+        if(compute_energy) m_poly.add_energy(m_pot_spring*(m_poly.dist(i,i+1)-m_pot_rmin)*
                                                  (m_poly.dist(i,i+1)-m_pot_rmin)/2.);
     }
 }
@@ -124,7 +124,7 @@ void Potential::extruder_spring_f(bool compute_energy) {
         m_poly.add_force((*i).get_l(), spring_x, spring_y, spring_z);
         m_poly.add_force((*i).get_r(), -spring_x, -spring_y, -spring_z);
 
-        if(compute_energy) m_poly.add_energy(k*(m_poly.dist((*i).get_l(),(*i).get_r())-extr_length)*
+        if(compute_energy) m_poly.add_energy(m_pot_spring*(m_poly.dist((*i).get_l(),(*i).get_r())-extr_length)*
                                                  (m_poly.dist((*i).get_l(),(*i).get_r())-extr_length)/2.);
     }
 }

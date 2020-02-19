@@ -22,7 +22,7 @@ public:
     Parameters(void) {};
 
     // constructor
-    Parameters(std::string, std::string, bool, bool, bool);
+    Parameters(std::string, std::string, bool);
 
     ~Parameters();
 
@@ -32,7 +32,7 @@ public:
     bool read_ctcf();
     bool print_ctcf(std::string);
     bool read_coupling_prob();
-    bool print_param(std::string, bool, bool, bool);
+    bool print_param(std::string, bool);
 
     // function that store different type parameters
     template <typename myType> void set_parm(myType &m_parm, myType parm) {
@@ -107,27 +107,6 @@ public:
     const float &get_koff() const {
         return m_k_off;
     }
-    const float &get_max_extr() const {
-        return m_n_max_extr;
-    }
-    const float &get_Dextr_free() const {
-        return m_Dextr_free;
-    };
-    const float &get_field_length() const {
-        return m_field_length;
-    };
-    const float &get_field_step() const {
-        return m_field_step;
-    };
-    const float &get_delta_c() const {
-        return m_delta_c;
-    };
-    const float &get_rho0_tot() const {
-        return m_rho0_tot;
-    };
-    const int &get_dt() const {
-        return m_dt;
-    };
 
 protected:
 
@@ -169,16 +148,6 @@ protected:
     // dynamics extruder parm
     float m_k_on = 0.5;
     float m_k_off = 0.001;
-    float m_n_max_extr = 10;
-    int m_dt=10000;
-
-    // field of extruders parameters
-    float m_Dextr_free = 1E-9;
-    float m_field_length = 10;
-    float m_field_step = 10;
-    float m_delta_c = 1.;
-
-    float m_rho0_tot = 8.9E-2;
 
 };
 

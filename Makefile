@@ -24,7 +24,7 @@ OBJPATH=./obj/
 CXX := $(GCC47_BINDIR)$(CXX)
 
 TARGET := LEAD
-OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o vector_extruder.o field.o)
+OBJS := $(patsubst %.o,$(OBJPATH)%.o, parameters.o polymer.o potential.o integrator.o dynamics.o extruder.o vector_extruder.o)
 
 DEBUG := -g
 WARNING := -Wall -Wextra

@@ -1,12 +1,12 @@
 #include "parameters.h"
 
-Parameters::Parameters(std::string parm_input, std::string parm_output, bool le, bool le_id, bool fe) {
+Parameters::Parameters(std::string parm_input, std::string parm_output, bool le) {
     this->read_parm(parm_input);
     if(le) {
         this->read_ctcf();
         this->read_coupling_prob();
     }
-    this->print_param(parm_output, le, le_id, fe);
+    this->print_param(parm_output, le);
 }
 
 Parameters::~Parameters() {}
@@ -75,20 +75,6 @@ bool Parameters::read_parm(std::string file_name) {
                     set_parm(m_k_on, std::stof(par));
                 else if (name == "k_off")
                     set_parm(m_k_off, std::stof(par));
-                else if (name == "n_max_extr")
-                    set_parm(m_n_max_extr, std::stof(par));
-                else if (name == "Dextr")
-                    set_parm(m_Dextr_free, std::stof(par));
-                else if (name == "field_length")
-                    set_parm(m_field_length, std::stof(par));
-                else if (name == "field_step")
-                    set_parm(m_field_step, std::stof(par));
-                else if (name == "delta_c")
-                    set_parm(m_delta_c, std::stof(par));
-                else if (name == "rho0")
-                    set_parm(m_rho0_tot, std::stof(par));
-                else if (name == "dt")
-                    set_parm(m_dt, std::stoi(par));
             }
         }
     }
@@ -160,7 +146,7 @@ bool Parameters::read_coupling_prob() {
     return 0;
 }
 
-bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool fe) {
+bool Parameters::print_param(std::string parm_output, bool le) {
 
     std::ofstream set_parameters;
     set_parameters.open(parm_output, std::ofstream::out);
@@ -195,36 +181,10 @@ bool Parameters::print_param(std::string parm_output, bool le, bool le_id, bool 
                        << std::endl;
         set_parameters << "Extruder decoupling probability: " << m_k_off
                        << std::endl;
-        set_parameters << "Flush explicit unbinded extruders after: " << m_dt
-                       << std::endl;
-        set_parameters << "Maximum number of extruder: " << m_n_max_extr
-                       << std::endl << std::endl;
         set_parameters << "I/O FILE" << std::endl;
         set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
         set_parameters << "Coupling probability file: " << m_coupling_prob_in
                        << std::endl;
-    }
-    if(fe) {
-        set_parameters << "EXTRUDER PARAMETERS" << std::endl;
-        set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
-        set_parameters << "Extruder rate fw right: " << m_rate_fwr << std::endl;
-        set_parameters << "Extruder rate bw left: " << m_rate_bwl << std::endl;
-        set_parameters << "Extruder rate bw right: " << m_rate_bwr << std::endl;
-        set_parameters << "Ctcf permeability: " << m_perm_ctcf << std::endl;
-        set_parameters << "Extruder couplng probability: " << m_k_on << std::endl;
-        set_parameters << "Extruder decoupling probability: " << m_k_off
-                       << std::endl;
-        set_parameters << "Maximum number of extruder: " << m_n_max_extr
-                       << std::endl << std::endl;
-        set_parameters << "FIELD PARAMETERS" << std::endl;
-        set_parameters << "Unloaded cohesin diffusion: " << m_Dextr_free << std::endl;
-        set_parameters << "Field length: " << m_field_length << std::endl;
-        set_parameters << "Field step: " << m_field_step << std::endl;
-        set_parameters << "Cohesin that diffuse: " << m_delta_c << std::endl << std::endl;
-        set_parameters << "I/O FILE" << std::endl;
-        set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
-        set_parameters << "Coupling probability file: " << m_coupling_prob_in
-                       << std::endl << std::endl;
     }
 
     set_parameters.close();

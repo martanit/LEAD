@@ -9,7 +9,6 @@
 #define POLYMER_H_
 
 #include "parameters.h"
-//#include "vector_extruder.h"
 
 #include <cmath>
 #include <fstream>
@@ -78,7 +77,7 @@ public:
         m_poly_z[i] = z;
     };
 
-    void center();
+    // function to set and get center of mass
     void set_cm();
 
     const double &get_xcm() const {
@@ -91,10 +90,11 @@ public:
         return z_cm;
     };
 
-    double get_Veq() {
-        return std::pow(m_poly_nmonomers, 3.*nu);
-    };
+    //function to center the polymer
+    //void center();
 
+    // functions to manage forces and energies
+    // given a conformation
     void reset_force();
     void add_force(const int &, const double &, const double &, const double &);
 
@@ -112,29 +112,31 @@ public:
         return m_poly_spring;
     };
 
+    // auxiliary IO functions
     friend bool print_xyz(Polymer &, std::string);
     friend bool read_xyz(Polymer &, std::string);
-
-private:
-
-    double d = 0.;
+    
+    // auxiliary variables
+    double dij = 0.;
     double sum_x, sum_y, sum_z;
     double x_cm, y_cm, z_cm;
+
+private:
 
     // polymer parameters
     int m_poly_nmonomers = 100;   // number of interacting monomers
     float m_poly_d = 0.89;    // diameter of monomers [50*nm]
     float m_poly_spring = 100.; // spring constant of harmonic oscillator (spring)
-    std::string m_poly_init = "init.dat";
+    std::string m_poly_init = "init.dat"; // starting configurations
 
-    // Exp parm
-    double nu = 0.22;
-
+    // positions and forces coordinates
     std::vector<double> m_poly_x, m_poly_y, m_poly_z;
     std::vector<double> m_poly_fx, m_poly_fy, m_poly_fz;
 
+    // energy 
     double m_poly_e = 0.;
 
+    // random stuff
     std::mt19937 mt{std::random_device{}()};
     std::uniform_real_distribution<double> uniform01;
 };
