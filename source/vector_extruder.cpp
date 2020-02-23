@@ -9,8 +9,9 @@ void VectorExtruder::first_fill(Polymer &poly) {
                     is_overl = true;
                     break;
                 }
+        // tmp 10000
         if (poly.get_poly_nmonomers() * m_kon * 0.032 
-			* integrator_timestep  > dist(mt) and !(is_overl))
+			* integrator_timestep * 10000  > dist(mt) and !(is_overl))
             m_vector_extr.push_back(std::make_unique<Extruder>(m_extr));
     }
 }
@@ -21,7 +22,8 @@ void VectorExtruder::update(Polymer &poly) {
         bool is_overl = false;
         std::vector<Extruder> tmp_extruder;
         for (const auto &i : m_vector_extr)
-            if (( m_koff * integrator_timestep) < dist(mt))
+            // tmp 10000
+            if (( m_koff * integrator_timestep * 10000 ) < dist(mt))
                 tmp_extruder.push_back(*i);
 	
 	m_vector_extr.clear();
@@ -35,8 +37,9 @@ void VectorExtruder::update(Polymer &poly) {
                         is_overl = true;
                         break;
                     }
+        // tmp 10000
 	    if (poly.get_poly_nmonomers() * m_kon * 0.032
-			    * integrator_timestep  > dist(mt) and !(is_overl))
+			    * integrator_timestep * 10000 > dist(mt) and !(is_overl))
             	m_vector_extr.push_back(std::make_unique<Extruder>(m_extr));
     	}
     }
