@@ -1,3 +1,4 @@
+set fit logfile '/dev/null'
 a=1.
 b=1.
 f(x)=a+b*x

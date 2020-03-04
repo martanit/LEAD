@@ -9,11 +9,6 @@ def nonblank_lines(f):
 		line = l.rstrip()
 		if line:
 	 		yield line
-def split(array, nrows, ncols):
-    r, h = array.shape
-    return (array.reshape(h//nrows, nrows, -1, ncols)
-            .swapaxes(1, 2)
-            .reshape(-1, nrows, ncols))
 
 # MAIN
 ps_tot = []
@@ -34,5 +29,5 @@ for j in range(0, lg):
 
 out=open(out, 'w')
 for t in range(0, lg):
-    out.write(str(t*3200)+'\t'+str(ps_mean[t])+'\n')
+    out.write(str(t)+'\t'+str(ps_mean[t])+'\n')
 out.close()
