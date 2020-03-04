@@ -26,7 +26,8 @@ public:
           m_pot_rcut(parm.get_rcut()),
 	  m_pot_spring(poly.get_spring()),
           m_pot_box_length(parm.get_box_length()),
-	  m_pot_kside(parm.get_kside()) {};
+	  m_pot_kside(parm.get_kside()),
+	  m_pot_eff_pot(parm.get_eff_pot()) {};
 
     Potential(Polymer &poly, VectorExtruder &vector_extr, Parameters parm)
         : m_poly(poly),
@@ -59,6 +60,7 @@ public:
 
     // potentials
     void lennard_jones_f(int, bool);
+    void well(bool);
     void soft_core_f(int, bool);
     void harmonic_spring_f(bool);
     void extruder_spring_f(bool);
@@ -90,6 +92,9 @@ private:
     
     // potential interaction sphere
     std::vector<std::vector<int>> sphere;
+
+    // effective potential from theory
+    std::vector<double> m_pot_eff_pot;
 
     double dr = 0.;
     double x = 0., y = 0., z = 0.;

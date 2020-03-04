@@ -46,6 +46,38 @@ void Potential::lennard_jones_f(int step,
     }
 }
 
+void Potential::well(bool compute_energy) {
+    for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {
+        for (unsigned int j = i + 2; j < m_poly.get_poly_nmonomers(); ++j) {
+		int n = ((m_poly.get_poly_nmonomers()-1)*
+			 (m_poly.get_poly_nmonomers()-2)/2.)-
+			((m_poly.get_poly_nmonomers()-1-i)*
+			 (m_poly.get_poly_nmonomers()-2-i)/2.)+j-i-2;
+
+            	x = (m_poly.get_x(i) - m_poly.get_x(j));
+            	y = (m_poly.get_y(i) - m_poly.get_y(j));
+            	z = (m_poly.get_z(i) - m_poly.get_z(j));
+
+            	dr = x * x + y * y + z * z;
+
+		f_x = x * m_pot_eff_pot[n] * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
+                f_y = y * m_pot_eff_pot[n] * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
+                f_z = z * m_pot_eff_pot[n] * 12.0 * m_pot_rmin_12 / std::pow(dr, 7);
+
+                f_x -= x * m_pot_eff_pot[n] * 12.0 * m_pot_rmin_6 / std::pow(dr, 4);
+                f_y -= y * m_pot_eff_pot[n] * 12.0 * m_pot_rmin_6 / std::pow(dr, 4);
+                f_z -= z * m_pot_eff_pot[n] * 12.0 * m_pot_rmin_6 / std::pow(dr, 4);
+
+		m_poly.add_force(i, f_x, f_y, f_z);
+		m_poly.add_force(j, -f_x, -f_y, -f_z);
+
+                if (compute_energy)
+                    m_poly.add_energy(-2. * m_pot_eff_pot[n] * m_pot_rmin_6 /
+                                      std::pow(dr, 3) + m_pot_eff_pot[n] * m_pot_rmin_12 / std::pow(dr, 6));
+	}
+    }
+}
+
 void Potential::soft_core_f(int step,
                             bool compute_energy) {
     if (step % 10000 == 0 or step == 0) {
@@ -128,6 +160,7 @@ void Potential::extruder_spring_f(bool compute_energy) {
                                                  (m_poly.dist((*i).get_l(),(*i).get_r())-extr_length)/2.);
     }
 }
+
 
 void Potential::box(bool compute_energy) {
     for (unsigned int i = 0; i < m_poly.get_poly_nmonomers(); ++i) {

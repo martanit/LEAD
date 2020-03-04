@@ -21,6 +21,7 @@ void Dynamics::run(bool rouse, bool soft_core, bool lennard_jones, bool compute_
         else if(lennard_jones) {
             this->harmonic_spring_f(compute_energy);
             this->lennard_jones_f(i, compute_energy);
+	    this->well(compute_energy);
         }
 
         Integrator::m_poly = Potential::m_poly;

@@ -29,6 +29,7 @@ public:
     // function that read parameters, ctcf and
     // coupling probability (for extruder) from file
     bool read_parm(std::string);
+    bool read_effective_potential();
     bool read_ctcf();
     bool print_ctcf(std::string);
     bool read_coupling_prob();
@@ -83,6 +84,9 @@ public:
     float get_permeability() {
         return m_perm_ctcf;
     }
+    const std::vector<double> &get_eff_pot() const {
+        return m_eff_pot;
+    };
     const std::vector<int> &get_ctcf() const {
         return m_ctcf;
     };
@@ -128,6 +132,7 @@ protected:
 
     // file parameters
     std::string m_init = "input/initial_chain.xyz"; // first configuration
+    std::string m_eff_in = "input/eff_potential.in";
     std::string m_ctcf_in = "input/ctcf.in";	// ctcf position file
     std::string m_coupling_prob_in = "input/coupling_probabilty.in"; // prob file
 
@@ -135,6 +140,8 @@ protected:
     float m_epsilon = 1.; // parameter for LJ potential
     float m_rmin = 1.;    // parameter for LJ potential
     float m_rcut = 2.5;    // parameter for LJ potential action
+
+    std::vector<double> m_eff_pot;
 
     // extruder parameters
     float m_perm_ctcf = 0.1;

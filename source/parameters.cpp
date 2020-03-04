@@ -6,6 +6,8 @@ Parameters::Parameters(std::string parm_input, std::string parm_output, bool le)
         this->read_ctcf();
         this->read_coupling_prob();
     }
+    else
+    	this->read_effective_potential();
     this->print_param(parm_output, le);
 }
 
@@ -51,6 +53,8 @@ bool Parameters::read_parm(std::string file_name) {
                     set_parm(m_spring, std::stof(par));
                 else if (name == "init")
                     set_parm(m_init, par);
+                else if (name == "eff_potential")
+                    set_parm(m_eff_in, par);
                 else if (name == "ctcf")
                     set_parm(m_ctcf_in, par);
                 else if (name == "probability")
@@ -79,6 +83,37 @@ bool Parameters::read_parm(std::string file_name) {
         }
     }
     parm_file.close();
+    return 0;
+}
+
+bool Parameters::read_effective_potential() {
+    double k,l,x;
+
+    // read file
+    std::ifstream eff_file;
+    eff_file.open(m_eff_in, std::fstream::in);
+
+    // return error if read file fail
+    if (eff_file.fail()) {
+        throw "ERROR: Impossible to open parameters file " + m_eff_in;
+        return 1;
+    }
+    
+    std::string line;
+    m_eff_pot.resize(5152);
+	    int i=0;
+    while (std::getline(eff_file, line)) {
+        std::istringstream iss(line);
+        iss >> k >> l >> x;
+        m_eff_pot[++i]=x;
+    }
+/*
+    for(int i=0; i<101; ++i)
+	    for(int j=i+2; j<103; ++j)
+		    std::cout << i << " " << j << " " << m_eff_pot[(102*(102-1)/2.)-((102-i)*(102-i-1)/2.)+j-i-2] << std::endl;
+  
+		    */
+    eff_file.close();
     return 0;
 }
 
