@@ -31,7 +31,8 @@ void Integrator::markov_chain() {
                     std::abs((*i).get_ctcf()[(*i).get_r() + 1]) * 
                     m_integrator_timestep *10000 > 
                     transition_prob(mt)) and
-                    !(m_vector_extr.overlap_rl(*i)))
+                    !(m_vector_extr.overlap_rl(*i)) and
+		    !(m_vector_extr.overlap_rr(*i)))
                 (*i).set_r((*i).get_r() + 1);
         // right side go backward to left
         if (((*i).get_rate_bwr() * m_integrator_timestep * 10000 > 
@@ -53,7 +54,8 @@ void Integrator::markov_chain() {
                      std::abs((*i).get_ctcf()[(*i).get_l() - 1]) * 
                      m_integrator_timestep * 10000 > 
                      transition_prob(mt)) and
-                    !(m_vector_extr.overlap_lr(*i)))
+                    !(m_vector_extr.overlap_lr(*i)) and
+		    !(m_vector_extr.overlap_ll(*i)))
                 (*i).set_l((*i).get_l() - 1);
         // left side go backward to right
         if (((*i).get_rate_bwl() * m_integrator_timestep * 10000 > 
