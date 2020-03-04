@@ -52,7 +52,7 @@ bool VectorExtruder::overlap_lr(Extruder &extr) {
         if (extr == (*i))
             is_overl = false;
 
-        else if (extr.get_l() == (*i).get_r()) {
+        else if (extr.get_l()-1 == (*i).get_r()) {
             is_overl = true;
             break;
         }
@@ -67,7 +67,7 @@ bool VectorExtruder::overlap_ll(Extruder &extr) {
         if (extr == (*i))
             is_overl = false;
 
-        else if (extr.get_l() == (*i).get_l()) {
+        else if (extr.get_l()-1 == (*i).get_l()) {
             is_overl = true;
             break;
         }
@@ -81,7 +81,7 @@ bool VectorExtruder::overlap_rl(Extruder &extr) {
         if (extr == (*i))
             is_overl = false;
 
-        else if (extr.get_r() == (*i).get_l()) {
+        else if (extr.get_r()+1 == (*i).get_l()) {
             is_overl = true;
             break;
         }
@@ -96,7 +96,7 @@ bool VectorExtruder::overlap_rr(Extruder &extr) {
         if (extr == (*i))
             is_overl = false;
 
-        else if (extr.get_r() == (*i).get_r()) {
+        else if (extr.get_r()+1 == (*i).get_r()) {
             is_overl = true;
             break;
         }
