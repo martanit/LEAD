@@ -21,7 +21,8 @@ bool print_box(Polymer, Parameters, std::string);
 int main(int argc, char** argv) {
 
     bool compute_energy=false;
-    bool extrusion=false;
+    bool expl_extrusion=false;
+    bool eff_extrusion=false;
     bool rouse=false;
     bool soft_core=false;
     bool lennard_jones=false;
@@ -58,9 +59,13 @@ int main(int argc, char** argv) {
             compute_energy=true;
             std::cerr <<"Computing energy..." << std::endl;
         }
-        else if(std::string(argv[idx])== "--le") {
-            extrusion=true;
-            std::cerr << "Loop extrusion activated" << std::endl;
+        else if(std::string(argv[idx])== "--le-expl") {
+            expl_extrusion=true;
+            std::cerr << "Loop extrusion with explicit cohesin activated" << std::endl;
+        }
+        else if(std::string(argv[idx])== "--le-eff") {
+            eff_extrusion=true;
+            std::cerr << "Loop extrusion with effective potential activated" << std::endl;
         }
         else if(std::string(argv[idx])== "--rouse") {
             rouse=true;
@@ -75,7 +80,7 @@ int main(int argc, char** argv) {
             std::cerr << "Using Rouse polymer with Lennard Jones interaction" << std::endl;
         }
         else {
-            std::cerr << "Unknown flag, options are: --energy, --le, --rouse, --soft-core, --lennard-jones" << std::endl;
+            std::cerr << "Unknown flag, options are: --energy, --le-expl, le-eff, --rouse, --soft-core, --lennard-jones" << std::endl;
             return 1;
         }
     }
@@ -83,26 +88,43 @@ int main(int argc, char** argv) {
         std::cerr << "ERROR: you have to use only one potential" << std::endl;
         return 1;
     }
+    if(expl_extrusion==true and eff_extrusion==true) {
+        std::cerr << "ERROR: you have to choose the explicit OR the effective model" << std::endl;
+        return 1;
+    }
 
     auto begin = std::chrono::high_resolution_clock::now();
 
-    if(!extrusion) {
-        Parameters parm(parm_input, parm_output+".out", extrusion);
+    try{    
+    if(!eff_extrusion and !expl_extrusion) {
+        Parameters parm(parm_input, parm_output+".out", "no_extr");
         Polymer poly_init(parm);
         print_box(poly_init,parm, parm_output+".box");
         Dynamics dyn(poly_init, parm);
 
         dyn.run(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
     }
-    else{
-        Parameters parm(parm_input, parm_output+".out", extrusion);
+    else if(eff_extrusion) {
+        Parameters parm(parm_input, parm_output+".out", "eff_extrusion");
+        Polymer poly_init(parm);
+        print_box(poly_init,parm, parm_output+".box");
+        Dynamics dyn(poly_init, parm);
+
+        dyn.run_effective(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
+    }
+    else if(expl_extrusion){
+        Parameters parm(parm_input, parm_output+".out", "expl_extrusion");
         Polymer poly_init(parm);
         print_box(poly_init, parm, parm_output+".box");
         Extruder extr(parm);
         VectorExtruder v_extr(parm, extr, poly_init);
         Dynamics dyn(poly_init, v_extr, parm);
 
-        dyn.run_extrusion(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
+        dyn.run_explicit(rouse, soft_core, lennard_jones, compute_energy, traj_output+".xyz");
+    }
+    }
+    catch(std::string s){
+ 	 std::cerr <<  s << '\n';	
     }
 
     auto end = std::chrono::high_resolution_clock::now();

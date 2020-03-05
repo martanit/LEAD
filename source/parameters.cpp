@@ -1,13 +1,14 @@
 #include "parameters.h"
 
-Parameters::Parameters(std::string parm_input, std::string parm_output, bool le) {
+Parameters::Parameters(std::string parm_input, std::string parm_output, std::string le) {
     this->read_parm(parm_input);
-    if(le) {
+    if(le == "eff_extrusion") {
+    	this->read_effective_potential();
+    }
+    else if(le == "expl_extrusion"){
         this->read_ctcf();
         this->read_coupling_prob();
     }
-    else
-    	this->read_effective_potential();
     this->print_param(parm_output, le);
 }
 
@@ -107,12 +108,6 @@ bool Parameters::read_effective_potential() {
         iss >> k >> l >> x;
         m_eff_pot[++i]=x;
     }
-/*
-    for(int i=0; i<101; ++i)
-	    for(int j=i+2; j<103; ++j)
-		    std::cout << i << " " << j << " " << m_eff_pot[(102*(102-1)/2.)-((102-i)*(102-i-1)/2.)+j-i-2] << std::endl;
-  
-		    */
     eff_file.close();
     return 0;
 }
@@ -181,7 +176,7 @@ bool Parameters::read_coupling_prob() {
     return 0;
 }
 
-bool Parameters::print_param(std::string parm_output, bool le) {
+bool Parameters::print_param(std::string parm_output, std::string le) {
 
     std::ofstream set_parameters;
     set_parameters.open(parm_output, std::ofstream::out);
@@ -205,7 +200,7 @@ bool Parameters::print_param(std::string parm_output, bool le) {
     set_parameters << "Cutoff radius LJ: " << m_rcut << std::endl;
     set_parameters << "Box length: " << m_box_length << std::endl;
     set_parameters << "Box hardness: " << m_kside << std::endl<<std::endl;
-    if(le) {
+    if(le == "eff_extrusion" or le == "expl_extrusion") {
         set_parameters << "EXTRUDER PARAMETERS" << std::endl;
         set_parameters << "Extruder rate fw left: " << m_rate_fwl << std::endl;
         set_parameters << "Extruder rate fw right: " << m_rate_fwr << std::endl;
@@ -217,6 +212,7 @@ bool Parameters::print_param(std::string parm_output, bool le) {
         set_parameters << "Extruder decoupling probability: " << m_k_off
                        << std::endl;
         set_parameters << "I/O FILE" << std::endl;
+        set_parameters << "Effective potential file: " << m_eff_in << std::endl;
         set_parameters << "Ctcf file: " << m_ctcf_in << std::endl;
         set_parameters << "Coupling probability file: " << m_coupling_prob_in
                        << std::endl;

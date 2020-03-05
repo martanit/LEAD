@@ -40,7 +40,8 @@ public:
 
     // run functions
     void run(bool, bool, bool, bool, std::string);
-    void run_extrusion(bool, bool, bool, bool, std::string);
+    void run_effective(bool, bool, bool, bool, std::string);
+    void run_explicit(bool, bool, bool, bool, std::string);
     
     // equivalent energy functions
     double delta_h();

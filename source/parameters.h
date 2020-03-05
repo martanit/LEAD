@@ -22,7 +22,7 @@ public:
     Parameters(void) {};
 
     // constructor
-    Parameters(std::string, std::string, bool);
+    Parameters(std::string, std::string, std::string);
 
     ~Parameters();
 
@@ -33,7 +33,7 @@ public:
     bool read_ctcf();
     bool print_ctcf(std::string);
     bool read_coupling_prob();
-    bool print_param(std::string, bool);
+    bool print_param(std::string, std::string);
 
     // function that store different type parameters
     template <typename myType> void set_parm(myType &m_parm, myType parm) {
