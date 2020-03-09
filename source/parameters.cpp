@@ -101,7 +101,7 @@ bool Parameters::read_effective_potential() {
     }
     
     std::string line;
-    m_eff_pot.resize(5152);
+    m_eff_pot.resize(double(m_nmonomers-1.)*double(m_nmonomers-2.)/2.);
 	    int i=0;
     while (std::getline(eff_file, line)) {
         std::istringstream iss(line);
