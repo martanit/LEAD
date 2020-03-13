@@ -50,7 +50,7 @@ void Integrator::markov_chain() {
             if ((((*i).get_ctcf()[(*i).get_l() - 1] <= 0 and
                   (*i).get_rate_fwl() * m_integrator_timestep * 10000 >
                     transition_prob(mt)) or
-                 ((*i).get_ctcf()[(*i).get_l() - 1] > 0 or
+                 ((*i).get_ctcf()[(*i).get_l() - 1] > 0 and
                   (*i).get_rate_fwl() * (*i).get_permeability() /
                      std::abs((*i).get_ctcf()[(*i).get_l() - 1]) * 
                      m_integrator_timestep * 10000 > transition_prob(mt))) and
