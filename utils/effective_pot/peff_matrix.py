@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import subprocess
 from scipy.special import binom
+from scipy.special import hyp2f1
 
 ctcf_file = sys.argv[1]
 
@@ -11,31 +12,341 @@ N=int(subprocess.check_output(command, shell=True))
 with open(ctcf_file) as f:
     ctcf = [line.rstrip() for line in f]
 
-Ueff = np.zeros((N,N))
 P_eff = np.zeros((N,N))
-for i in range(0,N-2):
-    for j in range(i+2,N):
-        sum_t=0
-        for t in range(0, abs(i-j)-1+1):
-            pk=1
-            pl=1
-            for k in range(0,t-1+2):
-                if(int(ctcf[i+k])>0):
-                    pk=0
-                    break
-                else:
-                    pk=1
-            for l in range(t, abs(i-j)+1):
-                if(int(ctcf[i+l])<0):
-                    pl=0
-                    break
-                else:
-                    pl=1
-            sum_t += binom(abs(i-j)-1, t)*pk*pl
 
-        P_eff[i][j] = (2.*2.28e-15/2e-13)*(2e-13/(2.*(2e-13+1.28e-15)))**(abs(i-j))*sum_t
+kon=2.28e-15
+koff=1.28e-15
+kfw=2e-13
+p0=kon/(koff+kfw)
+for i in range(0,N-1):
+    for j in range(i+1,N):
+        cr=0
+        cl=0
+        kcr = []
+        kcl = []
+        for t in range(i, j+1):
+            if(int(ctcf[t])>0):
+                cr=cr+1
+                kcr.append(t);
+            if(int(ctcf[t])<0):
+                cl=cl+1
+                kcl.append(t);
+       
+        #legend: >:ic   <:jc    i<:i=jc    >j:j=ic
+       
+        #i!=ic and j!=jc
+        ################
 
-for i in range(0,N-2):
+        #no ctcf between i and j
+        #(a) i-------j
+        if(cr==0 and cl==0): 
+            P_eff[i,j]=(kfw/(koff+kfw))**(j-i-1)*p0
+        #(b) i------>j
+        if(cr==1 and cl==0):
+            if(j==kcr[cr-1]):
+                P_eff[i,j]=(kfw/(koff+kfw))**(j-i-1)*p0
+        #(c) i<------j
+        if(cl==1 and cr==0):
+            if(i==kcl[0]):
+                P_eff[i,j]=(kfw/(koff+kfw))**(j-i-1)*p0
+        #(d) i<----->j
+        if(cl==1 and cr==1):
+            if(i==kcl[0] and j==kcr[0]):
+                P_eff[i,j]=(kfw/(koff+kfw))**(j-i-1)*p0
+
+        #two or more ctcf with convergent orientation
+        #(e) i-->--<--j
+        #(f) i-->--<->j
+        #(g) i<->--<--j
+        #(h) i<->--<->j
+        if(cr>0 and cl>0):
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]!=(kcr[0]-1)):
+                P_eff[i,j]=0
+
+        #one or several same oriented ctcf between i and j
+        if(cr>0 and cl==0):
+            #(i) i-->-->--j
+            if(i!=kcr[0] and j!=kcr[cr-1]):
+                n=kcr[0]-i
+                m=j-kcr[cr-1]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        if(cr>1 and cl==0):        
+            #(k) i-->-->->j
+            if(i!=kcr[0] and j==kcr[cr-1]):
+                n=kcr[0]-i
+                m=j-kcr[cr-2]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        if(cl>0 and cr==0):
+            #(j) i--<--<--j
+            if(i!=kcl[0] and j!=kcl[cl-1]):
+                n=kcl[0]-i
+                m=j-kcl[cl-1]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        if(cl>1 and cr==0):        
+            #(l) i<--<--<--j
+            if(i==kcl[0] and j!=kcl[cl-1]):
+                n=kcl[1]-i
+                m=j-kcl[cl-1]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        if(cr>0 and cl==1):
+            #(m) i<->-->--j
+            if(i==kcl[0] and j!=kcr[cr-1]):
+                n=kcr[0]-i
+                m=j-kcr[cr-1]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0        
+        if(cl>1 and cr==1):    
+            #(p) i<-->-->-->j
+            if(i==kcl[0] and j==kcr[cr-1]):
+                n=kcr[0]-i
+                m=j-kcl[cl-2]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        if(cl>0 and cr==1):
+            #(n) i--<--<->j
+            if(j==kcr[cr-1] and i!=kcl[0]):
+                n=kcl[0]-i
+                m=j-kcl[cl-1]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        if(cl>1 and cr==1):        
+            if(i==kcl[0] and j==kcr[cr-1]):
+                #(o) i<--<--<-->j
+                n=kcl[1]-i
+                m=j-kcl[cl-1]
+                P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+        
+        #two or more ctcf with divergent orientation
+        if(cr>0 and cl>0):
+            #(q) i---<<-->>---j
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i!=kcl[0] and j!=kcr[cr-1]):
+                n=kcl[0]-i
+                m=j-kcr[cr-1]
+                P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+        if(cr>0 and cl>1):
+            #(r) i<--<<-->>---j   
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i==kcl[0] and j!=kcr[cr-1]):
+                n=kcl[1]-i
+                m=j-kcr[cr-1]
+                P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+        if(cr>1 and cl>0):
+            #(s) i---<<-->>-->j
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i!=kcl[0] and j==kcr[cr-1]):
+                n=kcl[0]-i
+                m=j-kcr[cr-2]
+                P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+        if(cr>1 and cl>1):
+            #(t) i<--<<-->>-->j
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i==kcl[0] and j==kcr[cr-1]):
+                n=kcl[1]-i
+                m=j-kcr[cr-2]
+                P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+        
+        #i=ic and j!=jc
+        ################
+        
+        #no ctcf between i and j           
+        if((cr==1 or cr==2) and cl==0 ):
+            #(u) i>------j
+            if(cr==1 and i==kcr[0]):
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+            #(v) i>----->j
+            if(cr==2 and i==kcr[0] and j==kcr[cr-1]):
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        
+        #two or more ctcf with convergent orientation
+        #(w) i>-->--<--j
+        #(x) i>-->--<->j
+        if(cr>1 and cl>0):
+            if(i==kcr[0] and j!=kcl[cl-1] and kcl[cl-1]!=(kcr[1]-1)):
+                P_eff[i,j]=0
+
+        #one or several same oriented ctcf between i and j
+        if(cr>1 and cl==0):
+            #(y) i>-->-->--j
+            if(i==kcr[0] and j!=kcr[cr-1]):
+                #n=kcr[1]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        if(cr>2 and cl==0):
+            #(a') i>-->-->->j
+            if(i==kcr[0] and j==kcr[cr-1]):
+                #n=kcr[1]-i
+                #m=j-kcr[cr-2]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        #(z) i>--<--<--j
+        if(cl>0 and cr==1):
+            if(i==kcr[0] and j!=kcl[cl-1] and j!=kcr[cr-1]):
+                #n=kcl[0]-i
+                #m=j-kcl[cl-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        #(b') i>--<--<->j         
+        if(cl>0 and cr==2):
+            if(i==kcr[0] and j==kcr[cr-1]):
+                #n=kcl[0]-i
+                #m=j-kcl[cl-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        
+        #two or more ctcf with divergent orientation
+        if(cr>1 and cl>0):
+            #(c') i>--<<-->>--j
+            if(i==kcr[0] and j!=kcl[cl-1] and j!=kcr[cr-1] and kcl[cl-1]==(kcr[1]-1)):
+                #n=kcl[0]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                #                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        if(cr>2 and cl>0):
+            #(d') i>--<<-->>->j
+            if(i==kcr[0] and j==kcr[cr-1] and kcl[cl-1]==(kcr[1]-1)):
+                #n=kcl[0]-i
+                #m=j-kcr[cr-2]
+                #P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                #                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+
+        #i!=ic and j=jc
+        ################
+
+        #no ctcf between i and j           
+        if(cr==0 and (cl==1 or cl==2)):
+            #(e') i------<j
+            if(cl==1 and j==kcl[cl-1]):
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                                +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+            #(f') i<------<j
+            if(cl==2 and i==kcl[0] and j==kcl[cl-1]):
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                                +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+
+        #two or more ctcf with convergent orientation
+        #(g') i-->--<--<j
+        #(h') i<->--<--<j
+        if(cr>0 and cl>1):
+            if(i!=kcr[0] and j==kcl[cl-1] and kcl[cl-2]!=(kcr[0]-1)):
+                P_eff[i,j]=0
+
+        #one or several same oriented ctcf between i and j
+        if(cl>1 and cr==0):
+            #(i') i--<--<-<j
+            if(j==kcl[cl-1] and i!=kcl[0]):
+                #n=kcl[0]-i
+                #m=j-kcl[cl-2]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        if(cl>2 and cr==0):
+            #(k') i<-<--<-<j
+            if(j==kcl[cl-1] and i==kcl[0]):
+                #n=kcl[1]-i
+                #m=j-kcl[cl-2]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        #(j') i-->-->-<j
+        if(cr>0 and cl==1):
+            if(j==kcl[cl-1] and i!=kcr[0]):
+                #n=kcr[0]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        #(l') i<->-->-<j       
+        if(cr>0 and cl==2):
+            if(i==kcl[0] and j==kcl[cl-1]):
+                #n=kcr[0]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        
+        #two or more ctcf with divergent orientation
+        if(cr>0 and cl>1):
+            #(m') i--<<-->>-<j
+            if(i!=kcr[0] and j==kcl[cl-1] and i!=kcl[0] and kcl[cl-2]==(kcr[0]-1)):
+                #n=kcl[0]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                #                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        if(cr>0 and cl>2):
+            #(n') i<--<<-->>-<j
+            if(i==kcl[0] and j==kcl[cl-1] and kcl[cl-2]==(kcr[0]-1)):
+                #n=kcl[1]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                #                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                P_eff[i,j]=kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                            +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0
+        
+        #i=ic and j=jc
+        ################
+        
+        #no ctcf between i and j
+        #(o') i>------<j
+        if(cr==1 and cl==1):
+            if(i==kcr[0] and j==kcl[cl-1]):
+                P_eff[i,j]=(kfw/koff)*(kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                                    +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0)
+                if(P_eff[i,j]>1):
+                    print(i,j,P_eff[i,j],str("op"))
+        #two or more ctcf with convergent orientation
+        #(p') i>->--<-<j
+        if(cr>1 and cl>1):
+            if(i==kcr[0] and j==kcl[cl-1] and kcl[cl-2]!=(kcr[1]-1)):
+                P_eff[i,j]=0
+        
+        #one or several same oriented ctcf between i and j
+        #(q') i>->-->-<j
+        if(cr>1 and cl==1):
+            if(i==kcr[0] and j==kcl[cl-1]):
+                #n=kcr[0]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=(kfw/koff)*(kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                                    +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0)
+                if(P_eff[i,j]>1):
+                    print(i,j,P_eff[i,j],str("qp"))
+        #(r') i>-<--<-<j
+        if(cl>1 and cr==1):
+            if(i==kcr[0] and j==kcl[cl-1]):
+                #n=kcl[0]-i
+                #m=j-kcl[cl-1]
+                #P_eff[i,j]=binom(n+m-1,m)*hyp2f1(1,1-n,1+m,-1)*(kfw/(2*(koff+kfw)))**(j-i-1)*p0
+                P_eff[i,j]=(kfw/koff)*(kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                                    +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0)
+                if(P_eff[i,j]>1):
+                    print(i,j,P_eff[i,j],str("rp"))
+        
+        #two or more ctcf with divergent orientation
+        if(cr>1 and cl>1):
+            #(s') i>--<<-->>--<j
+            if(i==kcr[0] and j==kcl[cl-1] and kcl[cl-2]==(kcr[1]-1)):
+                #n=kcl[0]-i
+                #m=j-kcr[cr-1]
+                #P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(binom(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
+                #                                           binom(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                P_eff[i,j]=(kfw/koff)*(kon/(koff+kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)\
+                                    +(koff+kfw)/(kfw/2.)*((kfw/2.)/(koff+kfw/2.))**(j-i-2)*p0-((kfw/2.)/(koff+kfw))**(j-i-3)*p0)
+                if(P_eff[i,j]>1):
+                    print(i,j,P_eff[i,j],str("sp"))
+
+
+for i in range(0,N-1):
     print()
-    for j in range(i+2,N):
+    for j in range(i+1,N):
         print(i,j,P_eff[i][j])
