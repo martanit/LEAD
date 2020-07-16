@@ -106,7 +106,8 @@ bool Parameters::read_effective_potential() {
     while (std::getline(eff_file, line)) {
         std::istringstream iss(line);
         iss >> k >> l >> x;
-        m_eff_pot[++i]=x;
+        m_eff_pot[i]=x;
+        i=i+1;
     }
     eff_file.close();
     return 0;
