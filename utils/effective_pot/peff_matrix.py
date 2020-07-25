@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import sys
 import subprocess
@@ -123,32 +125,33 @@ for i in range(0,N-2):
         #two or more ctcf with divergent orientation
         if(cr>0 and cl>0):
             #(q) i---<<-->>---j
-            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i!=kcl[0] and j!=kcr[cr-1]):
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]<=(kcr[0]-1) and i!=kcl[0] and j!=kcr[cr-1]):
                 n=kcl[0]-i
                 m=j-kcr[cr-1]
                 P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(choose(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
-                                                           choose(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                                                           choose(n-1,0)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)*p0
+                #print(i,j,P_eff[i,j])
         if(cr>0 and cl>1):
             #(r) i<--<<-->>---j   
-            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i==kcl[0] and j!=kcr[cr-1]):
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]<=(kcr[0]-1) and i==kcl[0] and j!=kcr[cr-1]):
                 n=kcl[1]-i
                 m=j-kcr[cr-1]
                 P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(choose(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
-                                                           choose(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                                                           choose(n-1,0)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)*p0
         if(cr>1 and cl>0):
             #(s) i---<<-->>-->j
-            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i!=kcl[0] and j==kcr[cr-1]):
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]<=(kcr[0]-1) and i!=kcl[0] and j==kcr[cr-1]):
                 n=kcl[0]-i
                 m=j-kcr[cr-2]
                 P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(choose(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
-                                                           choose(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                                                           choose(n-1,0)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)*p0
         if(cr>1 and cl>1):
             #(t) i<--<<-->>-->j
-            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]==(kcr[0]-1) and i==kcl[0] and j==kcr[cr-1]):
+            if(i!=kcr[0] and j!=kcl[cl-1] and kcl[cl-1]<=(kcr[0]-1) and i==kcl[0] and j==kcr[cr-1]):
                 n=kcl[1]-i
                 m=j-kcr[cr-2]
                 P_eff[i,j]=((kfw/2.)/(koff+kfw))**(j-i-1)*(choose(m-1,m)*hyp2f1(1,1,1+m,-1)*((kfw/2.)/(koff+kfw/2.))**n+\
-                                                           choose(n-1,m)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)
+                                                           choose(n-1,0)*hyp2f1(1,1-n,1,-1)*((kfw/2.)/(koff+kfw/2.))**m)*p0
         
         #i=ic and j!=jc
         ################
@@ -212,7 +215,7 @@ for i in range(0,N-2):
         #two or more ctcf with divergent orientation
         if(cr>1 and cl>0):
             #(c') i>--<<-->>--j
-            if(i==kcr[0] and j!=kcl[cl-1] and j!=kcr[cr-1] and kcl[cl-1]==(kcr[1]-1)):
+            if(i==kcr[0] and j!=kcl[cl-1] and j!=kcr[cr-1] and kcl[cl-1]<=(kcr[1]-1)):
                 n1=kcl[0]-i-1
                 m1=j-kcr[cr-1]
                 n2=kcl[0]-i
@@ -223,7 +226,7 @@ for i in range(0,N-2):
                                           choose(n2-1,0)*hyp2f1(1,1-n2,1,-1)*((kfw/2.)/(koff+kfw))**(n2+kcr[cr-1]-kcl[0]-1)*((kfw/2.)/(koff+kfw/2.))**m2)*p0
         if(cr>2 and cl>0):
             #(d') i>--<<-->>->j
-            if(i==kcr[0] and j==kcr[cr-1] and kcl[cl-1]==(kcr[1]-1)):
+            if(i==kcr[0] and j==kcr[cr-1] and kcl[cl-1]<=(kcr[1]-1)):
                 n1=kcl[0]-i-1
                 m1=j-kcr[cr-2]
                 n2=kcl[0]-i
@@ -295,7 +298,7 @@ for i in range(0,N-2):
         #two or more ctcf with divergent orientation
         if(cr>0 and cl>1):
             #(m') i--<<-->>-<j
-            if(i!=kcr[0] and j==kcl[cl-1] and i!=kcl[0] and kcl[cl-2]==(kcr[0]-1)):
+            if(i!=kcr[0] and j==kcl[cl-1] and i!=kcl[0] and kcl[cl-2]<=(kcr[0]-1)):
                 n1=kcl[0]-i-1
                 m1=j-kcr[cr-1]
                 n2=kcl[0]-i
@@ -306,7 +309,7 @@ for i in range(0,N-2):
                                           choose(n2-1,0)*hyp2f1(1,1-n2,1,-1)*((kfw/2.)/(koff+kfw))**(n2+kcr[cr-1]-kcl[0]-1)*((kfw/2.)/(koff+kfw/2.))**m2)*p0
         if(cr>0 and cl>2):
             #(n') i<--<<-->>-<j
-            if(i==kcl[0] and j==kcl[cl-1] and kcl[cl-2]==(kcr[0]-1)):
+            if(i==kcl[0] and j==kcl[cl-1] and kcl[cl-2]<=(kcr[0]-1)):
                 n1=kcl[1]-i-1
                 m1=j-kcr[cr-1]
                 n2=kcl[1]-i
@@ -353,7 +356,7 @@ for i in range(0,N-2):
         #two or more ctcf with divergent orientation
         if(cr>1 and cl>1):
             #(s') i>--<<-->>--<j
-            if(i==kcr[0] and j==kcl[cl-1] and kcl[cl-2]==(kcr[1]-1)):
+            if(i==kcr[0] and j==kcl[cl-1] and kcl[cl-2]<=(kcr[1]-1)):
                 n1=kcl[0]-i-1
                 m1=j-kcr[cr-1]
                 n2=kcl[0]-i
@@ -363,23 +366,29 @@ for i in range(0,N-2):
                                           choose(m2-1,m2)*hyp2f1(1,1,1+m2,-1)*((kfw/2.)/(koff+kfw))**(m2+kcr[cr-1]-kcl[0]-1)*((kfw/2.)/(koff+kfw/2.))**n2+\
                                           choose(n2-1,0)*hyp2f1(1,1-n2,1,-1)*((kfw/2.)/(koff+kfw))**(n2+kcr[cr-1]-kcl[0]-1)*((kfw/2.)/(koff+kfw/2.))**m2)*p0
                 
+                
 with open("prob_eff.dat",'w') as pr_out:
     for i in range(0,N-2):
         pr_out.write('\n')
         for j in range(i+2,N):
             pr_out.write(str(i)+" "+str(j)+" "+str(P_eff[i,j])+'\n')
 
+Umax=-9999
 for i in range(0,N-2):
     for j in range(i+2,N):
-            U_eff[i,j]=-(1./2.57)*np.log(P_eff[i,j])
+       if P_eff[i,j]>0:
+            U_eff[i,j]=-np.log(P_eff[i,j])
+       else:
+            U_eff[i,j]=-1
+       if U_eff[i,j]>Umax: Umax=U_eff[i,j]
 
-U_eff_max=U_eff[np.isfinite(U_eff)].max()
+#U_eff_max=U_eff[np.isfinite(U_eff)].max()
 
 with open("pot_eff.in",'w') as po_out:
     for i in range(0,N-2):
         for j in range(i+2,N):
-            if(str(U_eff[i][j])=="inf"):
-                po_out.write(str(i)+" "+str(j)+" 0"+'\n')
-            else:
-                po_out.write(str(i)+" "+str(j)+" "+str(abs(U_eff[i][j]-U_eff_max))+'\n')
+           if U_eff[i,j]>0:
+                po_out.write(str(i)+" "+str(j)+" "+str(U_eff[i][j]-Umax)+'\n')
+           else:
+                po_out.write(str(i)+" "+str(j)+" "+str(0)+'\n')
 
