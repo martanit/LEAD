@@ -37,6 +37,7 @@ public:
           m_integrator_timestep(integrator_parm.get_timestep()),
           m_integrator_gamma(integrator_parm.get_gamma()),
           m_integrator_temp(integrator_parm.get_temp()),
+          m_integrator_deltastep(integrator_parm.get_print()),
 	  gauss_term(0, 1),
           transition_prob(0., 1.) {
         stoch_term = std::sqrt(2. * m_integrator_gamma * m_integrator_temp /
@@ -79,6 +80,7 @@ private:
     double m_integrator_timestep = 0.0001;
     double m_integrator_gamma = 1.;
     double m_integrator_temp = 1.;
+    double m_integrator_deltastep = 10000.;
     
     // random stuff
     std::mt19937 mt{std::random_device{}()};
