@@ -26,6 +26,7 @@ public:
 	  m_kon(parm.get_kon()),
 	  m_koff(parm.get_koff()),
           integrator_timestep(parm.get_timestep()),
+          integrator_deltastep(parm.get_print()),
           dist(0., 1.) {
         this->first_fill(poly);
     };
@@ -36,6 +37,7 @@ public:
         m_kon = vector_extr.m_kon;
         m_koff = vector_extr.m_koff;
         integrator_timestep = vector_extr.integrator_timestep;
+        integrator_deltastep = vector_extr.integrator_deltastep;
     };
 
     ~VectorExtruder() {};
@@ -86,6 +88,7 @@ private:
     double m_koff = 1E-15;
 
     double integrator_timestep = 1E6;
+    double integrator_deltastep = 1E4;
 
     // random stuff
     std::mt19937 mt{std::random_device{}()};
